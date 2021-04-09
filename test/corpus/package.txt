@@ -1,0 +1,19 @@
+===================
+Package Name
+===================
+
+package my;
+
+---
+
+(module (package_statement (identifier)))
+
+===================
+Package Name with path
+===================
+
+package my.other.package;
+
+---
+
+(module (package_statement (identifier) (identifier) (identifier)))

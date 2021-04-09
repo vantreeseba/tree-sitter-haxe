@@ -1,0 +1,62 @@
+===================
+Class
+===================
+
+class Main {}
+
+---
+
+(module (class_declaration (identifier)))
+
+===================
+Function
+===================
+
+class Main {
+  function foo(){}
+}
+
+---
+
+(module 
+  (class_declaration (identifier)
+    (function_declaration (identifier))
+  )
+)
+
+===================
+Function
+===================
+
+class Main {
+  public inline static function foo(){}
+}
+
+---
+
+(module 
+  (class_declaration (identifier)
+    (access_modifier) 
+    (access_modifier) 
+    (access_modifier) 
+    (function_declaration (identifier))
+  )
+)
+
+===================
+class variables
+===================
+
+class Main {
+  public var x; 
+}
+
+---
+
+(module 
+  (class_declaration (identifier)
+    (access_modifier) 
+    (variable_declaration (identifier))
+  )
+)
+
