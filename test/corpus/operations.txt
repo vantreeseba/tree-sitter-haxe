@@ -1,0 +1,174 @@
+===================
+increment unop postfix
+===================
+
+class main {
+  function test() {
+    x++;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (increment_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+increment unop prefix
+===================
+
+class main {
+  function test() {
+    ++x;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (increment_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+decrement_unop postfix
+===================
+
+class main {
+  function test() {
+    x--;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (decrement_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+decrement_unop prefix
+===================
+
+class main {
+  function test() {
+    --x;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (decrement_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+not_unop 
+===================
+
+class main {
+  function test() {
+    !x;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (not_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+negative_unop 
+===================
+
+class main {
+  function test() {
+    -x;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (negative_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+bitwise_negative_unop 
+===================
+
+class main {
+  function test() {
+    ~x;
+  }
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) 
+        (statement_block
+          (expression_statement 
+            (unary_expression (bitwise_negative_unop (identifier)))
+          )
+        )
+      )
+    )
+  )
+)

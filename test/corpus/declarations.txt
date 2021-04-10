@@ -1,0 +1,91 @@
+===================
+class
+===================
+
+class Main {}
+
+---
+
+(module (class_declaration (identifier) (class_body)))
+
+===================
+class function
+===================
+
+class Main {
+  function foo(){}
+}
+
+---
+
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration (identifier) (statement_block))
+    )
+  )
+)
+
+===================
+class public static inline function
+===================
+
+class Main {
+  public inline static function foo(){}
+}
+
+---
+(module 
+  (class_declaration (identifier) 
+    (class_body 
+      (function_declaration
+      (access_modifier) 
+      (access_modifier) 
+      (access_modifier) 
+      (identifier) (statement_block))
+    )
+  )
+)
+
+===================
+class variables
+===================
+
+class Main {
+  public var x;
+}
+
+---
+
+(module 
+  (class_declaration (identifier)
+    (class_body
+      (variable_declaration
+        (access_modifier) 
+        (identifier)
+      )
+    )
+  )
+)
+
+===================
+class variables with basic type
+===================
+
+class Main {
+  public var x:Int; 
+}
+
+---
+
+(module 
+  (class_declaration (identifier)
+    (class_body
+      (variable_declaration
+        (access_modifier) 
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)

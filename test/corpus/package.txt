@@ -16,4 +16,4 @@ package my.other.package;
 
 ---
 
-(module (package_statement (identifier) (identifier) (identifier)))
+(module (package_statement (identifier)))

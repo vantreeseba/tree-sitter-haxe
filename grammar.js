@@ -1,48 +1,65 @@
-module.exports = grammar({
+const types = require("./grammar-types");
+const operations = require("./grammar-operations");
+const expressions = require("./grammar-expressions");
+const declarations = require("./grammar-declarations");
+
+const haxe_grammar = {
   name: "haxe",
   word: ($) => $.identifier,
+  // inline: ($) => [$.statement, $._semicolon],
+  inline: ($) => [$.statement],
+  extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
+  supertypes: ($) => [
+    $.statement,
+    $.declaration,
+    $.expression,
+    $.primary_expression,
+  ],
+  precedences: ($) => [
+    ["member", "unary_expression", "declaration"],
+    ["member", $.expression],
+    ["declaration", "literal"],
+  ],
+  conflicts: ($) => [],
   rules: {
-    // source_file: ($) => "hello",
-    module: ($) =>
-      seq(
-        optional($.package_statement),
-        repeat($.import_statement),
-        optional($.class_declaration)
+    module: ($) => seq(repeat($.statement)),
+
+    statement: ($) =>
+      choice(
+        $.package_statement,
+        $.import_statement,
+        $.expression_statement,
+        $.declaration,
+        $.statement_block
       ),
+
+    expression_statement: ($) => seq($.expression, $._semicolon),
+
+    statement_block: ($) => prec.right(seq("{", repeat($.statement), "}")),
 
     package_statement: ($) =>
-      seq(
-        "package",
-        field("package_name", repeat(seq($.identifier, optional(".")))),
-        ";"
-      ),
+      seq("package", field("path", $.identifier), $._semicolon),
 
     import_statement: ($) =>
-      seq("import", repeat(seq($.identifier, optional("."))), ";"),
+      seq("import", field("path", $.identifier), $._semicolon),
 
-    class_declaration: ($) =>
-      seq("class", field("class_name", $.identifier), $._block),
-
-    _member_declaration: ($) =>
-      seq(
-        repeat($.access_modifier),
-        choice($.function_declaration, $.variable_declaration)
+    // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+    comment: ($) =>
+      token(
+        choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
       ),
-
-    function_declaration: ($) =>
-      seq("function", field("function_name", $.identifier), $._args, $._block),
-
-    variable_declaration: ($) =>
-      seq("var", field("variable_name", $.identifier), ";"),
-
-    _args: ($) => seq("(", repeat($._expression), ")"),
-    _block: ($) => seq("{", repeat($._expression), "}"),
-
-    access_modifier: ($) =>
-      choice("private", "protected", "public", "static", "inline"),
-
-    _expression: ($) => choice($._member_declaration),
-    identifier: ($) => /[a-zA-Z0-9]+/,
-    // number: ($) => /\d+/,
   },
-});
+};
+
+haxe_grammar.rules = Object.assign(
+  haxe_grammar.rules,
+  types,
+  operations,
+  declarations,
+  expressions,
+  {
+    _semicolon: ($) => ";",
+  }
+);
+
+module.exports = grammar(haxe_grammar);

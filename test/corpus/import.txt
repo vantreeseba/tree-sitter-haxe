@@ -16,7 +16,7 @@ import my.other.package;
 
 ---
 
-(module (import_statement (identifier) (identifier) (identifier)))
+(module (import_statement (identifier)))
 
 ===================
 multiple import statements
@@ -29,7 +29,7 @@ import test.other.SomeClass;
 ---
 
 (module 
-(import_statement (identifier) (identifier) (identifier))
 (import_statement (identifier))
-(import_statement (identifier) (identifier) (identifier))
+(import_statement (identifier))
+(import_statement (identifier))
 )
