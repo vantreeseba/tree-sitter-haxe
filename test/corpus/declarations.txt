@@ -6,7 +6,7 @@ class Main {}
 
 ---
 
-(module (class_declaration (identifier) (class_body)))
+(module (class_declaration (keyword) (identifier) (block)))
 
 ===================
 class function
@@ -19,33 +19,117 @@ class Main {
 ---
 
 (module 
-  (class_declaration (identifier) 
-    (class_body 
-      (function_declaration (identifier) (statement_block))
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration (keyword) (identifier) (block))
     )
   )
 )
+
+===================
+class function with attribute
+===================
+
+class Main {
+  @:test
+  function foo(){}
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration 
+        (attribute (identifier))
+        (keyword) 
+        (identifier) 
+        (block)
+      )
+    )
+  )
+)
+
 
 ===================
 class public static inline function
 ===================
 
 class Main {
-  public inline static function foo(){}
+  public static inline function foo(){}
 }
 
 ---
 (module 
-  (class_declaration (identifier) 
-    (class_body 
+  (class_declaration (keyword) (identifier) 
+    (block 
       (function_declaration
-      (access_modifier) 
-      (access_modifier) 
-      (access_modifier) 
-      (identifier) (statement_block))
+      (keyword)
+      (keyword)
+      (keyword)
+      (keyword)
+      (identifier) (block))
     )
   )
 )
+
+===================
+class function with declaration assignment statement
+===================
+
+class Main {
+  function foo(){
+    var x = 4;
+    var y = 'test';
+  }
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration (keyword) (identifier) 
+        (block
+          (variable_declaration (keyword) (identifier) (operator) (literal (integer)))
+          (variable_declaration (keyword) (identifier) (operator) (literal (string)))
+        )
+      )
+    )
+  )
+)
+
+===================
+class function with seperate declaration and assignment statements
+===================
+
+class Main {
+  function foo(){
+    var x;
+    var y;
+
+    x = 4;
+    y = x;
+  }
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration (keyword) (identifier) 
+        (block
+          (variable_declaration (keyword) (identifier))
+          (variable_declaration (keyword) (identifier))
+          (identifier) (operator) (literal (integer))
+          (identifier) (operator) (identifier)
+        )
+      )
+    )
+  )
+)
+
 
 ===================
 class variables
@@ -58,10 +142,11 @@ class Main {
 ---
 
 (module 
-  (class_declaration (identifier)
-    (class_body
+  (class_declaration (keyword) (identifier)
+    (block
       (variable_declaration
-        (access_modifier) 
+        (keyword)
+        (keyword)
         (identifier)
       )
     )
@@ -79,13 +164,15 @@ class Main {
 ---
 
 (module 
-  (class_declaration (identifier)
-    (class_body
+  (class_declaration (keyword) (identifier)
+    (block
       (variable_declaration
-        (access_modifier) 
+        (keyword) 
+        (keyword) 
         (identifier)
-        (type (identifier))
+        (type)
       )
     )
   )
 )
+

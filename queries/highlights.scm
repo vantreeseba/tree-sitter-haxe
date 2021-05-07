@@ -1,21 +1,24 @@
 (type) @type
+(keyword) @keyword
+(literal) @type
+(literal (string)) @string
+(literal (integer)) @number
+(literal (float)) @number
+(literal (bool)) @constant
+(literal (null)) @keyword
+(operator) @operator
 
-"import" @keyword
-(import_statement path: (identifier) @type)
+(attribute) @tag
+; (attribute name: (identifier) @type) @tag
 
-"package" @keyword
-(package_statement path: (identifier) @type)
+(package_statement name: (identifier) @type)
 
-"class" @keyword
 (class_declaration name: (identifier) @type)
 
-"var" @keyword
-(variable_declaration name: (identifier) @number)
+; (variable_declaration name: (identifier) @number)
+; (variable_declaration (type) @type)
 
-"function" @keyword
 (function_declaration (identifier) @function)
-(access_modifier) @keyword
-
 
 ; (increment_operator) @keyword
 ; (decrement_operator) @keyword

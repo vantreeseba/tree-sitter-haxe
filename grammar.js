@@ -1,65 +1,131 @@
-const types = require("./grammar-types");
-const operations = require("./grammar-operations");
-const expressions = require("./grammar-expressions");
-const declarations = require("./grammar-declarations");
+// const types = require("./grammar-types");
+// const operations = require("./grammar-operations");
+// const expressions = require("./grammar-expressions");
+// const declarations = require("./grammar-declarations");
+const keywords = require("./grammar-keywords");
 
 const haxe_grammar = {
   name: "haxe",
   word: ($) => $.identifier,
-  // inline: ($) => [$.statement, $._semicolon],
-  inline: ($) => [$.statement],
+  inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
-  supertypes: ($) => [
-    $.statement,
-    $.declaration,
-    $.expression,
-    $.primary_expression,
+  supertypes: ($) => [$.declaration],
+  precedences: ($) => [],
+  conflicts: ($) => [
+    [$.function_declaration],
+    [$.function_declaration, $.variable_declaration],
   ],
-  precedences: ($) => [
-    ["member", "unary_expression", "declaration"],
-    ["member", $.expression],
-    ["declaration", "literal"],
-  ],
-  conflicts: ($) => [],
   rules: {
     module: ($) => seq(repeat($.statement)),
 
+    // Statements
     statement: ($) =>
       choice(
+        seq($.expression, choice($.block, $._semicolon)),
         $.package_statement,
-        $.import_statement,
-        $.expression_statement,
         $.declaration,
-        $.statement_block
+        seq(
+          $.identifier,
+          $.operator,
+          choice($.identifier, $.literal),
+          $._semicolon
+        )
       ),
 
-    expression_statement: ($) => seq($.expression, $._semicolon),
-
-    statement_block: ($) => prec.right(seq("{", repeat($.statement), "}")),
-
     package_statement: ($) =>
-      seq("package", field("path", $.identifier), $._semicolon),
+      seq(
+        alias("package", $.keyword),
+        field("name", $.identifier),
+        $._semicolon
+      ),
 
-    import_statement: ($) =>
-      seq("import", field("path", $.identifier), $._semicolon),
+    // Declarations
+    declaration: ($) =>
+      choice(
+        $.class_declaration,
+        $.function_declaration,
+        $.variable_declaration
+      ),
 
-    // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+    class_declaration: ($) =>
+      seq(
+        alias("class", $.keyword),
+        field("name", $.identifier),
+        field("body", $.block)
+      ),
+
+    function_declaration: ($) =>
+      seq(
+        repeat($.attribute),
+        repeat($.keyword),
+        alias("function", $.keyword),
+        field("name", $.identifier),
+        seq("(", ")"),
+        field("body", $.block)
+      ),
+
+    variable_declaration: ($) =>
+      seq(
+        repeat($.keyword),
+        alias("var", $.keyword),
+        field("name", $.identifier),
+        optional(seq(":", alias($.identifier, $.type))),
+        optional(seq($.operator, $.literal)),
+        $._semicolon
+      ),
+    // Root tokens.
+    block: ($) => seq("{", repeat($.statement), "}"),
+
+    attribute: ($) => seq(
+      choice("@", "@:"), 
+      field("name", $.identifier),
+      optional(seq("(", $.literal, ")"))
+    ),
+
+    // TODO: Add operators.
+    expression: ($) => prec.right(repeat1(choice($.keyword, $.identifier))),
+    // statement: ($) => seq($.expression, choice($.block, $._semicolon)),
     comment: ($) =>
       token(
         choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
       ),
+
+    keyword: ($) => prec.right(choice(...keywords)),
+    // TODO: Think about removing the . from this.
+    identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9\.]*/,
+    literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null),
+    integer: ($) => /[\d]+/,
+    float: ($) => /[\d]+[\.]+[\d]*/,
+    string: ($) => choice(/\'[^\']*\'/, /\"[^\"]*\"/),
+    bool: ($) => choice("true", "false"),
+    null: ($) => choice("null"),
+    operator: ($) => choice($._binaryOperator, $._unaryOperator),
+    _binaryOperator: ($) => "=",
+    _unaryOperator: ($) => "++",
+    type: ($) => $.identifier,
+
+    // Hidden Nodes in tree.
+    _semicolon: ($) => ";",
   },
 };
 
-haxe_grammar.rules = Object.assign(
-  haxe_grammar.rules,
-  types,
-  operations,
-  declarations,
-  expressions,
-  {
-    _semicolon: ($) => ";",
-  }
-);
+// haxe_grammar.rules = Object.assign(
+//   haxe_grammar.rules,
+//   // types,
+//   // operations,
+//   // declarations,
+//   // expressions,
+//   {}
+// );
+
+// Took these from
+// https://github.com/tree-sitter/tree-sitter-javascript/blob/master/grammar.js
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(",", rule)));
+}
+
+function commaSep(rule) {
+  return optional(commaSep1(rule));
+}
 
 module.exports = grammar(haxe_grammar);
