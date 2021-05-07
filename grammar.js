@@ -29,7 +29,9 @@ const haxe_grammar = {
           $.operator,
           choice($.identifier, $.literal),
           $._semicolon
-        )
+        ),
+        seq($.operator, $.identifier, optional($._semicolon)),
+        seq($.identifier, $.operator, optional($._semicolon)),
       ),
 
     package_statement: ($) =>
@@ -76,11 +78,12 @@ const haxe_grammar = {
     // Root tokens.
     block: ($) => seq("{", repeat($.statement), "}"),
 
-    attribute: ($) => seq(
-      choice("@", "@:"), 
-      field("name", $.identifier),
-      optional(seq("(", $.literal, ")"))
-    ),
+    attribute: ($) =>
+      seq(
+        choice("@", "@:"),
+        field("name", $.identifier),
+        optional(seq("(", $.literal, ")"))
+      ),
 
     // TODO: Add operators.
     expression: ($) => prec.right(repeat1(choice($.keyword, $.identifier))),
@@ -91,17 +94,21 @@ const haxe_grammar = {
       ),
 
     keyword: ($) => prec.right(choice(...keywords)),
+
     // TODO: Think about removing the . from this.
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9\.]*/,
+
     literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null),
     integer: ($) => /[\d]+/,
     float: ($) => /[\d]+[\.]+[\d]*/,
     string: ($) => choice(/\'[^\']*\'/, /\"[^\"]*\"/),
     bool: ($) => choice("true", "false"),
     null: ($) => choice("null"),
+
     operator: ($) => choice($._binaryOperator, $._unaryOperator),
     _binaryOperator: ($) => "=",
     _unaryOperator: ($) => "++",
+
     type: ($) => $.identifier,
 
     // Hidden Nodes in tree.

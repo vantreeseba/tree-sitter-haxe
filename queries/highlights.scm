@@ -6,7 +6,7 @@
 (literal (float)) @number
 (literal (bool)) @constant
 (literal (null)) @keyword
-(operator) @operator
+(operator) @keyword
 
 (attribute) @tag
 ; (attribute name: (identifier) @type) @tag
