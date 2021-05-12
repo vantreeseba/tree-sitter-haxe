@@ -7,7 +7,11 @@ I've only testing this using nvim-treesitter.
 
 Install nvim-treesitter.  
 Clone this repo, and run tree-sitter generate (you may have to install globally).  
-Once generated, copy the queries/highlights.scm to ~/.vim/bundle/nvim-treesitter/queries/haxe/highlights.scm  
+Once generated, copy the queries to the nvim-treesitter folder
+```sh
+cp queries/* ~/.vim/BUNDLERPATH/nvim-treesitter/queries/haxe
+```
+You may have to create the haxe folder.
 
 Open nvim, and run TSInstallFromGrammer haxe
 
