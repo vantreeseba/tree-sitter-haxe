@@ -1,25 +1,19 @@
-(type) @type
-(keyword) @keyword
-(literal) @type
-(literal (string)) @string
-(literal (integer)) @number
-(literal (float)) @number
-(literal (bool)) @constant
-(literal (null)) @keyword
-(operator) @keyword
+[(null) (keyword)] @keyword
+[(type) (literal) ] @type
+[(integer) (float)] @number
+(string) @string
+(bool) @constant
 
 (attribute) @tag
-; (attribute name: (identifier) @type) @tag
-
+(attribute name: (identifier) @type) @tag
+(import_statement name: (identifier) @type)
 (package_statement name: (identifier) @type)
-
 (class_declaration name: (identifier) @type)
+
+(function_declaration name: (identifier) @function)
 
 ; (variable_declaration name: (identifier) @number)
 ; (variable_declaration (type) @type)
-
-(function_declaration (identifier) @function)
-
 ; (increment_operator) @keyword
 ; (decrement_operator) @keyword
 ; (decrement_unop (identifier) (decrement_operator))

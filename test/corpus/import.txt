@@ -6,7 +6,7 @@ import somePackage;
 
 ---
 
-(module (import_statement (identifier)))
+(module (import_statement (keyword) (identifier)))
 
 ===================
 import statement with path
@@ -16,7 +16,7 @@ import my.other.package;
 
 ---
 
-(module (import_statement (identifier)))
+(module (import_statement (keyword) (identifier)))
 
 ===================
 multiple import statements
@@ -29,7 +29,7 @@ import test.other.SomeClass;
 ---
 
 (module 
-(import_statement (identifier))
-(import_statement (identifier))
-(import_statement (identifier))
+(import_statement (keyword) (identifier))
+(import_statement (keyword) (identifier))
+(import_statement (keyword) (identifier))
 )

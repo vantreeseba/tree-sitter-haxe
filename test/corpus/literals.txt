@@ -1,0 +1,139 @@
+===================
+int literal.
+===================
+
+class main {
+  var x = 12;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (integer))
+      )
+    )
+  )
+)
+
+===================
+int hex literal.
+===================
+
+class main {
+  var x = 0xFF42;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (integer))
+      )
+    )
+  )
+)
+
+===================
+float literal.
+===================
+
+class main {
+  var x = 4.2;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (float))
+      )
+    )
+  )
+)
+
+===================
+float literal with no trailing number.
+===================
+
+class main {
+  var x = 4.;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (float))
+      )
+    )
+  )
+)
+
+===================
+float literal e notation.
+===================
+
+class main {
+  var x = 4.3e5;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (float))
+      )
+    )
+  )
+)
+
+===================
+float literal e notation error.
+===================
+
+class main {
+  var x = 4.3e5e;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (float))
+        (ERROR (identifier))
+      )
+    )
+  )
+)
+

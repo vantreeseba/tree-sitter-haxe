@@ -22,7 +22,8 @@
       ],
       "highlights": [
         "queries/highlights.scm"
-      ]
+      ],
+      "injection-regex": "^(hx|haxe)$"
     }
   ]
 }

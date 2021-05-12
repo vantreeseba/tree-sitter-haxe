@@ -64,6 +64,10 @@
           "named": true
         },
         {
+          "type": "import_statement",
+          "named": true
+        },
+        {
           "type": "keyword",
           "named": true
         },
@@ -113,11 +117,50 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "keyword",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "float",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "function_arg",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "type",
           "named": true
         }
       ]
@@ -157,11 +200,46 @@
           "named": true
         },
         {
+          "type": "function_arg",
+          "named": true
+        },
+        {
           "type": "keyword",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "import_statement",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "keyword",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "integer",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "keyword",
@@ -217,6 +295,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "import_statement",
           "named": true
         },
         {
@@ -292,6 +374,16 @@
             "named": true
           }
         ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
@@ -309,13 +401,29 @@
         {
           "type": "operator",
           "named": true
-        },
-        {
-          "type": "type",
-          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "!",
+    "named": false
+  },
+  {
+    "type": "!=",
+    "named": false
+  },
+  {
+    "type": "%",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "&&",
+    "named": false
   },
   {
     "type": "(",
@@ -326,7 +434,75 @@
     "named": false
   },
   {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
+    "type": "++",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": "--",
+    "named": false
+  },
+  {
+    "type": "...",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
     "type": ":",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<=",
+    "named": false
+  },
+  {
+    "type": "==",
+    "named": false
+  },
+  {
+    "type": "=>",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
+    "named": false
+  },
+  {
+    "type": ">>",
+    "named": false
+  },
+  {
+    "type": ">>>",
     "named": false
   },
   {
@@ -335,6 +511,10 @@
   },
   {
     "type": "@:",
+    "named": false
+  },
+  {
+    "type": "^",
     "named": false
   },
   {
@@ -406,10 +586,6 @@
     "named": false
   },
   {
-    "type": "float",
-    "named": true
-  },
-  {
     "type": "for",
     "named": false
   },
@@ -440,10 +616,6 @@
   {
     "type": "inline",
     "named": false
-  },
-  {
-    "type": "integer",
-    "named": true
   },
   {
     "type": "interface",
@@ -542,7 +714,19 @@
     "named": false
   },
   {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "||",
+    "named": false
+  },
+  {
     "type": "}",
+    "named": false
+  },
+  {
+    "type": "~",
     "named": false
   }
 ]

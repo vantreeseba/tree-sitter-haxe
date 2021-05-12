@@ -10,10 +10,12 @@ const haxe_grammar = {
   inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
   supertypes: ($) => [$.declaration],
-  precedences: ($) => [],
+  precedences: ($) => [[$._unaryOperator, $._binaryOperator]],
   conflicts: ($) => [
     [$.function_declaration],
     [$.function_declaration, $.variable_declaration],
+    [$._prefixUnaryOperator, $._arithmeticOperator],
+    [$._prefixUnaryOperator, $._postfixUnaryOperator],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -22,6 +24,7 @@ const haxe_grammar = {
     statement: ($) =>
       choice(
         seq($.expression, choice($.block, $._semicolon)),
+        $.import_statement,
         $.package_statement,
         $.declaration,
         seq(
@@ -31,12 +34,19 @@ const haxe_grammar = {
           $._semicolon
         ),
         seq($.operator, $.identifier, optional($._semicolon)),
-        seq($.identifier, $.operator, optional($._semicolon)),
+        seq($.identifier, $.operator, optional($._semicolon))
       ),
 
     package_statement: ($) =>
       seq(
         alias("package", $.keyword),
+        field("name", $.identifier),
+        $._semicolon
+      ),
+
+    import_statement: ($) =>
+      seq(
+        alias("import", $.keyword),
         field("name", $.identifier),
         $._semicolon
       ),
@@ -51,6 +61,7 @@ const haxe_grammar = {
 
     class_declaration: ($) =>
       seq(
+        repeat($.attribute),
         alias("class", $.keyword),
         field("name", $.identifier),
         field("body", $.block)
@@ -61,9 +72,19 @@ const haxe_grammar = {
         repeat($.attribute),
         repeat($.keyword),
         alias("function", $.keyword),
-        field("name", $.identifier),
-        seq("(", ")"),
+        choice(
+          field("name", $.identifier),
+          field("name", alias("new", $.identifier))
+        ),
+        seq("(", repeat(seq($.function_arg, optional(","))), ")"),
         field("body", $.block)
+      ),
+
+    function_arg: ($) =>
+      seq(
+        field("name", $.identifier),
+        optional(seq(":", alias($.identifier, $.type))),
+        optional(seq($._assignmentOperator, $.literal))
       ),
 
     variable_declaration: ($) =>
@@ -71,7 +92,7 @@ const haxe_grammar = {
         repeat($.keyword),
         alias("var", $.keyword),
         field("name", $.identifier),
-        optional(seq(":", alias($.identifier, $.type))),
+        optional(seq(":", field("type", alias($.identifier, $.type)))),
         optional(seq($.operator, $.literal)),
         $._semicolon
       ),
@@ -98,16 +119,54 @@ const haxe_grammar = {
     // TODO: Think about removing the . from this.
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9\.]*/,
 
+    // From: https://haxe.org/manual/expression-literals.html
     literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null),
-    integer: ($) => /[\d]+/,
-    float: ($) => /[\d]+[\.]+[\d]*/,
-    string: ($) => choice(/\'[^\']*\'/, /\"[^\"]*\"/),
+    // Match any [42, 0xFF43]
+    integer: ($) => choice(/[\d]+/, /0x[a-fA-F\d]+/),
+    // Match any [0.32, 3., 2.1e5]
+    float: ($) => choice(/[\d]+[\.]+[\d]*/, /[\d]+[\.]+[\d]*e[\d]*/),
+    // Match either [true, false]
     bool: ($) => choice("true", "false"),
-    null: ($) => choice("null"),
+    // Match any ["XXX", 'XXX']
+    string: ($) => choice(/\'[^\']*\'/, /\"[^\"]*\"/),
+    // match only [null]
+    null: ($) => "null",
+
+    // TODO: array, map, anonymous struct, range
+    // array: ($) => "null",
 
     operator: ($) => choice($._binaryOperator, $._unaryOperator),
-    _binaryOperator: ($) => "=",
-    _unaryOperator: ($) => "++",
+
+    // From: https://haxe.org/manual/expression-operators-unops.html
+    _unaryOperator: ($) =>
+      prec.right(choice($._prefixUnaryOperator, $._postfixUnaryOperator)),
+    _prefixUnaryOperator: ($) => choice("~", "!", "-", "++", "--"),
+    _postfixUnaryOperator: ($) => choice("++", "--"),
+
+    // From: https://haxe.org/manual/expression-operators-binops.html
+    _binaryOperator: ($) =>
+      prec.left(
+        choice(
+          $._arithmeticOperator,
+          $._bitwiseOperator,
+          $._logicalOperator,
+          $._comparisonOperator,
+          $._miscOperator,
+          $._assignmentOperator,
+          $._compoundAssignmentOperator
+        )
+      ),
+    _arithmeticOperator: ($) => choice("%", "*", "/", "+", "-"),
+    _bitwiseOperator: ($) => choice("<<", ">>", ">>>", "&", "|", "^"),
+    _logicalOperator: ($) => choice("&&", "||"),
+    _comparisonOperator: ($) => choice("==", "!=", "<", "<=", ">", ">="),
+    _miscOperator: ($) => choice("...", "=>"),
+    _assignmentOperator: ($) => "=",
+    _compoundAssignmentOperator: ($) =>
+      seq(
+        choice($._arithmeticOperator, $._bitwiseOperator),
+        $._assignmentOperator
+      ),
 
     type: ($) => $.identifier,
 

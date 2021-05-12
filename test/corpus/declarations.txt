@@ -9,6 +9,25 @@ class Main {}
 (module (class_declaration (keyword) (identifier) (block)))
 
 ===================
+class constructor
+===================
+
+class Main {
+  function new(){}
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration (keyword) (identifier) (block))
+    )
+  )
+)
+
+
+===================
 class function
 ===================
 
@@ -25,6 +44,50 @@ class Main {
     )
   )
 )
+
+===================
+class function with arg
+===================
+
+class Main {
+  function foo(x){}
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration (keyword) (identifier) 
+        (function_arg (identifier)) 
+        (block)
+      )
+    )
+  )
+)
+
+===================
+class function with arg and etc.
+===================
+
+class Main {
+  function foo(x:Int = 3, y:String){}
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration (keyword) (identifier) 
+        (function_arg (identifier) (type) (literal (integer))) 
+        (function_arg (identifier) (type)) 
+        (block)
+      )
+    )
+  )
+)
+
 
 ===================
 class function with attribute
