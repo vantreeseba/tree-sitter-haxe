@@ -137,3 +137,141 @@ class main {
   )
 )
 
+===================
+string literal single quote
+===================
+
+class main {
+  var x = 'hello';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (string))
+      )
+    )
+  )
+)
+
+===================
+string literal double quote
+===================
+
+class main {
+  var x = "hello";
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (string))
+      )
+    )
+  )
+)
+
+===================
+string literal single quote interpolated identifier
+===================
+
+class main {
+  var y = 1;
+  var x = 'hello $y';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (integer))
+      )
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (string (interpolation (identifier))))
+      )
+    )
+  )
+)
+
+===================
+string literal single quote interpolated identifier in braces
+===================
+
+class main {
+  var y = 1;
+  var x = 'hello ${y}';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (integer))
+      )
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (string (interpolation (identifier))))
+      )
+    )
+  )
+)
+
+
+===================
+string literal single quote interpolated expression in braces
+===================
+
+class main {
+  var y = 1;
+  var x = 'hello ${y + 1}';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (integer))
+      )
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (literal (string (interpolation (identifier) (ERROR))))
+      )
+    )
+  )
+)
+
+

@@ -2,10 +2,10 @@
 // const operations = require("./grammar-operations");
 // const expressions = require("./grammar-expressions");
 // const declarations = require("./grammar-declarations");
-const keywords = require("./grammar-keywords");
+const keywords = require('./grammar-keywords');
 
 const haxe_grammar = {
-  name: "haxe",
+  name: 'haxe',
   word: ($) => $.identifier,
   inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
@@ -31,7 +31,7 @@ const haxe_grammar = {
           $.identifier,
           $.operator,
           choice($.identifier, $.literal),
-          $._semicolon
+          optional($._semicolon)
         ),
         seq($.operator, $.identifier, optional($._semicolon)),
         seq($.identifier, $.operator, optional($._semicolon))
@@ -39,15 +39,15 @@ const haxe_grammar = {
 
     package_statement: ($) =>
       seq(
-        alias("package", $.keyword),
-        field("name", $.identifier),
+        alias('package', $.keyword),
+        field('name', $.identifier),
         $._semicolon
       ),
 
     import_statement: ($) =>
       seq(
-        alias("import", $.keyword),
-        field("name", $.identifier),
+        alias('import', $.keyword),
+        field('name', $.identifier),
         $._semicolon
       ),
 
@@ -62,48 +62,52 @@ const haxe_grammar = {
     class_declaration: ($) =>
       seq(
         repeat($.attribute),
-        alias("class", $.keyword),
-        field("name", $.identifier),
-        field("body", $.block)
+        alias('class', $.keyword),
+        field('name', $.identifier),
+        optional(seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
+        field('body', $.block)
       ),
+
+    type_param: ($) => $.identifier,
 
     function_declaration: ($) =>
       seq(
         repeat($.attribute),
         repeat($.keyword),
-        alias("function", $.keyword),
+        alias('function', $.keyword),
         choice(
-          field("name", $.identifier),
-          field("name", alias("new", $.identifier))
+          field('name', $.identifier),
+          field('name', alias('new', $.identifier))
         ),
-        seq("(", repeat(seq($.function_arg, optional(","))), ")"),
-        field("body", $.block)
+        seq('(', repeat(seq($.function_arg, optional(','))), ')'),
+        optional(seq(':', field('return_type', alias($.identifier, $.type)))),
+        field('body', $.block)
       ),
 
     function_arg: ($) =>
       seq(
-        field("name", $.identifier),
-        optional(seq(":", alias($.identifier, $.type))),
+        field('name', $.identifier),
+        optional(seq(':', alias($.identifier, $.type))),
         optional(seq($._assignmentOperator, $.literal))
       ),
 
     variable_declaration: ($) =>
       seq(
         repeat($.keyword),
-        alias("var", $.keyword),
-        field("name", $.identifier),
-        optional(seq(":", field("type", alias($.identifier, $.type)))),
+        alias('var', $.keyword),
+        field('name', $.identifier),
+        optional(seq(':', field('type', alias($.identifier, $.type)))),
         optional(seq($.operator, $.literal)),
         $._semicolon
       ),
     // Root tokens.
-    block: ($) => seq("{", repeat($.statement), "}"),
+    block: ($) => seq('{', repeat($.statement), '}'),
 
     attribute: ($) =>
       seq(
-        choice("@", "@:"),
-        field("name", $.identifier),
-        optional(seq("(", $.literal, ")"))
+        choice('@', '@:'),
+        field('name', $.identifier),
+        optional(seq('(', $.literal, ')'))
       ),
 
     // TODO: Add operators.
@@ -111,7 +115,7 @@ const haxe_grammar = {
     // statement: ($) => seq($.expression, choice($.block, $._semicolon)),
     comment: ($) =>
       token(
-        choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
+        choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))
       ),
 
     keyword: ($) => prec.right(choice(...keywords)),
@@ -126,11 +130,25 @@ const haxe_grammar = {
     // Match any [0.32, 3., 2.1e5]
     float: ($) => choice(/[\d]+[\.]+[\d]*/, /[\d]+[\.]+[\d]*e[\d]*/),
     // Match either [true, false]
-    bool: ($) => choice("true", "false"),
+    bool: ($) => choice('true', 'false'),
     // Match any ["XXX", 'XXX']
-    string: ($) => choice(/\'[^\']*\'/, /\"[^\"]*\"/),
+    interpolation: ($) =>
+      choice(
+        $._interpolated_identifier,
+        $._interpolated_block
+        //         $._interpolated_expression
+      ),
+    _interpolated_block: ($) => seq('$', $.block),
+    _interpolated_identifier: ($) =>
+      choice(seq('$', $.identifier), seq('${', $.identifier, '}')),
+    //     _interpolated_expression: ($) => seq('$', seq('{', $.expression, '}')),
+    string: ($) =>
+      choice(
+        seq(/\'/, repeat(choice($.interpolation, /[^\']/)), /\'/),
+        /\"[^\"]*\"/
+      ),
     // match only [null]
-    null: ($) => "null",
+    null: ($) => 'null',
 
     // TODO: array, map, anonymous struct, range
     // array: ($) => "null",
@@ -140,8 +158,8 @@ const haxe_grammar = {
     // From: https://haxe.org/manual/expression-operators-unops.html
     _unaryOperator: ($) =>
       prec.right(choice($._prefixUnaryOperator, $._postfixUnaryOperator)),
-    _prefixUnaryOperator: ($) => choice("~", "!", "-", "++", "--"),
-    _postfixUnaryOperator: ($) => choice("++", "--"),
+    _prefixUnaryOperator: ($) => choice('~', '!', '-', '++', '--'),
+    _postfixUnaryOperator: ($) => choice('++', '--'),
 
     // From: https://haxe.org/manual/expression-operators-binops.html
     _binaryOperator: ($) =>
@@ -156,12 +174,12 @@ const haxe_grammar = {
           $._compoundAssignmentOperator
         )
       ),
-    _arithmeticOperator: ($) => choice("%", "*", "/", "+", "-"),
-    _bitwiseOperator: ($) => choice("<<", ">>", ">>>", "&", "|", "^"),
-    _logicalOperator: ($) => choice("&&", "||"),
-    _comparisonOperator: ($) => choice("==", "!=", "<", "<=", ">", ">="),
-    _miscOperator: ($) => choice("...", "=>"),
-    _assignmentOperator: ($) => "=",
+    _arithmeticOperator: ($) => choice('%', '*', '/', '+', '-'),
+    _bitwiseOperator: ($) => choice('<<', '>>', '>>>', '&', '|', '^'),
+    _logicalOperator: ($) => choice('&&', '||'),
+    _comparisonOperator: ($) => choice('==', '!=', '<', '<=', '>', '>='),
+    _miscOperator: ($) => choice('...', '=>'),
+    _assignmentOperator: ($) => '=',
     _compoundAssignmentOperator: ($) =>
       seq(
         choice($._arithmeticOperator, $._bitwiseOperator),
@@ -171,7 +189,7 @@ const haxe_grammar = {
     type: ($) => $.identifier,
 
     // Hidden Nodes in tree.
-    _semicolon: ($) => ";",
+    _semicolon: ($) => ';',
   },
 };
 
@@ -187,7 +205,7 @@ const haxe_grammar = {
 // Took these from
 // https://github.com/tree-sitter/tree-sitter-javascript/blob/master/grammar.js
 function commaSep1(rule) {
-  return seq(rule, repeat(seq(",", rule)));
+  return seq(rule, repeat(seq(',', rule)));
 }
 
 function commaSep(rule) {

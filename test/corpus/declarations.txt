@@ -9,6 +9,25 @@ class Main {}
 (module (class_declaration (keyword) (identifier) (block)))
 
 ===================
+class with type params
+===================
+
+class Main<T,U> {}
+
+---
+
+(module 
+  (class_declaration 
+    (keyword) 
+    (identifier) 
+    (type_param (identifier))
+    (type_param (identifier))
+    (block)
+  )
+)
+
+
+===================
 class constructor
 ===================
 
