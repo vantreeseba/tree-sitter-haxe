@@ -1,0 +1,95 @@
+===================
+call
+===================
+
+fn();
+
+---
+
+(module
+  (call (identifier))
+)
+
+===================
+call with literal arg
+===================
+
+fn(1);
+
+---
+
+(module
+  (call (identifier) (literal (integer)))
+)
+
+===================
+call with 3 literal args
+===================
+
+fn(1,2,3);
+
+---
+
+(module
+  (call (identifier) 
+    (literal (integer))
+    (literal (integer))
+    (literal (integer))
+  )
+)
+
+
+===================
+call with variable arg
+===================
+
+fn(x);
+
+---
+
+(module
+  (call (identifier) (identifier))
+)
+
+===================
+call with expression arg
+===================
+
+fn("Some" + "Combined" + "String");
+
+---
+
+(module
+  (call
+    (identifier)
+    (literal (string))
+    (operator)
+    (literal (string))
+    (operator)
+    (literal (string))
+  )
+)
+
+===================
+recursive call
+===================
+
+fn(fn(x));
+
+---
+
+(module
+  (call (identifier) (call (identifier) (identifier)))
+)
+
+===================
+package method call
+===================
+
+some.package.fn();
+
+---
+
+(module
+  (call (identifier))
+)

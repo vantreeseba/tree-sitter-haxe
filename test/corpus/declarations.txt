@@ -20,8 +20,10 @@ class Main<T,U> {}
   (class_declaration 
     (keyword) 
     (identifier) 
-    (type_param (identifier))
-    (type_param (identifier))
+    (type_params 
+      (type_param (identifier))
+      (type_param (identifier))
+    )
     (block)
   )
 )
@@ -65,6 +67,32 @@ class Main {
 )
 
 ===================
+class function with type params
+===================
+
+class Main {
+  function foo<T,U>(){}
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration 
+        (keyword) 
+        (identifier) 
+        (type_params 
+          (type_param (identifier))
+          (type_param (identifier))
+        )
+        (block))
+    )
+  )
+)
+
+
+===================
 class function with arg
 ===================
 
@@ -86,7 +114,7 @@ class Main {
 )
 
 ===================
-class function with arg and etc.
+class function with arg, types and default param.
 ===================
 
 class Main {
@@ -107,9 +135,69 @@ class Main {
   )
 )
 
+===================
+class with runtime metadata
+===================
+
+@test
+class Main {
+}
+
+---
+
+(module 
+  (class_declaration
+    (metadata (identifier))
+    (keyword) (identifier) 
+    (block)
+  )
+)
 
 ===================
-class function with attribute
+class with compile time metadata
+===================
+
+@:test
+class Main {
+}
+
+---
+
+(module 
+  (class_declaration
+    (metadata (identifier))
+    (keyword) (identifier) 
+    (block)
+  )
+)
+
+
+===================
+class function with runtime metadata
+===================
+
+class Main {
+  @test
+  function foo(){}
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (function_declaration 
+        (metadata (identifier))
+        (keyword) 
+        (identifier) 
+        (block)
+      )
+    )
+  )
+)
+
+===================
+class function with compile time metadata
 ===================
 
 class Main {
@@ -123,7 +211,7 @@ class Main {
   (class_declaration (keyword) (identifier) 
     (block 
       (function_declaration 
-        (attribute (identifier))
+        (metadata (identifier))
         (keyword) 
         (identifier) 
         (block)
@@ -252,7 +340,30 @@ class Main {
         (keyword) 
         (keyword) 
         (identifier)
-        (type)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+class final variables with basic type
+===================
+
+class Main {
+  public final x:Int; 
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword) 
+        (keyword) 
+        (identifier)
+        (type (identifier))
       )
     )
   )

@@ -114,7 +114,7 @@ class main {
 )
 
 ===================
-float literal e notation error.
+float literal e notation error (this is not working).
 ===================
 
 class main {
@@ -131,7 +131,7 @@ class main {
         (identifier) 
         (operator)
         (literal (float))
-        (ERROR (identifier))
+        (identifier)
       )
     )
   )
@@ -268,7 +268,9 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (string (interpolation (identifier) (ERROR))))
+        (literal (string (interpolation 
+          (identifier) (operator) (literal (integer))
+        )))
       )
     )
   )

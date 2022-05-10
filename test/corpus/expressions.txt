@@ -1,0 +1,73 @@
+===================
+conditional
+===================
+
+if (true) {
+  a = 1;
+}
+
+---
+
+(module
+  (conditional_statement (keyword) (literal (bool))) 
+  (block
+    (identifier) (operator) (literal (integer))
+  )
+)
+
+
+===================
+unsafe cast
+===================
+
+cast x;
+
+---
+
+(module (keyword) (identifier))
+
+===================
+safe cast
+===================
+
+cast (x, Type);
+
+---
+
+(module (keyword) (identifier) (type (identifier)))
+
+
+===================
+runtime type check
+===================
+
+(x : Type);
+
+---
+
+(module (identifier) (type (identifier)))
+
+
+===================
+preprocessor macro
+===================
+
+#if !condition
+trace(x);
+#elseif (condition > 2)
+trace(y);
+#else
+trace(z);
+#end
+
+---
+
+(module
+  (preprocessor_statement (operator) (identifier))
+  (call (identifier) (identifier))
+  (preprocessor_statement (identifier) (operator) (literal (integer)))
+  (call (identifier) (identifier))
+  (preprocessor_statement)
+  (call (identifier) (identifier))
+  (preprocessor_statement)
+)

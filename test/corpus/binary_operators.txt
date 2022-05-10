@@ -1,0 +1,61 @@
+===================
+add two integers (both literals)
+===================
+
+var x = 1 + 2;
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (literal (integer)) (operator) (literal (integer)))
+)
+
+===================
+add two strings (both literals)
+===================
+
+var x = "a" + "b";
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (literal (string)) (operator) (literal (string)))
+)
+
+
+===================
+add three integers (all literals)
+===================
+
+var x = 1 + 2 + 3;
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (literal (integer)) 
+    (operator) 
+    (literal (integer))
+    (operator) 
+    (literal (integer))
+  )
+)
+
+
+
+===================
+add two integers, one is a variable 
+===================
+
+var y = 1;
+var x = 1 + y;
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) (operator) (literal (integer)))
+  (variable_declaration (keyword) (identifier) (operator)
+    (literal (integer)) (operator) (identifier)
+  )
+)
