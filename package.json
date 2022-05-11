@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-haxe",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A tree sitter parser for haxe.",
   "main": "bindings/node",
   "scripts": {
@@ -8,10 +8,13 @@
   },
   "author": "vantreeseba@gmail.com",
   "license": "ISC",
-  "dependencies": {
-    "nan": "^2.14.2"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vantreeseba/tree-sitter-haxe"
   },
+  "dependencies": {},
   "devDependencies": {
+    "nan": "^2.14.2",
     "tree-sitter-cli": "^0.19.5"
   },
   "tree-sitter": [
