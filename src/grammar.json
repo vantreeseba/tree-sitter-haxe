@@ -657,6 +657,13 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
+            "name": "metadata"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
             "name": "keyword"
           }
         },

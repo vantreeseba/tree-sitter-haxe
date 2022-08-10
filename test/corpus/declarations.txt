@@ -220,6 +220,53 @@ class Main {
   )
 )
 
+===================
+class variable with runtime metadata
+===================
+
+class Main {
+  @test
+  var foo:Int;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (metadata (identifier))
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+class variable with compile time metadata
+===================
+
+class Main {
+  @:test
+  var foo:Int;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (metadata (identifier))
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
 
 ===================
 class public static inline function
