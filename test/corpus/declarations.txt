@@ -16,11 +16,11 @@ class Main<T,U> {}
 
 ---
 
-(module 
-  (class_declaration 
-    (keyword) 
-    (identifier) 
-    (type_params 
+(module
+  (class_declaration
+    (keyword)
+    (identifier)
+    (type_params
       (type_param (identifier))
       (type_param (identifier))
     )
@@ -39,9 +39,9 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
       (function_declaration (keyword) (identifier) (block))
     )
   )
@@ -58,9 +58,9 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
       (function_declaration (keyword) (identifier) (block))
     )
   )
@@ -76,13 +76,13 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration 
-        (keyword) 
-        (identifier) 
-        (type_params 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration
+        (keyword)
+        (identifier)
+        (type_params
           (type_param (identifier))
           (type_param (identifier))
         )
@@ -102,11 +102,11 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier) 
-        (function_arg (identifier)) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration (keyword) (identifier)
+        (function_arg (identifier))
         (block)
       )
     )
@@ -123,12 +123,12 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier) 
-        (function_arg (identifier) (type) (literal (integer))) 
-        (function_arg (identifier) (type)) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration (keyword) (identifier)
+        (function_arg (identifier) (type) (literal (integer)))
+        (function_arg (identifier) (type))
         (block)
       )
     )
@@ -145,10 +145,10 @@ class Main {
 
 ---
 
-(module 
+(module
   (class_declaration
     (metadata (identifier))
-    (keyword) (identifier) 
+    (keyword) (identifier)
     (block)
   )
 )
@@ -163,10 +163,10 @@ class Main {
 
 ---
 
-(module 
+(module
   (class_declaration
     (metadata (identifier))
-    (keyword) (identifier) 
+    (keyword) (identifier)
     (block)
   )
 )
@@ -183,13 +183,13 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration
         (metadata (identifier))
-        (keyword) 
-        (identifier) 
+        (keyword)
+        (identifier)
         (block)
       )
     )
@@ -207,19 +207,66 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration
         (metadata (identifier))
-        (keyword) 
-        (identifier) 
+        (keyword)
+        (identifier)
         (block)
       )
     )
   )
 )
 
+===================
+class variable with runtime metadata
+===================
+
+class Main {
+  @test
+  var foo:Int;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (metadata (identifier))
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+class variable with compile time metadata
+===================
+
+class Main {
+  @:test
+  var foo:Int;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (metadata (identifier))
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
 
 ===================
 class public static inline function
@@ -230,9 +277,9 @@ class Main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
       (function_declaration
       (keyword)
       (keyword)
@@ -256,10 +303,10 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration (keyword) (identifier)
         (block
           (variable_declaration (keyword) (identifier) (operator) (literal (integer)))
           (variable_declaration (keyword) (identifier) (operator) (literal (string)))
@@ -285,10 +332,10 @@ class Main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (function_declaration (keyword) (identifier)
         (block
           (variable_declaration (keyword) (identifier))
           (variable_declaration (keyword) (identifier))
@@ -311,7 +358,7 @@ class Main {
 
 ---
 
-(module 
+(module
   (class_declaration (keyword) (identifier)
     (block
       (variable_declaration
@@ -328,17 +375,17 @@ class variables with basic type
 ===================
 
 class Main {
-  public var x:Int; 
+  public var x:Int;
 }
 
 ---
 
-(module 
+(module
   (class_declaration (keyword) (identifier)
     (block
       (variable_declaration
-        (keyword) 
-        (keyword) 
+        (keyword)
+        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -351,17 +398,17 @@ class final variables with basic type
 ===================
 
 class Main {
-  public final x:Int; 
+  public final x:Int;
 }
 
 ---
 
-(module 
+(module
   (class_declaration (keyword) (identifier)
     (block
       (variable_declaration
-        (keyword) 
-        (keyword) 
+        (keyword)
+        (keyword)
         (identifier)
         (type (identifier))
       )

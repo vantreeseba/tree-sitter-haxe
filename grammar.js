@@ -123,6 +123,7 @@ const haxe_grammar = {
 
     variable_declaration: ($) =>
       seq(
+        repeat($.metadata),
         repeat($.keyword),
         choice(alias('var', $.keyword), alias('final', $.keyword)),
         field('name', $.identifier),

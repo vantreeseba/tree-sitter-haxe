@@ -759,6 +759,10 @@
           "named": true
         },
         {
+          "type": "metadata",
+          "named": true
+        },
+        {
           "type": "operator",
           "named": true
         },
