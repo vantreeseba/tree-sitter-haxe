@@ -7,7 +7,7 @@
     "test": "tree-sitter generate && tree-sitter test"
   },
   "author": "vantreeseba@gmail.com",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/vantreeseba/tree-sitter-haxe"
