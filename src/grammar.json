@@ -91,7 +91,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "_lhs_expression"
             },
             {
               "type": "SYMBOL",
@@ -120,7 +120,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "_lhs_expression"
             },
             {
               "type": "CHOICE",
@@ -141,7 +141,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "_lhs_expression"
             },
             {
               "type": "SYMBOL",
@@ -218,7 +218,7 @@
                             "members": [
                               {
                                 "type": "SYMBOL",
-                                "name": "identifier"
+                                "name": "_lhs_expression"
                               },
                               {
                                 "type": "SYMBOL",
@@ -242,7 +242,7 @@
                               "members": [
                                 {
                                   "type": "SYMBOL",
-                                  "name": "identifier"
+                                  "name": "_lhs_expression"
                                 },
                                 {
                                   "type": "SYMBOL",
@@ -303,7 +303,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           }
         },
         {
@@ -329,7 +329,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           }
         },
         {
@@ -379,7 +379,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           }
         },
         {
@@ -406,40 +406,44 @@
     },
     "type_param": {
       "type": "SYMBOL",
-      "name": "identifier"
+      "name": "_lhs_expression"
     },
     "type_params": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "<"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "type_param"
-              },
-              {
-                "type": "STRING",
-                "value": ","
-              }
-            ]
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "<"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "type_param"
+                },
+                {
+                  "type": "STRING",
+                  "value": ","
+                }
+              ]
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "type_param"
+          },
+          {
+            "type": "STRING",
+            "value": ">"
           }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "type_param"
-        },
-        {
-          "type": "STRING",
-          "value": ">"
-        }
-      ]
+        ]
+      }
     },
     "function_declaration": {
       "type": "SEQ",
@@ -475,7 +479,7 @@
               "name": "name",
               "content": {
                 "type": "SYMBOL",
-                "name": "identifier"
+                "name": "_lhs_expression"
               }
             },
             {
@@ -552,7 +556,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           }
         },
         {
@@ -569,7 +573,7 @@
                   "type": "ALIAS",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "identifier"
+                    "name": "_lhs_expression"
                   },
                   "named": true,
                   "value": "type"
@@ -695,7 +699,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           }
         },
         {
@@ -812,7 +816,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           }
         },
         {
@@ -850,11 +854,15 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "_lhs_expression"
           },
           {
             "type": "SYMBOL",
             "name": "literal"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_constructor_call"
           },
           {
             "type": "SYMBOL",
@@ -1003,6 +1011,50 @@
                   ]
                 }
               ]
+            }
+          }
+        ]
+      }
+    },
+    "_lhs_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "member_expression"
+        }
+      ]
+    },
+    "member_expression": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "object",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          },
+          {
+            "type": "TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "."
+            }
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_lhs_expression"
             }
           }
         ]
@@ -1225,7 +1277,7 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "[a-zA-Z_]+[a-zA-Z0-9\\.]*"
+      "value": "[a-zA-Z_]+[a-zA-Z0-9]*"
     },
     "literal": {
       "type": "CHOICE",
@@ -1291,6 +1343,48 @@
         }
       ]
     },
+    "string": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "\\'"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "interpolation"
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "[^\\']"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\'"
+            }
+          ]
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\\"[^\\\"]*\\\""
+        }
+      ]
+    },
+    "null": {
+      "type": "STRING",
+      "value": "null"
+    },
     "interpolation": {
       "type": "CHOICE",
       "members": [
@@ -1333,7 +1427,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "_lhs_expression"
             }
           ]
         },
@@ -1346,7 +1440,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "_lhs_expression"
             },
             {
               "type": "STRING",
@@ -1384,48 +1478,6 @@
           ]
         }
       ]
-    },
-    "string": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "PATTERN",
-              "value": "\\'"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "interpolation"
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "[^\\']"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "PATTERN",
-              "value": "\\'"
-            }
-          ]
-        },
-        {
-          "type": "PATTERN",
-          "value": "\\\"[^\\\"]*\\\""
-        }
-      ]
-    },
-    "null": {
-      "type": "STRING",
-      "value": "null"
     },
     "operator": {
       "type": "CHOICE",
@@ -1685,7 +1737,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "_lhs_expression"
         },
         {
           "type": "SYMBOL",
@@ -1764,6 +1816,36 @@
         ]
       }
     },
+    "_constructor_call": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "STRING",
+                  "value": "new"
+                },
+                "named": true,
+                "value": "keyword"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "call"
+          }
+        ]
+      }
+    },
     "call": {
       "type": "PREC",
       "value": 1,
@@ -1771,12 +1853,20 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "FIELD",
-            "name": "name",
-            "content": {
-              "type": "SYMBOL",
-              "name": "identifier"
-            }
+            "type": "SYMBOL",
+            "name": "_lhs_expression"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_params"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
           },
           {
             "type": "FIELD",

@@ -16,6 +16,8 @@
 
 (function_declaration name: (identifier) @function)
 (function_arg name: (identifier) @variable.parameter)
+(call (identifier) @function)
+(call (member_expression (_) . (identifier) @function !arguments_list))
 
 ; Generic/Type Params
 ; --------------

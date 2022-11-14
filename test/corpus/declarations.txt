@@ -127,8 +127,8 @@ class Main {
   (class_declaration (keyword) (identifier)
     (block
       (function_declaration (keyword) (identifier)
-        (function_arg (identifier) (type) (literal (integer)))
-        (function_arg (identifier) (type))
+        (function_arg (identifier) (type (identifier)) (literal (integer)))
+        (function_arg (identifier) (type (identifier)))
         (block)
       )
     )

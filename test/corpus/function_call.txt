@@ -71,6 +71,25 @@ fn("Some" + "Combined" + "String");
 )
 
 ===================
+call with type params 
+===================
+
+fn<Int>(123);
+
+---
+
+(module
+  (call
+    (identifier)
+    (type_params
+      (type_param (identifier))
+    )
+    (literal (integer))
+  )
+)
+
+
+===================
 recursive call
 ===================
 
@@ -91,5 +110,13 @@ some.package.fn();
 ---
 
 (module
-  (call (identifier))
+  (call 
+    (member_expression 
+      (identifier)
+      (member_expression 
+        (identifier)
+        (identifier)
+      )
+    )
+  )
 )

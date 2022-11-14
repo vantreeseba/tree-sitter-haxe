@@ -1,0 +1,39 @@
+===================
+Assign an int.
+===================
+
+var x = 1;
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (literal (integer)))
+)
+
+===================
+Assign a string.
+===================
+
+var x = "hi";
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (literal (string)))
+)
+
+===================
+Assign an instance of a class.
+===================
+
+var x = new MyClass();
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (keyword)
+    (call (identifier)))
+)

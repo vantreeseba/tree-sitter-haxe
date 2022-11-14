@@ -36,9 +36,9 @@ const haxe_grammar = {
         $.import_statement,
         $.package_statement,
         $.declaration,
-        seq($.identifier, $.operator, optional($._semicolon)),
-        seq($.operator, $.identifier, optional($._semicolon)),
-        seq($.identifier, $.operator, optional($._semicolon))
+        seq($._lhs_expression, $.operator, optional($._semicolon)),
+        seq($.operator, $._lhs_expression, optional($._semicolon)),
+        seq($._lhs_expression, $.operator, optional($._semicolon))
       ),
 
     preprocessor_statement: ($) =>
@@ -49,10 +49,10 @@ const haxe_grammar = {
             seq(
               token.immediate(choice(...preprocessor_statement_start_tokens)),
               choice(
-                seq(optional($.operator), choice($.identifier, $.literal)),
+                seq(optional($.operator), choice($._lhs_expression, $.literal)),
                 seq(
                   '(',
-                  repeat1(choice($.identifier, $.literal, $.operator)),
+                  repeat1(choice($._lhs_expression, $.literal, $.operator)),
                   ')'
                 )
               )
@@ -65,14 +65,14 @@ const haxe_grammar = {
     package_statement: ($) =>
       seq(
         alias('package', $.keyword),
-        field('name', $.identifier),
+        field('name', $._lhs_expression),
         $._semicolon
       ),
 
     import_statement: ($) =>
       seq(
         alias('import', $.keyword),
-        field('name', $.identifier),
+        field('name', $._lhs_expression),
         $._semicolon
       ),
 
@@ -88,14 +88,16 @@ const haxe_grammar = {
       seq(
         repeat($.metadata),
         alias('class', $.keyword),
-        field('name', $.identifier),
+        field('name', $._lhs_expression),
         optional($.type_params),
         field('body', $.block)
       ),
 
-    type_param: ($) => $.identifier,
+    type_param: ($) => $._lhs_expression,
     type_params: ($) =>
-      seq('<', repeat(seq($.type_param, ',')), $.type_param, '>'),
+      prec(1,
+        seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')
+      ),
 
     function_declaration: ($) =>
       seq(
@@ -103,7 +105,7 @@ const haxe_grammar = {
         repeat($.keyword),
         alias('function', $.keyword),
         choice(
-          field('name', $.identifier),
+          field('name', $._lhs_expression),
           field('name', alias('new', $.identifier))
         ),
         optional($.type_params),
@@ -114,8 +116,8 @@ const haxe_grammar = {
 
     function_arg: ($) =>
       seq(
-        field('name', $.identifier),
-        optional(seq(':', alias($.identifier, $.type))),
+        field('name', $._lhs_expression),
+        optional(seq(':', alias($._lhs_expression, $.type))),
         optional(seq($._assignmentOperator, $.literal))
       ),
 
@@ -126,7 +128,7 @@ const haxe_grammar = {
         repeat($.metadata),
         repeat($.keyword),
         choice(alias('var', $.keyword), alias('final', $.keyword)),
-        field('name', $.identifier),
+        field('name', $._lhs_expression),
         optional(seq(':', field('type', $.type))),
         optional(seq(alias($._assignmentOperator, $.operator), $.expression)),
         repeat(seq($.operator, $.expression)),
@@ -139,15 +141,16 @@ const haxe_grammar = {
     metadata: ($) =>
       seq(
         choice('@', '@:'),
-        field('name', $.identifier),
+        field('name', $._lhs_expression),
         optional(seq('(', $.literal, ')'))
       ),
 
     // TODO: Add operators.
-    _rValue: ($) => prec.right(choice($.identifier, $.literal, $.call)),
+    _rValue: ($) => prec.right(choice($._lhs_expression, $.literal, $._constructor_call, $.call)),
 
     _runtime_type_check_expression: ($) =>
       seq('(', $.expression, ':', $.type, ')'),
+
     _cast_expression: ($) =>
       choice(
         seq(alias('cast', $.keyword), $._rValue),
@@ -159,12 +162,25 @@ const haxe_grammar = {
           ')'
         )
       ),
+
     expression: ($) =>
       prec.right(
         choice(
           $._cast_expression,
           $._runtime_type_check_expression,
           repeat1(seq($._rValue, optional($.operator)))
+        )
+      ),
+
+    _lhs_expression: ($) => 
+      choice($.identifier, $.member_expression),
+
+    member_expression: ($) => 
+      prec.right(
+        seq(
+          field('object', $.identifier),
+          token('.'),
+          repeat1($._lhs_expression)
         )
       ),
 
@@ -176,7 +192,7 @@ const haxe_grammar = {
     keyword: ($) => prec.right(choice(...keywords)),
 
     // TODO: Think about removing the . from this.
-    identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9\.]*/,
+    identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
 
     // From: https://haxe.org/manual/expression-literals.html
     literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null),
@@ -187,18 +203,6 @@ const haxe_grammar = {
     // Match either [true, false]
     bool: ($) => choice('true', 'false'),
     // Match any ["XXX", 'XXX']
-    interpolation: ($) =>
-      choice(
-        $._interpolated_block,
-        $._interpolated_identifier,
-        //         $._interpolated_expression
-      ),
-    _interpolated_block: ($) => seq('${', $.expression, '}'),
-    _interpolated_identifier: ($) =>
-      choice(seq('$', $.identifier), seq('${', $.identifier, '}')),
-    _interpolated_expression: ($) =>
-      seq('$', seq(token.immediate('{'), $.expression, '}')),
-
     string: ($) =>
       choice(
         seq(/\'/, repeat(choice($.interpolation, /[^\']/)), /\'/),
@@ -207,9 +211,21 @@ const haxe_grammar = {
     // match only [null]
     null: ($) => 'null',
 
+    // interplolated string.
+    interpolation: ($) =>
+      choice(
+        $._interpolated_block,
+        $._interpolated_identifier,
+        //         $._interpolated_expression
+      ),
+    _interpolated_block: ($) => seq('${', $.expression, '}'),
+    _interpolated_identifier: ($) =>
+      choice(seq('$', $._lhs_expression), seq('${', $._lhs_expression, '}')),
+    _interpolated_expression: ($) =>
+      seq('$', seq(token.immediate('{'), $.expression, '}')),
+
     // TODO: array, map, anonymous struct, range
     // array: ($) => "null",
-
     operator: ($) => choice($._binaryOperator, $._unaryOperator),
 
     // From: https://haxe.org/manual/expression-operators-unops.html
@@ -244,7 +260,7 @@ const haxe_grammar = {
       ),
 
     builtin_type: ($) => prec.right(choice(...builtins)),
-    type: ($) => choice($.identifier, $.builtin_type),
+    type: ($) => choice($._lhs_expression, $.builtin_type),
 
     // arg list is () with any amount of expressions followed by commas
     _call_arg_list: ($) => seq('(', commaSep($.expression), ')'),
@@ -255,7 +271,14 @@ const haxe_grammar = {
         seq(
           field('name', $.keyword),
           field('arguments_list', $._call_arg_list)
-          //           choice($.block, $.statement)
+        )
+      ),
+
+    _constructor_call: ($) => 
+      prec(1,
+        seq(
+          optional(alias('new', $.keyword)), // for constructor calls.
+          $.call
         )
       ),
 
@@ -263,7 +286,8 @@ const haxe_grammar = {
       prec(
         1,
         seq(
-          field('name', $.identifier),
+          $._lhs_expression,
+          optional($.type_params),
           field('arguments_list', $._call_arg_list)
         )
       ),
@@ -284,12 +308,20 @@ const haxe_grammar = {
 
 // Took these from
 // https://github.com/tree-sitter/tree-sitter-javascript/blob/master/grammar.js
-function commaSep1(rule) {
-  return seq(rule, repeat(seq(',', rule)));
+function commaSep(rule) {
+  return optional(seperated(rule, ','));
 }
 
-function commaSep(rule) {
-  return optional(commaSep1(rule));
+function dotSep1(rule) {
+  return seperated(rule, '.');
+}
+
+function seperated(rule, seperator) {
+  return seq(rule, repeat(seq(seperator, rule)));
+}
+
+function seperatedSkipLast(rule, seperator) {
+  return repeat1(seq(rule, seperator));
 }
 
 module.exports = grammar(haxe_grammar);
