@@ -1,18 +1,21 @@
 package my.test.package;
 
 @:stupid
-class Main<Int, Void, Bool> {
-	public var foo:Int;
+class Main<T, U> {
 	public var foo:Int;
 	public var bar:Void;
+	public var foo:Array<Int>;
 
-	public var banana;
-	public var foo:Int;
-
-	public static function main(a,a,f) {
+	public static function main(a:Int, a, f) {
 		var foo = x++;
 		var b = 3 + 3;
 		x++;
 		++x;
 	}
 }
+
+typedef Bar = {
+	var x:Int;
+}
+
+typedef Bar = Main;

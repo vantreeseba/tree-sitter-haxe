@@ -131,7 +131,7 @@ class main {
         (identifier) 
         (operator)
         (literal (float))
-        (identifier)
+        (ERROR (identifier))
       )
     )
   )

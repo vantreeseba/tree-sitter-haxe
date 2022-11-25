@@ -7,7 +7,7 @@ fn();
 ---
 
 (module
-  (call (identifier))
+  (call_expression (identifier))
 )
 
 ===================
@@ -19,7 +19,7 @@ fn(1);
 ---
 
 (module
-  (call (identifier) (literal (integer)))
+  (call_expression (identifier) (literal (integer)))
 )
 
 ===================
@@ -31,7 +31,7 @@ fn(1,2,3);
 ---
 
 (module
-  (call (identifier) 
+  (call_expression (identifier) 
     (literal (integer))
     (literal (integer))
     (literal (integer))
@@ -48,7 +48,7 @@ fn(x);
 ---
 
 (module
-  (call (identifier) (identifier))
+  (call_expression (identifier) (identifier))
 )
 
 ===================
@@ -60,7 +60,7 @@ fn("Some" + "Combined" + "String");
 ---
 
 (module
-  (call
+  (call_expression
     (identifier)
     (literal (string))
     (operator)
@@ -79,7 +79,7 @@ fn<Int>(123);
 ---
 
 (module
-  (call
+  (call_expression
     (identifier)
     (type_params
       (type_param (identifier))
@@ -98,7 +98,7 @@ fn(fn(x));
 ---
 
 (module
-  (call (identifier) (call (identifier) (identifier)))
+  (call_expression (identifier) (call_expression (identifier) (identifier)))
 )
 
 ===================
@@ -110,7 +110,7 @@ some.package.fn();
 ---
 
 (module
-  (call 
+  (call_expression 
     (member_expression 
       (identifier)
       (member_expression 

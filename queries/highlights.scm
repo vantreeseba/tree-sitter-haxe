@@ -1,23 +1,15 @@
 (identifier) @type
 (comment) @comment
 
+; Preprocessor Statement
+; --------
+(preprocessor_statement) @tag
+; (metadata name: (identifier) @type) @tag
+
 ; MetaData
 ; --------
 (metadata) @tag
 (metadata name: (identifier) @type) @tag
-
-; Declarations
-; ------------
-(import_statement name: (identifier) @type)
-(package_statement name: (identifier) @type)
-
-(class_declaration name: (identifier) @type)
-(class_declaration (type_params (type_param (identifier) @type)))
-
-(function_declaration name: (identifier) @function)
-(function_arg name: (identifier) @variable.parameter)
-(call (identifier) @function)
-(call (member_expression (_) . (identifier) @function !arguments_list))
 
 ; Generic/Type Params
 ; --------------
@@ -25,11 +17,29 @@
   "<" @punctuation.bracket
   ">" @punctuation.bracket)
 
+
+; Declarations
+; ------------
+(import_statement name: (identifier) @type)
+(package_statement name: (identifier) @type)
+(class_declaration name: (identifier) @type.definition)
+(class_declaration (type_params (type_param (identifier) @type)))
+(typedef_declaration name: (identifier) @type.definition)
+
+(function_declaration name: (identifier) @function)
+(function_arg name: (identifier) @variable.parameter)
+
+; Expressions
+(call_expression (identifier) @function)
+(call_expression (_ (identifier) @function .))
+(call_expression (_(_ (identifier) @function .)))
+
+
 ; Literals
 ; --------
 [(null) (keyword)] @keyword
 [(type) (literal)] @type
-[(builtin_type)] @type.builtin
+(type built_in: (identifier)) @type.builtin
 [(integer) (float)] @number
 (string) @string
 (bool) @constant

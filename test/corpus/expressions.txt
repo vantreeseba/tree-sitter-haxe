@@ -15,6 +15,21 @@ if (true) {
   )
 )
 
+===================
+parenthesis
+===================
+
+a = (1+1);
+
+---
+
+(module
+  (identifier) 
+  (operator)
+  (literal (integer))
+  (operator) 
+  (literal (integer))
+)
 
 ===================
 unsafe cast
@@ -24,18 +39,27 @@ cast x;
 
 ---
 
-(module (keyword) (identifier))
+(module 
+  (cast_expression
+    (keyword) (identifier)
+  )
+)
 
 ===================
 safe cast
 ===================
 
-cast (x, Type);
+cast (x, Int);
 
 ---
 
-(module (keyword) (identifier) (type (identifier)))
-
+(module 
+  (cast_expression
+    (keyword) 
+    (identifier) 
+    (type (identifier))
+  )
+)
 
 ===================
 runtime type check
@@ -45,8 +69,11 @@ runtime type check
 
 ---
 
-(module (identifier) (type (identifier)))
-
+(module 
+  (runtime_type_check_expression
+    (identifier) (type (identifier))
+  )
+)
 
 ===================
 preprocessor macro
@@ -64,10 +91,10 @@ trace(z);
 
 (module
   (preprocessor_statement (operator) (identifier))
-  (call (identifier) (identifier))
+  (call_expression (identifier) (identifier))
   (preprocessor_statement (identifier) (operator) (literal (integer)))
-  (call (identifier) (identifier))
+  (call_expression (identifier) (identifier))
   (preprocessor_statement)
-  (call (identifier) (identifier))
+  (call_expression (identifier) (identifier))
   (preprocessor_statement)
 )

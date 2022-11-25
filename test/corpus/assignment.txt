@@ -8,7 +8,24 @@ var x = 1;
 (module 
   (variable_declaration (keyword) (identifier) 
     (operator)
-    (literal (integer)))
+    (literal (integer))
+  )
+)
+
+===================
+Assign an expression.
+===================
+
+var x = 1 + 1;
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (literal (integer))
+    (operator)
+    (literal (integer))
+  )
 )
 
 ===================
@@ -21,7 +38,8 @@ var x = "hi";
 (module 
   (variable_declaration (keyword) (identifier) 
     (operator)
-    (literal (string)))
+    (literal (string))
+  )
 )
 
 ===================
@@ -34,6 +52,9 @@ var x = new MyClass();
 (module 
   (variable_declaration (keyword) (identifier) 
     (operator)
-    (keyword)
-    (call (identifier)))
+    (call_expression
+      (keyword)
+      (identifier)
+    )
+  )
 )

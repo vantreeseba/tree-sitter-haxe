@@ -1,3 +1,4 @@
 module.exports = [
-  'Void'
+  'Void',
+  'Int',
 ];

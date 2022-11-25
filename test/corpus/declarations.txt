@@ -394,6 +394,33 @@ class Main {
 )
 
 ===================
+class variables with parameterized type
+===================
+
+class Main {
+  public var x:Array<Int>;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (keyword)
+        (identifier)
+        (type 
+          (identifier) 
+          (type_params (type_param (identifier)))
+        )
+      )
+    )
+  )
+)
+
+
+===================
 class final variables with basic type
 ===================
 
@@ -415,4 +442,29 @@ class Main {
     )
   )
 )
+
+===================
+type def
+===================
+
+typedef MyType = {
+  var x:Int;
+}
+
+---
+
+(module
+  (typedef_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+
+
 
