@@ -1,4 +1,4 @@
-(identifier) @type @local.reference
+(identifier) @type ;@local.reference
 (comment) @comment
 
 ; Preprocessor Statement
