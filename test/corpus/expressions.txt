@@ -32,6 +32,43 @@ a = (1+1);
 )
 
 ===================
+subscript_expression
+===================
+
+a = b[1];
+
+---
+
+(module
+  (identifier) 
+  (operator)
+  (subscript_expression
+    (identifier)
+    (literal (integer))
+  )
+)
+
+===================
+subscript_expression
+===================
+
+a = b[c + 1];
+
+---
+
+(module
+  (identifier) 
+  (operator)
+  (subscript_expression
+    (identifier)
+    (identifier)
+    (operator)
+    (literal (integer))
+  )
+)
+
+
+===================
 unsafe cast
 ===================
 

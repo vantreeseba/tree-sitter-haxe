@@ -18,18 +18,18 @@ const haxe_grammar = {
   supertypes: ($) => [$.declaration],
   precedences: ($) => [[$._unaryOperator, $._binaryOperator]],
   conflicts: ($) => [
-//     [$._parenthesized_expression],
+    //     [$._parenthesized_expression],
     [$.call_expression, $._constructor_call],
     [$.function_declaration],
     [$.function_declaration, $.variable_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
-    ],
+  ],
   rules: {
     module: ($) => seq(repeat($.statement)),
 
     // Statements
-    statement: ($) => 
+    statement: ($) =>
       // Use prec.left to favor rules that end SOONER
       // since we have optional semi, this means a semicolon ends the statement.
       prec.left(seq(
@@ -44,7 +44,7 @@ const haxe_grammar = {
         ),
         optional($._semicolon)
       )
-    ),
+      ),
 
     preprocessor_statement: ($) =>
       prec.right(
@@ -54,7 +54,7 @@ const haxe_grammar = {
             seq(
               token.immediate(choice(...preprocessor_statement_start_tokens)),
               $.statement,
-           ),
+            ),
             token.immediate(choice(...preprocessor_statement_end_tokens))
           )
         )
@@ -74,9 +74,9 @@ const haxe_grammar = {
     ),
 
     _rhs_expression: ($) => choice(
-      $.literal, 
-      $.identifier, 
-      $.member_expression, 
+      $.literal,
+      $.identifier,
+      $.member_expression,
       $.call_expression
     ),
 
@@ -110,17 +110,26 @@ const haxe_grammar = {
 
     expression: ($) => choice(
       $._unaryExpression,
+      $.subscript_expression,
       $.runtime_type_check_expression,
       $.cast_expression,
       $._parenthesized_expression,
       // simple expression, or chained.
       seq(
-        $._rhs_expression, 
-        repeat(seq($.operator, $._rhs_expression)), 
+        $._rhs_expression,
+        repeat(seq($.operator, $._rhs_expression)),
       ),
     ),
 
-    member_expression: ($) => 
+    subscript_expression: $ =>
+      prec.right(
+        seq(
+          $.expression,
+          '[', field('index', $.expression), ']'
+        )
+      ),
+
+    member_expression: ($) =>
       prec.right(
         seq(
           field('object', $.identifier),
@@ -133,7 +142,7 @@ const haxe_grammar = {
     builtin_type: ($) => prec.right(choice(...builtins)),
     type: ($) => prec.right(seq(
       choice(
-        $._lhs_expression, 
+        $._lhs_expression,
         field('built_in', alias($.builtin_type, $.identifier))
       ),
       optional($.type_params)
@@ -157,7 +166,7 @@ const haxe_grammar = {
       )
     ),
 
-    _call: ($) => prec(1,seq(
+    _call: ($) => prec(1, seq(
       $._lhs_expression,
       optional($.type_params),
       field('arguments_list', $._arg_list)
