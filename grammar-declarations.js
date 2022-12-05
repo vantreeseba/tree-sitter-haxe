@@ -55,6 +55,7 @@ module.exports = {
   function_arg: ($) =>
     seq(
       field('name', $._lhs_expression),
+      optional('?'),
       optional(seq(':', alias($._lhs_expression, $.type))),
       optional(seq($._assignmentOperator, $.literal))
     ),

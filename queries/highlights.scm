@@ -1,4 +1,4 @@
-(identifier) @type
+(identifier) @type @local.reference
 (comment) @comment
 
 ; Preprocessor Statement
@@ -27,12 +27,17 @@
 (typedef_declaration name: (identifier) @type.definition)
 
 (function_declaration name: (identifier) @function)
-(function_arg name: (identifier) @variable.parameter)
+(function_arg name: (identifier) @variable.parameter @local.definition)
 
 ; Expressions
-(call_expression (identifier) @function)
-(call_expression (_ (identifier) @function .))
-(call_expression (_(_ (identifier) @function .)))
+; -----------
+(call_expression name: (identifier) @variable.parameter)
+; TODO: Figure out how to determined when "nested member call" is last ident.
+(call_expression object: (identifier) @function)
+(call_expression object: (_ (identifier) @function .))
+(call_expression object: (_(_ (identifier) @function .)))
+(call_expression object: (_(_(_ (identifier) @function .))))
+
 
 
 ; Literals

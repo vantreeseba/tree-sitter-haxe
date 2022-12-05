@@ -146,22 +146,28 @@
             "named": true
           }
         ]
+      },
+      "object": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "keyword",
-          "named": true
-        },
-        {
-          "type": "member_expression",
           "named": true
         },
         {
@@ -1240,6 +1246,10 @@
   },
   {
     "type": ">>>",
+    "named": false
+  },
+  {
+    "type": "?",
     "named": false
   },
   {

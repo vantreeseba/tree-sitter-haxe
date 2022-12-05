@@ -167,7 +167,7 @@ const haxe_grammar = {
     ),
 
     _call: ($) => prec(1, seq(
-      $._lhs_expression,
+      field('object', $._lhs_expression),
       optional($.type_params),
       field('arguments_list', $._arg_list)
     )),
