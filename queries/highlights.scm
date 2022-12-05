@@ -32,11 +32,15 @@
 ; Expressions
 ; -----------
 (call_expression name: (identifier) @variable.parameter)
+
 ; TODO: Figure out how to determined when "nested member call" is last ident.
+; apparently this is a known issue https://github.com/tree-sitter/tree-sitter/issues/880
 (call_expression object: (identifier) @function)
-(call_expression object: (_ (identifier) @function .))
+(call_expression object: (_ member: (identifier) @function .))
 (call_expression object: (_(_ (identifier) @function .)))
 (call_expression object: (_(_(_ (identifier) @function .))))
+(call_expression object: (_(_(_(_ (identifier) @function .)))))
+(call_expression object: (_(_(_(_(_ (identifier) @function .))))))
 
 
 

@@ -134,7 +134,7 @@ const haxe_grammar = {
         seq(
           field('object', $.identifier),
           token('.'),
-          repeat1($._lhs_expression)
+          repeat1(field('member', $._lhs_expression))
         )
       ),
 
