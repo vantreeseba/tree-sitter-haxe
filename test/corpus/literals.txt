@@ -277,6 +277,29 @@ class main {
 )
 
 ===================
+Array literal with no elements
+===================
+
+class main {
+  var y = [];
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (array)
+      )
+    )
+  )
+)
+
+===================
 Array literal with single element
 ===================
 
@@ -294,6 +317,96 @@ class main {
         (identifier) 
         (operator)
         (array (integer))
+      )
+    )
+  )
+)
+
+===================
+Array literal with multiple elements
+===================
+
+  var y = [1, 2, 3];
+
+---
+
+(module 
+  (variable_declaration 
+    (keyword) 
+    (identifier) 
+    (operator)
+    (array (integer) (integer) (integer))
+  )
+)
+
+===================
+simple pair literal 
+===================
+
+x:1
+
+---
+
+(module 
+  (pair (identifier) (integer))
+)
+
+===================
+simple map pair literal 
+===================
+
+"test"=>1
+
+---
+
+(module 
+  (pair (string) (integer))
+)
+
+
+
+===================
+Map literal with single element
+===================
+
+class main {
+  var y = ["string" =>  1];
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (map (pair (string) (integer)))
+      )
+    )
+  )
+)
+
+
+===================
+Object literal 
+===================
+
+class main {
+  var y = {x:1}; 
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (object (pair (identifier) (integer)))
       )
     )
   )

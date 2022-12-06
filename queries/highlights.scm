@@ -1,4 +1,4 @@
-(identifier) @variable
+(identifier !type) @variable
 (comment) @comment
 
 ; Preprocessor Statement
@@ -19,20 +19,19 @@
   ">" @punctuation.bracket
 )
 
-
 ; Declarations
 ; ------------
 (import_statement name: [
   (identifier) @type 
-  (_ (identifier) @type)
-  (_(_ (identifier) @type))
-  (_(_(_ (identifier) @type)))
-  (_(_(_(_ (identifier) @type))))
-  (_(_(_(_(_ (identifier) @type)))))
+;   (_ (identifier) @type)
+;   (_(_ (identifier) @type))
+;   (_(_(_ (identifier) @type)))
+;   (_(_(_(_ (identifier) @type))))
+;   (_(_(_(_(_ (identifier) @type)))))
 ])
 (package_statement name: (identifier) @type) 
+
 (class_declaration name: (identifier) @type.definition)
-; (class_declaration (type_params (type_param (identifier) @type)))
 (typedef_declaration name: (identifier) @type.definition)
 
 (function_declaration name: (identifier) @function)
@@ -56,9 +55,9 @@
 ; Literals
 ; --------
 [(keyword) (null)] @keyword
-(type) @type
+; (type) @type
+(type (identifier) !built_in) @type
 (type built_in: (identifier)) @type.builtin
-(type (identifier)) @type
 [(integer) (float)] @number
 (string) @string
 (bool) @constant

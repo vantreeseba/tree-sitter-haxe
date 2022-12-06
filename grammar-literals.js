@@ -1,8 +1,11 @@
 // From: https://haxe.org/manual/expression-literals.html
-const {commaSep} = require("./utils");
+const {commaSep, commaSep1} = require("./utils");
 
 module.exports = {
-  _literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null, $.array),
+  // Main "literal" export.
+  _literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null, $.array, $.map, $.object, $.pair),
+
+
   // Match any [42, 0xFF43]
   integer: ($) => choice(/[\d]+/, /0x[a-fA-F\d]+/),
   // Match any [0.32, 3., 2.1e5]
@@ -17,8 +20,22 @@ module.exports = {
   // match only [null]
   null: ($) => 'null',
 
-  // 
+  // https://haxe.org/manual/expression-array-declaration.html
   array: ($) => seq('[', commaSep(prec.left($.expression)), ']'),
+
+  // https://haxe.org/manual/expression-map-declaration.html
+  map: ($) => prec(1, seq('[', commaSep1($.pair), ']')),
+
+  // https://haxe.org/manual/expression-object-declaration.html
+  object: ($) => prec(1, seq('{', commaSep($.pair), '}')),
+
+  // Sub part of map and object literals
+  pair: ($) => prec.left(
+    choice(
+      seq($.identifier, choice(':', '=>'), $.expression),
+      seq($._literal, choice('=>'), $.expression)
+    )
+  ),
 
   // interplolated string.
   interpolation: ($) =>

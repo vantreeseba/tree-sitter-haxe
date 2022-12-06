@@ -1,5 +1,10 @@
 package my.test.package;
 
+typedef Point = {
+	x:Int,
+	y:Int
+}
+
 @:some_macro
 class Main<T, U> {
 	public var foo:Int;
@@ -16,8 +21,10 @@ class Main<T, U> {
 	}
 }
 
-typedef Bar = {
-	var x:Int;
-}
+var x = [1, 2, 3];
+var x = {x: 1};
+var x = {x: (1 + 3)};
+var x = [x => (1 + 3)];
 
 typedef Bar = Main;
+var foo = new Main();

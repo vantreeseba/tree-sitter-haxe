@@ -20,6 +20,8 @@ const haxe_grammar = {
   conflicts: ($) => [
     //     [$._parenthesized_expression],
     //     [$.array, $.subscript_expression],
+    [$.block, $.object],
+    [$._rhs_expression, $.pair],
     [$.call_expression, $._constructor_call],
     [$.function_declaration],
     [$.function_declaration, $.variable_declaration],
@@ -89,7 +91,7 @@ const haxe_grammar = {
     )),
 
     runtime_type_check_expression: ($) =>
-      seq('(', $.expression, ':', $.type, ')'),
+      prec(2, seq('(', $.expression, ':', $.type, ')')),
 
     cast_expression: ($) =>
       choice(
@@ -140,6 +142,7 @@ const haxe_grammar = {
       ),
 
     _lhs_expression: ($) => prec(1, choice($.identifier, $.member_expression)),
+
     builtin_type: ($) => prec.right(choice(...builtins)),
     type: ($) => prec.right(seq(
       choice(
