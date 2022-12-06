@@ -76,6 +76,7 @@
 ; ------
 
 (":") @punctuation.special
+(pair [":" "=>"] @punctuation.special)
 
 [
   "("

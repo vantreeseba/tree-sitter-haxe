@@ -340,6 +340,26 @@ Array literal with multiple elements
 )
 
 ===================
+Array literal with object element 
+===================
+
+  var y = [{x:1}];
+
+---
+
+(module 
+  (variable_declaration 
+    (keyword) 
+    (identifier) 
+    (operator)
+    (array 
+      (object 
+      (pair (identifier) (integer)))
+    )
+  )
+)
+
+===================
 simple pair literal 
 ===================
 
@@ -388,6 +408,29 @@ class main {
   )
 )
 
+===================
+Map literal with nested 
+===================
+
+var y = ["string" =>  ["bar" => 2]];
+
+---
+
+(module 
+  (variable_declaration 
+    (keyword) 
+    (identifier) 
+    (operator)
+    (map 
+      (pair 
+        (string)
+        (map
+          (pair (string) (integer))
+        )
+      )
+    )
+  )
+)
 
 ===================
 Object literal 
