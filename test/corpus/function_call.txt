@@ -19,7 +19,7 @@ fn(1);
 ---
 
 (module
-  (call_expression (identifier) (literal (integer)))
+  (call_expression (identifier) (integer))
 )
 
 ===================
@@ -32,9 +32,9 @@ fn(1,2,3);
 
 (module
   (call_expression (identifier) 
-    (literal (integer))
-    (literal (integer))
-    (literal (integer))
+    (integer)
+    (integer)
+    (integer)
   )
 )
 
@@ -62,11 +62,11 @@ fn("Some" + "Combined" + "String");
 (module
   (call_expression
     (identifier)
-    (literal (string))
+    (string)
     (operator)
-    (literal (string))
+    (string)
     (operator)
-    (literal (string))
+    (string)
   )
 )
 
@@ -84,7 +84,7 @@ fn<Int>(123);
     (type_params
       (type_param (identifier))
     )
-    (literal (integer))
+    (integer)
   )
 )
 

@@ -1,9 +1,9 @@
 class Main {}
 // <- keyword
-//    ^ type
+//    ^ variable 
 
 class Main<T,Y> {}
 // <- keyword
-//    ^ type
-//         ^ type
-//           ^ type
+//    ^  variable
+//         ^ variable
+//           ^ variable

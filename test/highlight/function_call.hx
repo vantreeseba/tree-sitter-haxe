@@ -1,15 +1,19 @@
-class banana {
-	// <- keyword
-	//    ^ type
-	public function bar(?bar:Int) {}
-	// ^keyword
-	//       ^ keyword
-	//                ^ type
-}
+public function bar() {}
+// ^keyword
+//       ^ keyword
+//              ^ variable
+
 banana();
-// <- type
+// <- variable
+
 banana.bar(foo);
-// <- type
-//     ^ type
+// <- variable
+//     ^ variable
+
 banana.foo.bar();
+
 banana.foo.bar(apple);
+
+public function foo(bar) {
+	bar = 3;
+}

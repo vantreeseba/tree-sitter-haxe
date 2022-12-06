@@ -22,6 +22,69 @@
     ]
   },
   {
+    "type": "array",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "subscript_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "block",
     "named": true,
     "fields": {},
@@ -30,7 +93,15 @@
       "required": false,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "bool",
           "named": true
         },
         {
@@ -50,6 +121,10 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -58,11 +133,15 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "integer",
           "named": true
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
           "named": true
         },
         {
@@ -79,6 +158,10 @@
         },
         {
           "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -114,6 +197,14 @@
             "named": false
           },
           {
+            "type": "array",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -122,15 +213,23 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
           {
-            "type": "literal",
+            "type": "integer",
             "named": true
           },
           {
             "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "null",
             "named": true
           },
           {
@@ -139,6 +238,10 @@
           },
           {
             "type": "runtime_type_check_expression",
+            "named": true
+          },
+          {
+            "type": "string",
             "named": true
           },
           {
@@ -197,7 +300,19 @@
       "required": true,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
           "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "float",
           "named": true
         },
         {
@@ -205,15 +320,23 @@
           "named": true
         },
         {
+          "type": "integer",
+          "named": true
+        },
+        {
           "type": "keyword",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "member_expression",
           "named": true
         },
         {
-          "type": "member_expression",
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -288,6 +411,14 @@
             "named": false
           },
           {
+            "type": "array",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -296,15 +427,23 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
           {
-            "type": "literal",
+            "type": "integer",
             "named": true
           },
           {
             "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "null",
             "named": true
           },
           {
@@ -313,6 +452,10 @@
           },
           {
             "type": "runtime_type_check_expression",
+            "named": true
+          },
+          {
+            "type": "string",
             "named": true
           },
           {
@@ -362,7 +505,27 @@
       "required": false,
       "types": [
         {
-          "type": "literal",
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -483,6 +646,14 @@
       "required": false,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
@@ -491,15 +662,23 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "integer",
           "named": true
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
           "named": true
         },
         {
@@ -508,6 +687,10 @@
         },
         {
           "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -521,37 +704,6 @@
     "type": "keyword",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "literal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "bool",
-          "named": true
-        },
-        {
-          "type": "float",
-          "named": true
-        },
-        {
-          "type": "integer",
-          "named": true
-        },
-        {
-          "type": "null",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "member_expression",
@@ -607,7 +759,27 @@
       "required": false,
       "types": [
         {
-          "type": "literal",
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -622,7 +794,15 @@
       "required": false,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "bool",
           "named": true
         },
         {
@@ -642,6 +822,10 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -650,11 +834,15 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "integer",
           "named": true
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
           "named": true
         },
         {
@@ -671,6 +859,10 @@
         },
         {
           "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -724,7 +916,15 @@
       "required": false,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "bool",
           "named": true
         },
         {
@@ -744,6 +944,10 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -752,11 +956,15 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "integer",
           "named": true
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
           "named": true
         },
         {
@@ -776,6 +984,10 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "subscript_expression",
           "named": true
         }
@@ -791,6 +1003,14 @@
       "required": true,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
@@ -799,15 +1019,23 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "integer",
           "named": true
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
           "named": true
         },
         {
@@ -816,6 +1044,10 @@
         },
         {
           "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -861,6 +1093,14 @@
             "named": false
           },
           {
+            "type": "array",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -869,15 +1109,23 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           },
           {
-            "type": "literal",
+            "type": "integer",
             "named": true
           },
           {
             "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "null",
             "named": true
           },
           {
@@ -886,6 +1134,10 @@
           },
           {
             "type": "runtime_type_check_expression",
+            "named": true
+          },
+          {
+            "type": "string",
             "named": true
           },
           {
@@ -900,6 +1152,14 @@
       "required": false,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
@@ -908,15 +1168,23 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "integer",
           "named": true
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
           "named": true
         },
         {
@@ -925,6 +1193,10 @@
         },
         {
           "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -947,10 +1219,24 @@
             "named": true
           }
         ]
+      },
+      "type_name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
@@ -1086,6 +1372,14 @@
       "required": true,
       "types": [
         {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
@@ -1094,15 +1388,19 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "keyword",
+          "type": "integer",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "keyword",
           "named": true
         },
         {
@@ -1114,11 +1412,19 @@
           "named": true
         },
         {
+          "type": "null",
+          "named": true
+        },
+        {
           "type": "operator",
           "named": true
         },
         {
           "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {

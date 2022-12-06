@@ -1,11 +1,11 @@
 package my;
 // <- keyword
-//      ^ type
+//      ^ variable
 // (module (package_statement (identifier)))
 
 package my.other.package;
 // <- keyword
-//      ^ type
-//         ^ type
-//               ^ type
+//      ^ variable
+//         ^ variable
+//               ^ variable
 // (module (package_statement (identifier)(identifier)(identifier)))

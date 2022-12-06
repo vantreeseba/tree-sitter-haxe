@@ -127,7 +127,7 @@ class Main {
   (class_declaration (keyword) (identifier)
     (block
       (function_declaration (keyword) (identifier)
-        (function_arg (identifier) (type (identifier)) (literal (integer)))
+        (function_arg (identifier) (type (identifier)) (integer))
         (function_arg (identifier) (type (identifier)))
         (block)
       )
@@ -308,8 +308,8 @@ class Main {
     (block
       (function_declaration (keyword) (identifier)
         (block
-          (variable_declaration (keyword) (identifier) (operator) (literal (integer)))
-          (variable_declaration (keyword) (identifier) (operator) (literal (string)))
+          (variable_declaration (keyword) (identifier) (operator) (integer))
+          (variable_declaration (keyword) (identifier) (operator) (string))
         )
       )
     )
@@ -339,7 +339,7 @@ class Main {
         (block
           (variable_declaration (keyword) (identifier))
           (variable_declaration (keyword) (identifier))
-          (identifier) (operator) (literal (integer))
+          (identifier) (operator) (integer)
           (identifier) (operator) (identifier)
         )
       )

@@ -1,7 +1,8 @@
 // From: https://haxe.org/manual/expression-literals.html
+const {commaSep} = require("./utils");
 
 module.exports = {
-  literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null),
+  _literal: ($) => choice($.integer, $.float, $.string, $.bool, $.null, $.array),
   // Match any [42, 0xFF43]
   integer: ($) => choice(/[\d]+/, /0x[a-fA-F\d]+/),
   // Match any [0.32, 3., 2.1e5]
@@ -15,6 +16,10 @@ module.exports = {
   ),
   // match only [null]
   null: ($) => 'null',
+
+  // 
+  array: ($) => seq('[', commaSep(prec.left($.expression)), ']'),
+
   // interplolated string.
   interpolation: ($) =>
     choice(
@@ -24,7 +29,7 @@ module.exports = {
     ),
   _interpolated_block: ($) => seq('${', $.expression, '}'),
   _interpolated_identifier: ($) => choice(
-    seq('$', $._lhs_expression), 
+    seq('$', $._lhs_expression),
     seq('${', $._lhs_expression, '}')
   ),
   _interpolated_expression: ($) =>

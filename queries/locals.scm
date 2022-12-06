@@ -1,12 +1,12 @@
-; locals.scm
+; Scopes
+[
+ (block)
+ (function_declaration)
+] @scope @local.scope
 
-; (method) @local.scope
-; (do_block) @local.scope
-;
-; (method_parameters (identifier) @local.definition)
-; (block_parameters (identifier) @local.definition)
-;
-; (assignment left:(identifier) @local.definition)
+; Definitions
+(function_arg name: (identifier) @definition.parameter)
+(variable_declaration name: (identifier) @local.definition) 
 
-(function_arg name: (identifier) @local.definition)
-(identifier) @local.reference
+; References
+(block (identifier)) @local.reference

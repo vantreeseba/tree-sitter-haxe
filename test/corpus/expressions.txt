@@ -9,9 +9,9 @@ if (true) {
 ---
 
 (module
-  (conditional_statement (keyword) (literal (bool))) 
+  (conditional_statement (keyword) (bool))
   (block
-    (identifier) (operator) (literal (integer))
+    (identifier) (operator) (integer)
   )
 )
 
@@ -26,9 +26,9 @@ a = (1+1);
 (module
   (identifier) 
   (operator)
-  (literal (integer))
+  (integer)
   (operator) 
-  (literal (integer))
+  (integer)
 )
 
 ===================
@@ -44,7 +44,7 @@ a = b[1];
   (operator)
   (subscript_expression
     (identifier)
-    (literal (integer))
+    (integer)
   )
 )
 
@@ -63,7 +63,7 @@ a = b[c + 1];
     (identifier)
     (identifier)
     (operator)
-    (literal (integer))
+    (integer)
   )
 )
 
@@ -129,7 +129,7 @@ trace(z);
 (module
   (preprocessor_statement (operator) (identifier))
   (call_expression (identifier) (identifier))
-  (preprocessor_statement (identifier) (operator) (literal (integer)))
+  (preprocessor_statement (identifier) (operator) (integer))
   (call_expression (identifier) (identifier))
   (preprocessor_statement)
   (call_expression (identifier) (identifier))

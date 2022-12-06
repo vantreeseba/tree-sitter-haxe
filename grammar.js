@@ -19,6 +19,7 @@ const haxe_grammar = {
   precedences: ($) => [[$._unaryOperator, $._binaryOperator]],
   conflicts: ($) => [
     //     [$._parenthesized_expression],
+    //     [$.array, $.subscript_expression],
     [$.call_expression, $._constructor_call],
     [$.function_declaration],
     [$.function_declaration, $.variable_declaration],
@@ -74,7 +75,7 @@ const haxe_grammar = {
     ),
 
     _rhs_expression: ($) => choice(
-      $.literal,
+      $._literal,
       $.identifier,
       $.member_expression,
       $.call_expression
@@ -122,7 +123,7 @@ const haxe_grammar = {
     ),
 
     subscript_expression: $ =>
-      prec.right(
+      prec.right(1,
         seq(
           $.expression,
           '[', field('index', $.expression), ']'
@@ -142,7 +143,7 @@ const haxe_grammar = {
     builtin_type: ($) => prec.right(choice(...builtins)),
     type: ($) => prec.right(seq(
       choice(
-        $._lhs_expression,
+        field('type_name', $._lhs_expression),
         field('built_in', alias($.builtin_type, $.identifier))
       ),
       optional($.type_params)
@@ -153,7 +154,7 @@ const haxe_grammar = {
     metadata: ($) => seq(
       choice(token('@'), token('@:')),
       field('name', $._lhs_expression),
-      optional(seq('(', $.literal, ')'))
+      optional(seq('(', $._literal, ')'))
     ),
 
     // arg list is () with any amount of expressions followed by commas

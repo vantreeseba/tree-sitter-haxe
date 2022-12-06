@@ -7,7 +7,7 @@ if (true) {
 //      ^ @punctuation.bracket
 //        ^ @punctuation.bracket
   a = 1;
-//^ type
+//^ variable
 //    ^ number
 }
 // <- @punctuation.bracket
@@ -15,7 +15,7 @@ if (true) {
 // parenthesis
 
 a = (1+1);
-// <- type 
+// <- variable 
 //  ^ @punctuation.bracket
 //   ^ number  
 //     ^ number 
@@ -24,12 +24,12 @@ a = (1+1);
 // unsafe cast
 cast x;
 // <- keyword 
-//   ^ type 
+//   ^ variable 
 
 // safe cast
 cast (x, Int);
 // <- keyword 
-//    ^ type
+//    ^ variable
 //       ^ @type.builtin
 
 // runtime type check

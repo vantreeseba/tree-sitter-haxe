@@ -15,7 +15,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (integer))
+        (integer)
       )
     )
   )
@@ -38,7 +38,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (integer))
+        (integer)
       )
     )
   )
@@ -61,7 +61,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (float))
+        (float)
       )
     )
   )
@@ -84,7 +84,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (float))
+        (float)
       )
     )
   )
@@ -107,7 +107,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (float))
+        (float)
       )
     )
   )
@@ -130,7 +130,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (float))
+        (float)
         (ERROR (identifier))
       )
     )
@@ -154,7 +154,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (string))
+        (string)
       )
     )
   )
@@ -177,7 +177,7 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (string))
+        (string)
       )
     )
   )
@@ -201,13 +201,13 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (integer))
+        (integer)
       )
       (variable_declaration 
         (keyword) 
         (identifier) 
         (operator)
-        (literal (string (interpolation (identifier))))
+        (string (interpolation (identifier)))
       )
     )
   )
@@ -231,13 +231,13 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (integer))
+        (integer)
       )
       (variable_declaration 
         (keyword) 
         (identifier) 
         (operator)
-        (literal (string (interpolation (identifier))))
+        (string (interpolation (identifier)))
       )
     )
   )
@@ -262,18 +262,39 @@ class main {
         (keyword) 
         (identifier) 
         (operator)
-        (literal (integer))
+        (integer)
       )
       (variable_declaration 
         (keyword) 
         (identifier) 
         (operator)
-        (literal (string (interpolation 
-          (identifier) (operator) (literal (integer))
-        )))
+        (string (interpolation 
+          (identifier) (operator) (integer)
+        ))
       )
     )
   )
 )
 
+===================
+Array literal with single element
+===================
 
+class main {
+  var y = [1];
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (array (integer))
+      )
+    )
+  )
+)
