@@ -506,6 +506,18 @@
           {
             "type": "STRING",
             "value": "Int"
+          },
+          {
+            "type": "STRING",
+            "value": "Float"
+          },
+          {
+            "type": "STRING",
+            "value": "Bool"
+          },
+          {
+            "type": "STRING",
+            "value": "Null"
           }
         ]
       }
@@ -619,7 +631,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_literal"
+                  "name": "expression"
                 },
                 {
                   "type": "STRING",
@@ -1803,21 +1815,21 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": ":"
+                    "type": "SYMBOL",
+                    "name": "identifier"
                   },
                   {
-                    "type": "STRING",
-                    "value": "=>"
+                    "type": "SYMBOL",
+                    "name": "string"
                   }
                 ]
+              },
+              {
+                "type": "STRING",
+                "value": ":"
               },
               {
                 "type": "SYMBOL",
@@ -1829,17 +1841,21 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "_literal"
-              },
-              {
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": "=>"
+                    "type": "SYMBOL",
+                    "name": "identifier"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_literal"
                   }
                 ]
+              },
+              {
+                "type": "STRING",
+                "value": "=>"
               },
               {
                 "type": "SYMBOL",
@@ -2184,12 +2200,16 @@
       "object"
     ],
     [
+      "call_expression",
+      "_constructor_call"
+    ],
+    [
       "_rhs_expression",
       "pair"
     ],
     [
-      "call_expression",
-      "_constructor_call"
+      "_literal",
+      "pair"
     ],
     [
       "function_declaration"
@@ -2216,6 +2236,16 @@
       {
         "type": "SYMBOL",
         "name": "_binaryOperator"
+      }
+    ],
+    [
+      {
+        "type": "SYMBOL",
+        "name": "runtime_type_check_expression"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "pair"
       }
     ]
   ],

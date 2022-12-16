@@ -15,14 +15,18 @@ const haxe_grammar = {
   word: ($) => $.identifier,
   inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
-  supertypes: ($) => [$.declaration],
-  precedences: ($) => [[$._unaryOperator, $._binaryOperator]],
+  supertypes: ($) => [
+    $.declaration,
+  ],
+  precedences: ($) => [
+    [$._unaryOperator, $._binaryOperator],
+    [$.runtime_type_check_expression, $.pair]
+  ],
   conflicts: ($) => [
-    //     [$._parenthesized_expression],
-    //     [$.array, $.subscript_expression],
     [$.block, $.object],
-    [$._rhs_expression, $.pair],
     [$.call_expression, $._constructor_call],
+    [$._rhs_expression, $.pair],
+    [$._literal, $.pair],
     [$.function_declaration],
     [$.function_declaration, $.variable_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
@@ -157,7 +161,7 @@ const haxe_grammar = {
     metadata: ($) => seq(
       choice(token('@'), token('@:')),
       field('name', $._lhs_expression),
-      optional(seq('(', $._literal, ')'))
+      optional(seq('(', $.expression, ')'))
     ),
 
     // arg list is () with any amount of expressions followed by commas

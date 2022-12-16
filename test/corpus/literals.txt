@@ -436,21 +436,19 @@ var y = ["string" =>  ["bar" => 2]];
 Object literal 
 ===================
 
-class main {
-  var y = {x:1}; 
-}
+var y = {x:1, y:2}; 
 
 ---
 
 (module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
-        (operator)
-        (object (pair (identifier) (integer)))
-      )
+  (variable_declaration 
+    (keyword) 
+    (identifier) 
+    (operator)
+    (object 
+      (pair (identifier) (integer))
+      (pair (identifier) (integer))
     )
   )
 )
+

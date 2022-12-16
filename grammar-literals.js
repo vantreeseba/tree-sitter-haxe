@@ -32,8 +32,8 @@ module.exports = {
   // Sub part of map and object literals
   pair: ($) => prec.left(
     choice(
-      seq($.identifier, choice(':', '=>'), $.expression),
-      seq($._literal, choice('=>'), $.expression)
+      seq(choice($.identifier, $.string), ':', $.expression),
+      seq(choice($.identifier, $._literal), '=>', $.expression)
     )
   ),
 
