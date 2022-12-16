@@ -9,6 +9,24 @@ package my;
 (module (package_statement (keyword) (identifier)))
 
 ===================
+Package Name with single path
+===================
+
+package my.other;
+
+---
+
+(module 
+  (package_statement 
+    (keyword) 
+    (member_expression
+      (identifier)
+      (identifier)
+    )
+  )
+)
+
+===================
 Package Name with path
 ===================
 
@@ -16,4 +34,15 @@ package my.other.package;
 
 ---
 
-(module (package_statement (keyword) (identifier)))
+(module 
+  (package_statement 
+    (keyword) 
+    (member_expression
+      (identifier)
+      (member_expression
+        (identifier)
+        (identifier)
+      )
+    )
+  )
+)

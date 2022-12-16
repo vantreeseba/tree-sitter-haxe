@@ -12,7 +12,6 @@
     "type": "git",
     "url": "https://github.com/vantreeseba/tree-sitter-haxe"
   },
-  "dependencies": {},
   "devDependencies": {
     "nan": "^2.14.2",
     "tree-sitter-cli": "^0.20.7"

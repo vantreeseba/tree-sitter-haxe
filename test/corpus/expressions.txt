@@ -9,9 +9,61 @@ if (true) {
 ---
 
 (module
-  (conditional_statement (keyword) (literal (bool))) 
+  (conditional_statement (keyword) (bool))
   (block
-    (identifier) (operator) (literal (integer))
+    (identifier) (operator) (integer)
+  )
+)
+
+===================
+parenthesis
+===================
+
+a = (1+1);
+
+---
+
+(module
+  (identifier) 
+  (operator)
+  (integer)
+  (operator) 
+  (integer)
+)
+
+===================
+subscript_expression
+===================
+
+a = b[1];
+
+---
+
+(module
+  (identifier) 
+  (operator)
+  (subscript_expression
+    (identifier)
+    (integer)
+  )
+)
+
+===================
+subscript_expression
+===================
+
+a = b[c + 1];
+
+---
+
+(module
+  (identifier) 
+  (operator)
+  (subscript_expression
+    (identifier)
+    (identifier)
+    (operator)
+    (integer)
   )
 )
 
@@ -24,18 +76,27 @@ cast x;
 
 ---
 
-(module (keyword) (identifier))
+(module 
+  (cast_expression
+    (keyword) (identifier)
+  )
+)
 
 ===================
 safe cast
 ===================
 
-cast (x, Type);
+cast (x, Int);
 
 ---
 
-(module (keyword) (identifier) (type (identifier)))
-
+(module 
+  (cast_expression
+    (keyword) 
+    (identifier) 
+    (type (identifier))
+  )
+)
 
 ===================
 runtime type check
@@ -45,8 +106,11 @@ runtime type check
 
 ---
 
-(module (identifier) (type (identifier)))
-
+(module 
+  (runtime_type_check_expression
+    (identifier) (type (identifier))
+  )
+)
 
 ===================
 preprocessor macro
@@ -64,10 +128,10 @@ trace(z);
 
 (module
   (preprocessor_statement (operator) (identifier))
-  (call (identifier) (identifier))
-  (preprocessor_statement (identifier) (operator) (literal (integer)))
-  (call (identifier) (identifier))
+  (call_expression (identifier) (identifier))
+  (preprocessor_statement (identifier) (operator) (integer))
+  (call_expression (identifier) (identifier))
   (preprocessor_statement)
-  (call (identifier) (identifier))
+  (call_expression (identifier) (identifier))
   (preprocessor_statement)
 )
