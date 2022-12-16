@@ -127,8 +127,8 @@ class Main {
   (class_declaration (keyword) (identifier)
     (block
       (function_declaration (keyword) (identifier)
-        (function_arg (identifier) (type) (literal (integer)))
-        (function_arg (identifier) (type))
+        (function_arg (identifier) (type (identifier)) (integer))
+        (function_arg (identifier) (type (identifier)))
         (block)
       )
     )
@@ -308,8 +308,8 @@ class Main {
     (block
       (function_declaration (keyword) (identifier)
         (block
-          (variable_declaration (keyword) (identifier) (operator) (literal (integer)))
-          (variable_declaration (keyword) (identifier) (operator) (literal (string)))
+          (variable_declaration (keyword) (identifier) (operator) (integer))
+          (variable_declaration (keyword) (identifier) (operator) (string))
         )
       )
     )
@@ -339,7 +339,7 @@ class Main {
         (block
           (variable_declaration (keyword) (identifier))
           (variable_declaration (keyword) (identifier))
-          (identifier) (operator) (literal (integer))
+          (identifier) (operator) (integer)
           (identifier) (operator) (identifier)
         )
       )
@@ -394,6 +394,33 @@ class Main {
 )
 
 ===================
+class variables with parameterized type
+===================
+
+class Main {
+  public var x:Array<Int>;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (keyword)
+        (identifier)
+        (type 
+          (identifier) 
+          (type_params (type_param (identifier)))
+        )
+      )
+    )
+  )
+)
+
+
+===================
 class final variables with basic type
 ===================
 
@@ -415,4 +442,29 @@ class Main {
     )
   )
 )
+
+===================
+type def
+===================
+
+typedef MyType = {
+  var x:Int;
+}
+
+---
+
+(module
+  (typedef_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+
+
 

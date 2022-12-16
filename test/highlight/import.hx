@@ -1,7 +1,9 @@
 import somePackage;
 // <- keyword
-//     ^ type
+//     ^ variable
+
+import foo.bar;
 
 import my.other.package;
 // <- keyword
-//     ^ type
+//     ^ variable

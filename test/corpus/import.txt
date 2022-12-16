@@ -16,7 +16,18 @@ import my.other.package;
 
 ---
 
-(module (import_statement (keyword) (identifier)))
+(module 
+  (import_statement 
+    (keyword) 
+    (member_expression 
+      (identifier)
+      (member_expression 
+        (identifier)
+        (identifier)
+      )
+    )
+  )
+)
 
 ===================
 multiple import statements
@@ -29,7 +40,28 @@ import test.other.SomeClass;
 ---
 
 (module 
-(import_statement (keyword) (identifier))
-(import_statement (keyword) (identifier))
-(import_statement (keyword) (identifier))
+  (import_statement 
+    (keyword)
+    (member_expression 
+      (identifier)
+      (member_expression 
+        (identifier)
+        (identifier)
+      )
+    )
+  )
+  (import_statement 
+    (keyword) 
+    (identifier)
+  )
+  (import_statement 
+    (keyword)
+    (member_expression 
+      (identifier)
+      (member_expression 
+        (identifier)
+        (identifier)
+      )
+    )
+  )
 )
