@@ -19,6 +19,21 @@ cp queries/* ~/.local/share/nvim/lazy/nvim-treesitter/queries/haxe
 
 You may have to create the haxe folder.
 
+Add this snippet to your treesitter config or anywhere in your ```init.lua```:
+
+```
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.haxe = {
+  install_info = {
+    url = "https://github.com/vantreeseba/tree-sitter-haxe",
+    files = {"src/parser.c"},
+    -- optional entries:
+    branch = "main", 
+  },
+  filetype = "haxe",
+}
+```
+
 Open nvim, and run TSInstallFromGrammer haxe
 
 This should get you running.
