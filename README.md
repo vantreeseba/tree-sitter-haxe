@@ -38,7 +38,7 @@ Open nvim, and run TSInstallFromGrammer haxe
 
 This should get you running.
 
-### WTF I still don't get highlighting...
+### I still don't get highlighting...
 You might have to add the haxe filetype for neovim to be able to associate the grammar to your files.
 To do this create the appropriate file with:
 ```
