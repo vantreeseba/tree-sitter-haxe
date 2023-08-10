@@ -9,6 +9,26 @@ interface Main {}
 (module (interface_declaration (keyword) (identifier) (block)))
 
 ===================
+interface with type params
+===================
+
+interface Main<T,U> {}
+
+---
+
+(module
+  (interface_declaration
+    (keyword)
+    (identifier)
+    (type_params
+      (type_param (identifier))
+      (type_param (identifier))
+    )
+    (block)
+  )
+)
+
+===================
 class
 ===================
 

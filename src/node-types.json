@@ -743,11 +743,15 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "keyword",
+          "named": true
+        },
+        {
+          "type": "type_params",
           "named": true
         }
       ]

@@ -25,7 +25,7 @@ module.exports = {
       //       repeat($.metadata),
       alias('interface', $.keyword),
       field('name', $._lhs_expression),
-      //       optional($.type_params),
+      optional($.type_params),
       field('body', $.block),
     ),
 
