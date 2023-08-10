@@ -1,0 +1,3 @@
+interface TestInterface {}
+// <- keyword
+//        ^ variable

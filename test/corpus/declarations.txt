@@ -1,4 +1,14 @@
 ===================
+interface
+===================
+
+interface Main {}
+
+---
+
+(module (interface_declaration (keyword) (identifier) (block)))
+
+===================
 class
 ===================
 

@@ -1,13 +1,14 @@
-const { commaSep } = require('./utils')
+const { commaSep } = require('./utils');
 
 module.exports = {
   // Declarations
   declaration: ($) =>
     choice(
+      $.interface_declaration,
       $.class_declaration,
       $.typedef_declaration,
       $.function_declaration,
-      $.variable_declaration
+      $.variable_declaration,
     ),
 
   class_declaration: ($) =>
@@ -16,7 +17,16 @@ module.exports = {
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
-      field('body', $.block)
+      field('body', $.block),
+    ),
+
+  interface_declaration: ($) =>
+    seq(
+      //       repeat($.metadata),
+      alias('interface', $.keyword),
+      field('name', $._lhs_expression),
+      //       optional($.type_params),
+      field('body', $.block),
     ),
 
   typedef_declaration: ($) =>
@@ -25,17 +35,12 @@ module.exports = {
       alias('typedef', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
-      choice(
-        seq("=", $.block),
-        seq("=", $._lhs_expression)
-      )
+      choice(seq('=', $.block), seq('=', $._lhs_expression)),
     ),
 
   type_param: ($) => $._lhs_expression,
   type_params: ($) =>
-    prec(1,
-      seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')
-    ),
+    prec(1, seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
 
   function_declaration: ($) =>
     seq(
@@ -44,12 +49,12 @@ module.exports = {
       alias('function', $.keyword),
       choice(
         field('name', $._lhs_expression),
-        field('name', alias('new', $.identifier))
+        field('name', alias('new', $.identifier)),
       ),
       optional($.type_params),
       $._function_arg_list,
       optional(seq(':', field('return_type', $.type))),
-      field('body', $.block)
+      field('body', $.block),
     ),
 
   function_arg: ($) =>
@@ -57,7 +62,7 @@ module.exports = {
       field('name', $._lhs_expression),
       optional('?'),
       optional(seq(':', alias($._lhs_expression, $.type))),
-      optional(seq($._assignmentOperator, $._literal))
+      optional(seq($._assignmentOperator, $._literal)),
     ),
 
   _function_arg_list: ($) => seq('(', commaSep($.function_arg), ')'),
@@ -70,6 +75,6 @@ module.exports = {
       field('name', $._lhs_expression),
       optional(seq(':', field('type', $.type))),
       optional(seq(($._assignmentOperator, $.operator), $.expression)),
-      $._semicolon
+      $._semicolon,
     ),
-}
+};

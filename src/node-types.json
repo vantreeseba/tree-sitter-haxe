@@ -12,6 +12,10 @@
         "named": true
       },
       {
+        "type": "interface_declaration",
+        "named": true
+      },
+      {
         "type": "typedef_declaration",
         "named": true
       },
@@ -708,6 +712,46 @@
     "type": "integer",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "interface_declaration",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "keyword",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "interpolation",
