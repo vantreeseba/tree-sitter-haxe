@@ -25,7 +25,11 @@ module.exports = {
   // Match any ["XXX", 'XXX']
   string: ($) =>
     choice(
-      seq(/\'/, repeat(choice($.interpolation, /[^\']/)), /\'/),
+      seq(
+        /\'/,
+        repeat(choice($.interpolation, $.escape_sequence, /[^\']/)),
+        /\'/,
+      ),
       /\"[^\"]*\"/,
     ),
   // match only [null]
@@ -69,4 +73,18 @@ module.exports = {
     choice(seq('$', $._lhs_expression), seq('${', $._lhs_expression, '}')),
   _interpolated_expression: ($) =>
     seq('$', seq(token.immediate('{'), $.expression, '}')),
+
+  escape_sequence: ($) =>
+    token.immediate(
+      seq(
+        '\\',
+        choice(
+          /[^xu0-7]/,
+          /[0-7]{1,3}/,
+          /x[0-9a-fA-F]{2}/,
+          /u[0-9a-fA-F]{4}/,
+          /u{[0-9a-fA-F]+}/,
+        ),
+      ),
+    ),
 };

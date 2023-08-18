@@ -32,6 +32,13 @@ var x = 'hello';
 // <- keyword
 //      ^ string
 
+// string literal single quote escape_sequence
+var x = 'hello\ntest';
+// <- keyword
+//      ^ string
+//            ^ punctuation
+
+
 // string literal double quote
 var x = "hello";
 // <- keyword
