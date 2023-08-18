@@ -14,6 +14,7 @@ module.exports = {
   class_declaration: ($) =>
     seq(
       repeat($.metadata),
+      optional(alias('final', $.keyword)),
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),

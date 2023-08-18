@@ -29,6 +29,17 @@ interface Main<T,U> {}
 )
 
 ===================
+final class
+===================
+
+final class Main {}
+
+---
+
+(module (class_declaration (keyword) (keyword) (identifier) (block)))
+
+
+===================
 class
 ===================
 
