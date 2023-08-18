@@ -1392,6 +1392,10 @@
         {
           "type": "integer",
           "named": true
+        },
+        {
+          "type": "keyword",
+          "named": true
         }
       ]
     }

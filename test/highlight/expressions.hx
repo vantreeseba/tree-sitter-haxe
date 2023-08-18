@@ -43,3 +43,5 @@ trace(y);
 #else
 trace(z);
 #end
+
+var x = [for (i in 0...10) i];

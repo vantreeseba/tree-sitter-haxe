@@ -682,7 +682,7 @@ var a = [for (i in 0...5) i];
     (array
       (call_expression
         (identifier)
-        (range_expression (identifier) (integer) (integer))
+        (range_expression (identifier) (keyword) (integer) (integer))
       )
       (identifier)
     )

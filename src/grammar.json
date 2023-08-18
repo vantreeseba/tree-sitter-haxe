@@ -373,8 +373,13 @@
             "name": "identifier"
           },
           {
-            "type": "STRING",
-            "value": "in"
+            "type": "ALIAS",
+            "content": {
+              "type": "STRING",
+              "value": "in"
+            },
+            "named": true,
+            "value": "keyword"
           },
           {
             "type": "CHOICE",

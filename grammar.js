@@ -119,7 +119,7 @@ const haxe_grammar = {
         1,
         seq(
           $.identifier,
-          'in',
+          alias('in', $.keyword),
           choice(seq($.integer, $._rangeOperator, $.integer), $.identifier),
         ),
       ),
