@@ -30,7 +30,7 @@ module.exports = {
         repeat(choice($.interpolation, $.escape_sequence, /[^\']/)),
         /\'/,
       ),
-      /\"[^\"]*\"/,
+      seq(/\"/, repeat(choice($.escape_sequence, /[^\"]/)), /\"/),
     ),
   // match only [null]
   null: ($) => 'null',
