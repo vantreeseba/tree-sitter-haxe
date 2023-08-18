@@ -161,6 +161,76 @@ class main {
 )
 
 ===================
+string literal single quote with escape sequence
+===================
+
+class main {
+  var x = 'hello\n';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (string (escape_sequence))
+      )
+    )
+  )
+)
+
+===================
+string literal single quote with escape sequence single quote
+===================
+
+class main {
+  var x = 'hello\'';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (string (escape_sequence))
+      )
+    )
+  )
+)
+
+===================
+string literal double quote with escape sequence 
+===================
+
+class main {
+  var x = 'hello\nhello';
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (string (escape_sequence))
+      )
+    )
+  )
+)
+
+
+===================
 string literal double quote
 ===================
 

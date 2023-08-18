@@ -65,6 +65,7 @@
 (string) @string
 (bool) @constant
 (operator) @operator
+(escape_sequence) @punctuation
 
 ; Interpolation
 ; -------------
