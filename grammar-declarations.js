@@ -91,7 +91,7 @@ module.exports = {
       repeat($.keyword),
       choice(alias('var', $.keyword), alias('final', $.keyword)),
       field('name', $._lhs_expression),
-      optional(seq(':', field('type', $.type))),
+      optional(seq(':', field('type', $.type), optional($.type_params))),
       optional(seq(($._assignmentOperator, $.operator), $.expression)),
       $._semicolon,
     ),

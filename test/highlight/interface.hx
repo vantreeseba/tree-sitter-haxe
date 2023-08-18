@@ -7,3 +7,11 @@ interface Main<T,Y> {}
 //        ^  variable
 //             ^ variable
 //               ^ variable
+
+interface TestInterface extends IAnother {}
+// <- keyword
+//        ^ variable
+//                      ^ keyword
+//                              ^ variable
+
+

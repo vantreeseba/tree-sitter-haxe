@@ -1807,6 +1807,10 @@
         {
           "type": "subscript_expression",
           "named": true
+        },
+        {
+          "type": "type_params",
+          "named": true
         }
       ]
     }
