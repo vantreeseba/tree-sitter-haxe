@@ -552,6 +552,20 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "keyword",
+          "named": true
+        }
+      ]
     }
   },
   {
