@@ -408,6 +408,20 @@
           }
         ]
       },
+      "interface_name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -428,15 +442,7 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "keyword",
-          "named": true
-        },
-        {
-          "type": "member_expression",
           "named": true
         },
         {
@@ -731,6 +737,20 @@
         "types": [
           {
             "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "interface_name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
             "named": true
           }
         ]

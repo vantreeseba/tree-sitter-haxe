@@ -29,6 +29,21 @@ interface Main<T,U> {}
 )
 
 ===================
+interface extending another
+===================
+
+interface ITest extends IBanana {}
+
+---
+
+(module (interface_declaration 
+  (keyword) (identifier) 
+  (keyword) (identifier) 
+  (block)
+))
+
+
+===================
 class implementing interface
 ===================
 

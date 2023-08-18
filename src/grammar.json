@@ -1072,13 +1072,27 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "ALIAS",
-              "content": {
-                "type": "STRING",
-                "value": "final"
-              },
-              "named": true,
-              "value": "keyword"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "final"
+                  },
+                  "named": true,
+                  "value": "keyword"
+                },
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "abstract"
+                  },
+                  "named": true,
+                  "value": "keyword"
+                }
+              ]
             },
             {
               "type": "BLANK"
@@ -1132,8 +1146,12 @@
                     "value": "keyword"
                   },
                   {
-                    "type": "SYMBOL",
-                    "name": "_lhs_expression"
+                    "type": "FIELD",
+                    "name": "interface_name",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_lhs_expression"
+                    }
                   }
                 ]
               }
@@ -1157,6 +1175,23 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "STRING",
+                "value": "final"
+              },
+              "named": true,
+              "value": "keyword"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "ALIAS",
           "content": {
             "type": "STRING",
@@ -1179,6 +1214,39 @@
             {
               "type": "SYMBOL",
               "name": "type_params"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "STRING",
+                      "value": "extends"
+                    },
+                    "named": true,
+                    "value": "keyword"
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "interface_name",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_lhs_expression"
+                    }
+                  }
+                ]
+              }
             },
             {
               "type": "BLANK"

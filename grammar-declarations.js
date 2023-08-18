@@ -14,20 +14,36 @@ module.exports = {
   class_declaration: ($) =>
     seq(
       repeat($.metadata),
-      optional(alias('final', $.keyword)),
+      optional(choice(alias('final', $.keyword), alias('abstract', $.keyword))),
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
-      optional(repeat(seq(alias('implements', $.keyword), $._lhs_expression))),
+      optional(
+        repeat(
+          seq(
+            alias('implements', $.keyword),
+            field('interface_name', $._lhs_expression),
+          ),
+        ),
+      ),
       field('body', $.block),
     ),
 
   interface_declaration: ($) =>
     seq(
       //       repeat($.metadata),
+      optional(alias('final', $.keyword)),
       alias('interface', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
+      optional(
+        repeat(
+          seq(
+            alias('extends', $.keyword),
+            field('interface_name', $._lhs_expression),
+          ),
+        ),
+      ),
       field('body', $.block),
     ),
 
