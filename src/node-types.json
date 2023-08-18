@@ -1436,6 +1436,21 @@
     }
   },
   {
+    "type": "structure_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "pair",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "subscript_expression",
     "named": true,
     "fields": {
@@ -1716,6 +1731,10 @@
         },
         {
           "type": "metadata",
+          "named": true
+        },
+        {
+          "type": "structure_type",
           "named": true
         },
         {

@@ -1352,6 +1352,10 @@
               "members": [
                 {
                   "type": "SYMBOL",
+                  "name": "structure_type"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "block"
                 },
                 {
