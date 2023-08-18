@@ -49,6 +49,7 @@ const haxe_grammar = {
             $.declaration,
             $.expression,
             $.conditional_statement,
+            $.case_statement,
             $.block,
           ),
           optional($._semicolon),
@@ -107,6 +108,12 @@ const haxe_grammar = {
     runtime_type_check_expression: ($) =>
       prec(2, seq('(', $.expression, ':', $.type, ')')),
 
+    switch_expression: ($) =>
+      seq(
+        alias('switch', $.keyword),
+        choice($.identifier, $._parenthesized_expression),
+      ),
+
     cast_expression: ($) =>
       choice(
         seq(alias('cast', $.keyword), $._rhs_expression),
@@ -140,6 +147,7 @@ const haxe_grammar = {
         $.cast_expression,
         $.range_expression,
         $._parenthesized_expression,
+        $.switch_expression,
         // simple expression, or chained.
         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
       ),
@@ -182,11 +190,22 @@ const haxe_grammar = {
     // arg list is () with any amount of expressions followed by commas
     _arg_list: ($) => seq('(', commaSep($.expression), ')'),
 
+    case_statement: ($) =>
+      choice(
+        seq(
+          alias('case', $.keyword),
+          choice($._literal, alias('_', $.literal)),
+          ':',
+          $.statement,
+        ),
+        seq(alias('default', $.keyword), ':', $.statement),
+      ),
+
     conditional_statement: ($) =>
       prec.right(
         1,
         seq(
-          field('name', $.keyword),
+          field('name', alias('if', $.keyword)),
           field('arguments_list', $._arg_list),
           optional($.block),
           optional(seq(alias('else', $.keyword), $.block)),
