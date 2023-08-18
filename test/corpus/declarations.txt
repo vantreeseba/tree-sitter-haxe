@@ -477,6 +477,39 @@ class Main {
   )
 )
 
+===================
+class function with this 
+===================
+
+class Main {
+  public var x;
+  function foo(){
+    this.x = 4;
+  }
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (keyword)
+        (identifier)
+      )
+      (function_declaration (keyword) (identifier)
+        (block
+          (member_expression (keyword) (identifier))
+          (operator)
+          (integer)
+        )
+      )
+    )
+  )
+)
+
+
 
 ===================
 class variables

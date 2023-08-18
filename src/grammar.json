@@ -533,8 +533,22 @@
             "type": "FIELD",
             "name": "object",
             "content": {
-              "type": "SYMBOL",
-              "name": "identifier"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "this"
+                  },
+                  "named": true,
+                  "value": "keyword"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                }
+              ]
             }
           },
           {
