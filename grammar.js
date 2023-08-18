@@ -18,6 +18,7 @@ const haxe_grammar = {
   supertypes: ($) => [$.declaration],
   precedences: ($) => [
     [$._unaryOperator, $._binaryOperator],
+    [$._rangeOperator, $._literal],
     [$.runtime_type_check_expression, $.pair],
   ],
   conflicts: ($) => [
@@ -113,12 +114,23 @@ const haxe_grammar = {
     _parenthesized_expression: ($) =>
       seq('(', repeat1(prec.left($.expression)), ')'),
 
+    range_expression: ($) =>
+      prec(
+        1,
+        seq(
+          $.identifier,
+          'in',
+          choice(seq($.integer, $._rangeOperator, $.integer), $.identifier),
+        ),
+      ),
+
     expression: ($) =>
       choice(
         $._unaryExpression,
         $.subscript_expression,
         $.runtime_type_check_expression,
         $.cast_expression,
+        $.range_expression,
         $._parenthesized_expression,
         // simple expression, or chained.
         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),

@@ -53,7 +53,7 @@ module.exports = {
       alias('typedef', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
-      seq('=', choice($.structure_type, $._lhs_expression, $.type)),
+      seq('=', choice($.block, $._lhs_expression, $.type)),
     ),
 
   type_param: ($) => $._lhs_expression,

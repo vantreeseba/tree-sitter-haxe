@@ -32,7 +32,11 @@ module.exports = {
   null: ($) => 'null',
 
   // https://haxe.org/manual/expression-array-declaration.html
-  array: ($) => seq('[', commaSep(prec.left($.expression)), ']'),
+  array: ($) =>
+    choice(
+      seq('[', commaSep(prec.left($.expression)), ']'),
+      seq('[', $.expression, $.identifier, ']'), //array comprehension
+    ),
 
   // https://haxe.org/manual/expression-map-declaration.html
   map: ($) => prec(1, seq('[', commaSep1($.pair), ']')),

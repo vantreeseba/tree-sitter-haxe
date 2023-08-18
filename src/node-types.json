@@ -86,6 +86,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -185,6 +189,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -274,6 +282,10 @@
           },
           {
             "type": "pair",
+            "named": true
+          },
+          {
+            "type": "range_expression",
             "named": true
           },
           {
@@ -526,6 +538,10 @@
           },
           {
             "type": "pair",
+            "named": true
+          },
+          {
+            "type": "range_expression",
             "named": true
           },
           {
@@ -860,6 +876,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -1000,6 +1020,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -1096,6 +1120,10 @@
         },
         {
           "type": "preprocessor_statement",
+          "named": true
+        },
+        {
+          "type": "range_expression",
           "named": true
         },
         {
@@ -1224,6 +1252,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -1327,6 +1359,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -1336,6 +1372,25 @@
         },
         {
           "type": "subscript_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "range_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "integer",
           "named": true
         }
       ]
@@ -1402,6 +1457,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -1430,21 +1489,6 @@
       "types": [
         {
           "type": "interpolation",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "structure_type",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "pair",
           "named": true
         }
       ]
@@ -1519,6 +1563,10 @@
             "named": true
           },
           {
+            "type": "range_expression",
+            "named": true
+          },
+          {
             "type": "runtime_type_check_expression",
             "named": true
           },
@@ -1587,6 +1635,10 @@
         },
         {
           "type": "pair",
+          "named": true
+        },
+        {
+          "type": "range_expression",
           "named": true
         },
         {
@@ -1734,10 +1786,6 @@
           "named": true
         },
         {
-          "type": "structure_type",
-          "named": true
-        },
-        {
           "type": "type",
           "named": true
         },
@@ -1842,6 +1890,10 @@
           "named": true
         },
         {
+          "type": "range_expression",
+          "named": true
+        },
+        {
           "type": "runtime_type_check_expression",
           "named": true
         },
@@ -1926,10 +1978,6 @@
   },
   {
     "type": ".",
-    "named": false
-  },
-  {
-    "type": "...",
     "named": false
   },
   {

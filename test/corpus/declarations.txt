@@ -665,3 +665,26 @@ var x:Array<Int>;
     )
   )
 )
+
+===================
+var declaration array comprehension 
+===================
+
+var a = [for (i in 0...5) i];
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (operator)
+    (array
+      (call_expression
+        (identifier)
+        (range_expression (identifier) (integer) (integer))
+      )
+      (identifier)
+    )
+  )
+)
