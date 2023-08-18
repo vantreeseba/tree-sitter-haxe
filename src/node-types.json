@@ -1711,6 +1711,10 @@
           "named": true
         },
         {
+          "type": "type",
+          "named": true
+        },
+        {
           "type": "type_params",
           "named": true
         }

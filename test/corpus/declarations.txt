@@ -549,6 +549,42 @@ typedef MyType = {
 )
 
 ===================
+type def 'alias' 
+===================
+
+typedef MyType = Int;
+
+---
+
+(module
+  (typedef_declaration 
+    (keyword) 
+    (identifier)
+    (type (identifier))
+  )
+)
+
+===================
+type def 'alias' 
+===================
+
+typedef MyType = Array<Int>;
+
+---
+
+(module
+  (typedef_declaration 
+    (keyword) 
+    (identifier)
+    (type 
+      (identifier)
+      (type_params (type_param (identifier)))
+    )
+  )
+)
+
+
+===================
 var declaration with type
 ===================
 
@@ -582,9 +618,3 @@ var x:Array<Int>;
     )
   )
 )
-
-
-
-
-
-

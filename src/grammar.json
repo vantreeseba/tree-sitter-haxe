@@ -1341,31 +1341,26 @@
           ]
         },
         {
-          "type": "CHOICE",
+          "type": "SEQ",
           "members": [
             {
-              "type": "SEQ",
+              "type": "STRING",
+              "value": "="
+            },
+            {
+              "type": "CHOICE",
               "members": [
-                {
-                  "type": "STRING",
-                  "value": "="
-                },
                 {
                   "type": "SYMBOL",
                   "name": "block"
-                }
-              ]
-            },
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "="
                 },
                 {
                   "type": "SYMBOL",
                   "name": "_lhs_expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "type"
                 }
               ]
             }
@@ -2408,6 +2403,10 @@
     [
       "block",
       "object"
+    ],
+    [
+      "typedef_declaration",
+      "type"
     ],
     [
       "call_expression",

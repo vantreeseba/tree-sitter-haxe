@@ -22,6 +22,7 @@ const haxe_grammar = {
   ],
   conflicts: ($) => [
     [$.block, $.object],
+    [$.typedef_declaration, $.type],
     [$.call_expression, $._constructor_call],
     [$._rhs_expression, $.pair],
     [$._literal, $.pair],
