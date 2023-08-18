@@ -1976,8 +1976,33 @@
           ]
         },
         {
-          "type": "PATTERN",
-          "value": "\\\"[^\\\"]*\\\""
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "\\\""
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "escape_sequence"
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "[^\\\"]"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\\""
+            }
+          ]
         }
       ]
     },
