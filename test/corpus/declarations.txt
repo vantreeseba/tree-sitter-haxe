@@ -219,6 +219,30 @@ class Main {
 )
 
 ===================
+function with generic typed arg 
+===================
+
+function foo(x:Array<Int>){}
+
+---
+
+(module
+  (function_declaration 
+    (keyword) 
+    (identifier)
+    (function_arg 
+      (identifier) 
+      (type 
+        (identifier)
+        (type_params (type_param (identifier)))
+      )
+    )
+    (block)
+  )
+)
+
+
+===================
 class with runtime metadata
 ===================
 

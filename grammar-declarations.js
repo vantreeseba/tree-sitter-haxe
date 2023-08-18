@@ -76,11 +76,14 @@ module.exports = {
     ),
 
   function_arg: ($) =>
-    seq(
-      field('name', $._lhs_expression),
-      optional('?'),
-      optional(seq(':', alias($._lhs_expression, $.type))),
-      optional(seq($._assignmentOperator, $._literal)),
+    prec(
+      1,
+      seq(
+        field('name', $._lhs_expression),
+        optional('?'),
+        optional(seq(':', alias(choice($._lhs_expression, $.type), $.type))),
+        optional(seq($._assignmentOperator, $._literal)),
+      ),
     ),
 
   _function_arg_list: ($) => seq('(', commaSep($.function_arg), ')'),
