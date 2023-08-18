@@ -81,7 +81,9 @@ module.exports = {
       seq(
         field('name', $._lhs_expression),
         optional('?'),
-        optional(seq(':', alias(choice($._lhs_expression, $.type), $.type))),
+        optional(
+          seq(':', alias(choice($._lhs_expression, $.type, $.structure_type), $.type)),
+        ),
         optional(seq($._assignmentOperator, $._literal)),
       ),
     ),

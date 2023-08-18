@@ -1234,6 +1234,10 @@
         {
           "type": "subscript_expression",
           "named": true
+        },
+        {
+          "type": "type",
+          "named": true
         }
       ]
     }
@@ -1615,7 +1619,7 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -1624,6 +1628,10 @@
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "pair",
           "named": true
         },
         {

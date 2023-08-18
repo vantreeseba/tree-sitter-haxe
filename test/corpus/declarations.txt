@@ -241,6 +241,29 @@ function foo(x:Array<Int>){}
   )
 )
 
+===================
+function with anonymous struct arg 
+===================
+
+function foo(x:{z:int, y:float}){}
+
+---
+
+(module
+  (function_declaration 
+    (keyword) 
+    (identifier)
+    (function_arg 
+      (identifier) 
+      (type 
+        (pair (identifier) (type (identifier)))
+        (pair (identifier) (type (identifier)))
+      )
+    )
+    (block)
+  )
+)
+
 
 ===================
 class with runtime metadata
