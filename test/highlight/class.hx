@@ -8,6 +8,17 @@ class Main<T,Y> {}
 //         ^ variable
 //           ^ variable
 
+final class Main {}
+// <- keyword
+//    ^ keyword 
+//          ^ variable 
+
+abstract class Main {}
+// <- keyword
+//       ^ keyword 
+//             ^ variable 
+
+
 class Main implements ITest {}
 // <- keyword
 //    ^ variable 
