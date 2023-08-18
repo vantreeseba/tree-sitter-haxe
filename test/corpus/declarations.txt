@@ -29,6 +29,59 @@ interface Main<T,U> {}
 )
 
 ===================
+interface extending another
+===================
+
+interface ITest extends IBanana {}
+
+---
+
+(module (interface_declaration 
+  (keyword) (identifier) 
+  (keyword) (identifier) 
+  (block)
+))
+
+
+===================
+class implementing interface
+===================
+
+class Main implements ITest {}
+
+---
+
+(module (class_declaration (keyword) (identifier) (keyword) (identifier) (block)))
+
+===================
+class implementing multiple interfaces
+===================
+
+class Main implements ITest implements IAnother {}
+
+---
+
+(module (class_declaration 
+  (keyword) (identifier) 
+  (keyword) (identifier) 
+  (keyword) (identifier) 
+  (block)
+))
+
+
+
+===================
+final class
+===================
+
+final class Main {}
+
+---
+
+(module (class_declaration (keyword) (keyword) (identifier) (block)))
+
+
+===================
 class
 ===================
 
@@ -164,6 +217,53 @@ class Main {
     )
   )
 )
+
+===================
+function with generic typed arg 
+===================
+
+function foo(x:Array<Int>){}
+
+---
+
+(module
+  (function_declaration 
+    (keyword) 
+    (identifier)
+    (function_arg 
+      (identifier) 
+      (type 
+        (identifier)
+        (type_params (type_param (identifier)))
+      )
+    )
+    (block)
+  )
+)
+
+===================
+function with anonymous struct arg 
+===================
+
+function foo(x:{z:int, y:float}){}
+
+---
+
+(module
+  (function_declaration 
+    (keyword) 
+    (identifier)
+    (function_arg 
+      (identifier) 
+      (type 
+        (pair (identifier) (type (identifier)))
+        (pair (identifier) (type (identifier)))
+      )
+    )
+    (block)
+  )
+)
+
 
 ===================
 class with runtime metadata
@@ -377,6 +477,39 @@ class Main {
   )
 )
 
+===================
+class function with this 
+===================
+
+class Main {
+  public var x;
+  function foo(){
+    this.x = 4;
+  }
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (keyword)
+        (identifier)
+      )
+      (function_declaration (keyword) (identifier)
+        (block
+          (member_expression (keyword) (identifier))
+          (operator)
+          (integer)
+        )
+      )
+    )
+  )
+)
+
+
 
 ===================
 class variables
@@ -495,6 +628,96 @@ typedef MyType = {
   )
 )
 
+===================
+type def 'alias' 
+===================
+
+typedef MyType = Int;
+
+---
+
+(module
+  (typedef_declaration 
+    (keyword) 
+    (identifier)
+    (type (identifier))
+  )
+)
+
+===================
+type def 'alias' 
+===================
+
+typedef MyType = Array<Int>;
+
+---
+
+(module
+  (typedef_declaration 
+    (keyword) 
+    (identifier)
+    (type 
+      (identifier)
+      (type_params (type_param (identifier)))
+    )
+  )
+)
 
 
+===================
+var declaration with type
+===================
 
+  var x:Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type (identifier))
+  )
+)
+
+===================
+var declaration with type with params
+===================
+
+var x:Array<Int>;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type 
+      (identifier)
+      (type_params (type_param (identifier)))
+    )
+  )
+)
+
+===================
+var declaration array comprehension 
+===================
+
+var a = [for (i in 0...5) i];
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (operator)
+    (array
+      (call_expression
+        (identifier)
+        (range_expression (identifier) (keyword) (integer) (integer))
+      )
+      (identifier)
+    )
+  )
+)

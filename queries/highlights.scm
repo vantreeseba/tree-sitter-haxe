@@ -32,7 +32,9 @@
 (package_statement name: (identifier) @type) 
 
 (class_declaration name: (identifier) @type.definition)
+(class_declaration interface_name: (identifier) @type.definition)
 (interface_declaration name: (identifier) @type.definition)
+(interface_declaration interface_name: (identifier) @type.definition)
 (typedef_declaration name: (identifier) @type.definition)
 
 (function_declaration name: (identifier) @function)

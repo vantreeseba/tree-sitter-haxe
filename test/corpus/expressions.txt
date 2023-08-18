@@ -9,11 +9,38 @@ if (true) {
 ---
 
 (module
-  (conditional_statement (keyword) (bool))
-  (block
-    (identifier) (operator) (integer)
+  (conditional_statement (keyword) (bool)
+    (block
+      (identifier) (operator) (integer)
+    )
   )
 )
+
+===================
+conditional with else
+===================
+
+if (true) {
+  a = 1;
+} else {
+  b = 2;
+}
+
+---
+
+(module
+  (conditional_statement 
+    (keyword) (bool)
+    (block
+      (identifier) (operator) (integer)
+    )
+    (keyword)
+    (block
+      (identifier) (operator) (integer)
+    )
+  )
+)
+
 
 ===================
 parenthesis

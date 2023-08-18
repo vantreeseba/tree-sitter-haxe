@@ -14,18 +14,36 @@ module.exports = {
   class_declaration: ($) =>
     seq(
       repeat($.metadata),
+      optional(choice(alias('final', $.keyword), alias('abstract', $.keyword))),
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
+      optional(
+        repeat(
+          seq(
+            alias('implements', $.keyword),
+            field('interface_name', $._lhs_expression),
+          ),
+        ),
+      ),
       field('body', $.block),
     ),
 
   interface_declaration: ($) =>
     seq(
       //       repeat($.metadata),
+      optional(alias('final', $.keyword)),
       alias('interface', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
+      optional(
+        repeat(
+          seq(
+            alias('extends', $.keyword),
+            field('interface_name', $._lhs_expression),
+          ),
+        ),
+      ),
       field('body', $.block),
     ),
 
@@ -35,7 +53,7 @@ module.exports = {
       alias('typedef', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
-      choice(seq('=', $.block), seq('=', $._lhs_expression)),
+      seq('=', choice($.block, $._lhs_expression, $.type)),
     ),
 
   type_param: ($) => $._lhs_expression,
@@ -58,11 +76,19 @@ module.exports = {
     ),
 
   function_arg: ($) =>
-    seq(
-      field('name', $._lhs_expression),
-      optional('?'),
-      optional(seq(':', alias($._lhs_expression, $.type))),
-      optional(seq($._assignmentOperator, $._literal)),
+    prec(
+      1,
+      seq(
+        field('name', $._lhs_expression),
+        optional('?'),
+        optional(
+          seq(
+            ':',
+            alias(choice($._lhs_expression, $.type, $.structure_type), $.type),
+          ),
+        ),
+        optional(seq($._assignmentOperator, $._literal)),
+      ),
     ),
 
   _function_arg_list: ($) => seq('(', commaSep($.function_arg), ')'),
@@ -73,7 +99,7 @@ module.exports = {
       repeat($.keyword),
       choice(alias('var', $.keyword), alias('final', $.keyword)),
       field('name', $._lhs_expression),
-      optional(seq(':', field('type', $.type))),
+      optional(seq(':', field('type', $.type), optional($.type_params))),
       optional(seq(($._assignmentOperator, $.operator), $.expression)),
       $._semicolon,
     ),

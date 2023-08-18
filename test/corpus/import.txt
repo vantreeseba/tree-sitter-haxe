@@ -65,3 +65,15 @@ import test.other.SomeClass;
     )
   )
 )
+
+===================
+using statement
+===================
+
+using somePackage;
+
+---
+
+(module (using_statement (keyword) (identifier)))
+
+
