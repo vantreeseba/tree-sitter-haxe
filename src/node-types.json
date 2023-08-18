@@ -203,6 +203,10 @@
         {
           "type": "subscript_expression",
           "named": true
+        },
+        {
+          "type": "using_statement",
+          "named": true
         }
       ]
     }
@@ -1137,6 +1141,10 @@
         {
           "type": "subscript_expression",
           "named": true
+        },
+        {
+          "type": "using_statement",
+          "named": true
         }
       ]
     }
@@ -1372,6 +1380,10 @@
         },
         {
           "type": "subscript_expression",
+          "named": true
+        },
+        {
+          "type": "using_statement",
           "named": true
         }
       ]
@@ -1795,6 +1807,36 @@
         },
         {
           "type": "type_params",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "using_statement",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "keyword",
           "named": true
         }
       ]

@@ -33,6 +33,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "using_statement"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "package_statement"
               },
               {
@@ -161,6 +165,32 @@
           "content": {
             "type": "STRING",
             "value": "import"
+          },
+          "named": true,
+          "value": "keyword"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_lhs_expression"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_semicolon"
+        }
+      ]
+    },
+    "using_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "using"
           },
           "named": true,
           "value": "keyword"

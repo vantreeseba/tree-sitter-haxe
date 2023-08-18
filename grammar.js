@@ -44,6 +44,7 @@ const haxe_grammar = {
           choice(
             $.preprocessor_statement,
             $.import_statement,
+            $.using_statement,
             $.package_statement,
             $.declaration,
             $.expression,
@@ -78,6 +79,13 @@ const haxe_grammar = {
     import_statement: ($) =>
       seq(
         alias('import', $.keyword),
+        field('name', $._lhs_expression),
+        $._semicolon,
+      ),
+
+    using_statement: ($) =>
+      seq(
+        alias('using', $.keyword),
         field('name', $._lhs_expression),
         $._semicolon,
       ),
