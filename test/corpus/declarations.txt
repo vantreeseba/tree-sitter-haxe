@@ -29,6 +29,33 @@ interface Main<T,U> {}
 )
 
 ===================
+class implementing interface
+===================
+
+class Main implements ITest {}
+
+---
+
+(module (class_declaration (keyword) (identifier) (keyword) (identifier) (block)))
+
+===================
+class implementing multiple interfaces
+===================
+
+class Main implements ITest implements IAnother {}
+
+---
+
+(module (class_declaration 
+  (keyword) (identifier) 
+  (keyword) (identifier) 
+  (keyword) (identifier) 
+  (block)
+))
+
+
+
+===================
 final class
 ===================
 

@@ -18,6 +18,7 @@ module.exports = {
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
+      optional(repeat(seq(alias('implements', $.keyword), $._lhs_expression))),
       field('body', $.block),
     ),
 

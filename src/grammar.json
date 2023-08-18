@@ -1115,6 +1115,35 @@
           ]
         },
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "STRING",
+                      "value": "implements"
+                    },
+                    "named": true,
+                    "value": "keyword"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_lhs_expression"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "FIELD",
           "name": "body",
           "content": {

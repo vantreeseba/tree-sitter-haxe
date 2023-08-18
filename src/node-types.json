@@ -428,7 +428,15 @@
       "required": true,
       "types": [
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "keyword",
+          "named": true
+        },
+        {
+          "type": "member_expression",
           "named": true
         },
         {
