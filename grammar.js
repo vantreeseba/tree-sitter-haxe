@@ -38,7 +38,7 @@ const haxe_grammar = {
     // Statements
     statement: ($) =>
       // Use prec.left to favor rules that end SOONER
-      // since we have optional semi, this means a semicolon ends the statement.
+      // this means a semicolon ends the statement.
       prec.left(
         seq(
           choice(
@@ -61,35 +61,20 @@ const haxe_grammar = {
         seq(
           '#',
           choice(
-            seq(
-              token.immediate(choice(...preprocessor_statement_start_tokens)),
-              $.statement,
-            ),
+            seq(token.immediate(choice(...preprocessor_statement_start_tokens)), $.statement),
             token.immediate(choice(...preprocessor_statement_end_tokens)),
           ),
         ),
       ),
 
     package_statement: ($) =>
-      seq(
-        alias('package', $.keyword),
-        field('name', $._lhs_expression),
-        $._semicolon,
-      ),
+      seq(alias('package', $.keyword), field('name', $._lhs_expression), $._semicolon),
 
     import_statement: ($) =>
-      seq(
-        alias('import', $.keyword),
-        field('name', $._lhs_expression),
-        $._semicolon,
-      ),
+      seq(alias('import', $.keyword), field('name', $._lhs_expression), $._semicolon),
 
     using_statement: ($) =>
-      seq(
-        alias('using', $.keyword),
-        field('name', $._lhs_expression),
-        $._semicolon,
-      ),
+      seq(alias('using', $.keyword), field('name', $._lhs_expression), $._semicolon),
 
     _rhs_expression: ($) =>
       choice($._literal, $.identifier, $.member_expression, $.call_expression),
@@ -105,14 +90,10 @@ const haxe_grammar = {
         ),
       ),
 
-    runtime_type_check_expression: ($) =>
-      prec(2, seq('(', $.expression, ':', $.type, ')')),
+    runtime_type_check_expression: ($) => prec(2, seq('(', $.expression, ':', $.type, ')')),
 
     switch_expression: ($) =>
-      seq(
-        alias('switch', $.keyword),
-        choice($.identifier, $._parenthesized_expression),
-      ),
+      seq(alias('switch', $.keyword), choice($.identifier, $._parenthesized_expression)),
 
     cast_expression: ($) =>
       choice(
@@ -126,8 +107,7 @@ const haxe_grammar = {
         ),
       ),
 
-    _parenthesized_expression: ($) =>
-      seq('(', repeat1(prec.left($.expression)), ')'),
+    _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
 
     range_expression: ($) =>
       prec(
@@ -153,7 +133,16 @@ const haxe_grammar = {
       ),
 
     subscript_expression: ($) =>
-      prec.right(1, seq($.expression, '[', field('index', $.expression), ']')),
+      prec.left(
+        1,
+        seq(
+          choice($.identifier, $._parenthesized_expression, $.member_expression),
+          '[',
+          field('index', $.expression),
+          ']',
+        ),
+        //           seq($._parenthesized_expression, '[', field('index', $.expression), ']'),
+      ),
 
     member_expression: ($) =>
       prec.right(
@@ -192,12 +181,7 @@ const haxe_grammar = {
 
     case_statement: ($) =>
       choice(
-        seq(
-          alias('case', $.keyword),
-          choice($._literal, alias('_', $.literal)),
-          ':',
-          $.statement,
-        ),
+        seq(alias('case', $.keyword), choice($._literal, alias('_', $.literal)), ':', $.statement),
         seq(alias('default', $.keyword), ':', $.statement),
       ),
 
@@ -234,10 +218,7 @@ const haxe_grammar = {
     ...declarations,
     ...literals,
 
-    comment: ($) =>
-      token(
-        choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/')),
-      ),
+    comment: ($) => token(choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
     keyword: ($) => prec.right(choice(...keywords)),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
     // Hidden Nodes in tree.

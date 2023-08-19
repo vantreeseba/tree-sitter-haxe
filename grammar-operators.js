@@ -4,8 +4,7 @@ module.exports = {
   operator: ($) => choice($._binaryOperator, $._unaryOperator),
 
   // From: https://haxe.org/manual/expression-operators-unops.html
-  _unaryOperator: ($) =>
-    prec.right(choice($._prefixUnaryOperator, $._postfixUnaryOperator)),
+  _unaryOperator: ($) => prec.right(choice($._prefixUnaryOperator, $._postfixUnaryOperator)),
   _prefixUnaryOperator: ($) => choice('~', '!', '-', '++', '--'),
   _postfixUnaryOperator: ($) => choice('++', '--'),
 
@@ -31,9 +30,6 @@ module.exports = {
   //   _miscOperator: ($) => choice('...', '=>'),
   _assignmentOperator: ($) => '=',
   _compoundAssignmentOperator: ($) =>
-    seq(
-      choice($._arithmeticOperator, $._bitwiseOperator),
-      $._assignmentOperator,
-    ),
+    seq(choice($._arithmeticOperator, $._bitwiseOperator), $._assignmentOperator),
   _rangeOperator: ($) => '...',
 };

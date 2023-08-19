@@ -15,5 +15,5 @@ module.exports = {
   commaSep1,
   dotSep1,
   seperated,
-  seperatedSkipLast
-}
+  seperatedSkipLast,
+};

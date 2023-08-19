@@ -1,7 +1,1 @@
-module.exports = [
-  'Void',
-  'Int',
-  'Float',
-  'Bool',
-  'Null',
-];
+module.exports = ['Void', 'Int', 'Float', 'Bool', 'Null'];

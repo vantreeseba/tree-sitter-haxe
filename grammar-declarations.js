@@ -19,12 +19,7 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        repeat(
-          seq(
-            alias('implements', $.keyword),
-            field('interface_name', $._lhs_expression),
-          ),
-        ),
+        repeat(seq(alias('implements', $.keyword), field('interface_name', $._lhs_expression))),
       ),
       field('body', $.block),
     ),
@@ -37,12 +32,7 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        repeat(
-          seq(
-            alias('extends', $.keyword),
-            field('interface_name', $._lhs_expression),
-          ),
-        ),
+        repeat(seq(alias('extends', $.keyword), field('interface_name', $._lhs_expression))),
       ),
       field('body', $.block),
     ),
@@ -57,18 +47,14 @@ module.exports = {
     ),
 
   type_param: ($) => $._lhs_expression,
-  type_params: ($) =>
-    prec(1, seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
+  type_params: ($) => prec(1, seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
 
   function_declaration: ($) =>
     seq(
       repeat($.metadata),
       repeat($.keyword),
       alias('function', $.keyword),
-      choice(
-        field('name', $._lhs_expression),
-        field('name', alias('new', $.identifier)),
-      ),
+      choice(field('name', $._lhs_expression), field('name', alias('new', $.identifier))),
       optional($.type_params),
       $._function_arg_list,
       optional(seq(':', field('return_type', $.type))),
@@ -81,12 +67,7 @@ module.exports = {
       seq(
         field('name', $._lhs_expression),
         optional('?'),
-        optional(
-          seq(
-            ':',
-            alias(choice($._lhs_expression, $.type, $.structure_type), $.type),
-          ),
-        ),
+        optional(seq(':', alias(choice($._lhs_expression, $.type, $.structure_type), $.type))),
         optional(seq($._assignmentOperator, $._literal)),
       ),
     ),

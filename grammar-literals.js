@@ -4,17 +4,7 @@ const { commaSep, commaSep1 } = require('./utils');
 module.exports = {
   // Main "literal" export.
   _literal: ($) =>
-    choice(
-      $.integer,
-      $.float,
-      $.string,
-      $.bool,
-      $.null,
-      $.array,
-      $.map,
-      $.object,
-      $.pair,
-    ),
+    choice($.integer, $.float, $.string, $.bool, $.null, $.array, $.map, $.object, $.pair),
 
   // Match any [42, 0xFF43]
   integer: ($) => choice(/[\d]+/, /0x[a-fA-F\d]+/),
@@ -25,11 +15,7 @@ module.exports = {
   // Match any ["XXX", 'XXX']
   string: ($) =>
     choice(
-      seq(
-        /\'/,
-        repeat(choice($.interpolation, $.escape_sequence, /[^\']/)),
-        /\'/,
-      ),
+      seq(/\'/, repeat(choice($.interpolation, $.escape_sequence, /[^\']/)), /\'/),
       seq(/\"/, repeat(choice($.escape_sequence, /[^\"]/)), /\"/),
     ),
   // match only [null]
@@ -48,8 +34,7 @@ module.exports = {
   // https://haxe.org/manual/expression-object-declaration.html
   object: ($) => prec(1, seq('{', commaSep($.pair), '}')),
 
-  structure_type: ($) =>
-    prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), '}')),
+  structure_type: ($) => prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), '}')),
   structure_type_pair: ($) => prec.left(seq(choice($.identifier), ':', $.type)),
 
   // Sub part of map and object literals
@@ -71,20 +56,13 @@ module.exports = {
   _interpolated_block: ($) => seq('${', $.expression, '}'),
   _interpolated_identifier: ($) =>
     choice(seq('$', $._lhs_expression), seq('${', $._lhs_expression, '}')),
-  _interpolated_expression: ($) =>
-    seq('$', seq(token.immediate('{'), $.expression, '}')),
+  _interpolated_expression: ($) => seq('$', seq(token.immediate('{'), $.expression, '}')),
 
   escape_sequence: ($) =>
     token.immediate(
       seq(
         '\\',
-        choice(
-          /[^xu0-7]/,
-          /[0-7]{1,3}/,
-          /x[0-9a-fA-F]{2}/,
-          /u[0-9a-fA-F]{4}/,
-          /u{[0-9a-fA-F]+}/,
-        ),
+        choice(/[^xu0-7]/, /[0-7]{1,3}/, /x[0-9a-fA-F]{2}/, /u[0-9a-fA-F]{4}/, /u{[0-9a-fA-F]+}/),
       ),
     ),
 };

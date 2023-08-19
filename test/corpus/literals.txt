@@ -430,6 +430,29 @@ Array literal with object element
 )
 
 ===================
+Array literal with string element 
+===================
+
+class main {
+  var y = ["a"];
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (array (string))
+      )
+    )
+  )
+)
+
+===================
 simple pair literal 
 ===================
 
