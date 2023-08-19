@@ -57,6 +57,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "throw_statement"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "block"
               }
             ]
@@ -212,6 +216,28 @@
           "name": "_semicolon"
         }
       ]
+    },
+    "throw_statement": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "STRING",
+              "value": "throw"
+            },
+            "named": true,
+            "value": "keyword"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          }
+        ]
+      }
     },
     "_rhs_expression": {
       "type": "CHOICE",

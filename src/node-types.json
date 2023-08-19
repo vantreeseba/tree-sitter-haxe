@@ -217,6 +217,10 @@
           "named": true
         },
         {
+          "type": "throw_statement",
+          "named": true
+        },
+        {
           "type": "using_statement",
           "named": true
         }
@@ -466,6 +470,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "throw_statement",
           "named": true
         },
         {
@@ -1320,6 +1328,10 @@
           "named": true
         },
         {
+          "type": "throw_statement",
+          "named": true
+        },
+        {
           "type": "using_statement",
           "named": true
         }
@@ -1569,6 +1581,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "throw_statement",
           "named": true
         },
         {
@@ -1879,6 +1895,93 @@
   },
   {
     "type": "switch_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "keyword",
+          "named": true
+        },
+        {
+          "type": "map",
+          "named": true
+        },
+        {
+          "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "object",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "pair",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "runtime_type_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "subscript_expression",
+          "named": true
+        },
+        {
+          "type": "switch_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "throw_statement",
     "named": true,
     "fields": {},
     "children": {

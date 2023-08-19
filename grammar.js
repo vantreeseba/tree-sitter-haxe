@@ -50,6 +50,7 @@ const haxe_grammar = {
             $.expression,
             $.conditional_statement,
             $.case_statement,
+            $.throw_statement,
             $.block,
           ),
           optional($._semicolon),
@@ -75,6 +76,8 @@ const haxe_grammar = {
 
     using_statement: ($) =>
       seq(alias('using', $.keyword), field('name', $._lhs_expression), $._semicolon),
+
+    throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $.expression)),
 
     _rhs_expression: ($) =>
       choice($._literal, $.identifier, $.member_expression, $.call_expression),

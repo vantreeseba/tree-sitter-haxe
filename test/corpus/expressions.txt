@@ -1,4 +1,16 @@
 ===================
+throw
+===================
+
+throw "error";
+
+---
+
+(module
+  (throw_statement (keyword) (string))
+)
+
+===================
 conditional
 ===================
 
