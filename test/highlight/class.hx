@@ -33,6 +33,10 @@ class Main implements ITest implements IAnother {}
 //                          ^ keyword
 //                                     ^ variable
 
+class foo extends Main {
+  
+}
+
 typedef foo = Array<Int>;
 
 class Bar {

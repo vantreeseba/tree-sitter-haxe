@@ -590,6 +590,20 @@
             "named": true
           }
         ]
+      },
+      "super_class_name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          }
+        ]
       }
     },
     "children": {

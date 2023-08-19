@@ -18,6 +18,7 @@ module.exports = {
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
+      optional(seq(alias('extends', $.keyword), field('super_class_name', $._lhs_expression))),
       optional(
         repeat(seq(alias('implements', $.keyword), field('interface_name', $._lhs_expression))),
       ),
