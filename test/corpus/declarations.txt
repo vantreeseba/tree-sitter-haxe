@@ -9,6 +9,30 @@ interface Main {}
 (module (interface_declaration (keyword) (identifier) (block)))
 
 ===================
+interface with function
+===================
+
+interface Printable {
+    public function toString():String;
+}
+
+---
+
+(module
+  (interface_declaration
+    (keyword)
+    (identifier)
+    (block
+      (function_declaration
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
 interface with type params
 ===================
 
