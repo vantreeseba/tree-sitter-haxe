@@ -243,6 +243,27 @@ class Main {
 )
 
 ===================
+class with property and read/write access
+===================
+
+class Main {
+  public var x(default, null):Int;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration (keyword) (keyword) (identifier)
+        (access_identifiers (keyword) (keyword))
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
 function with generic typed arg 
 ===================
 
