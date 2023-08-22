@@ -713,7 +713,23 @@ typedef MyType = Array<Int>;
 var declaration with type
 ===================
 
-  var x:Int;
+var x:Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type (identifier))
+  )
+)
+
+===================
+var declaration with type and parenthesis
+===================
+
+var x:(((Int)));
 
 ---
 
