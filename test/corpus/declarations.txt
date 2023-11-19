@@ -9,6 +9,31 @@ interface Main {}
 (module (interface_declaration (keyword) (identifier) (block)))
 
 ===================
+interface with function
+===================
+
+interface Printable {
+    public function toString():String;
+}
+
+---
+
+(module
+  (interface_declaration
+    (keyword)
+    (identifier)
+    (block
+      (function_declaration
+        (keyword)
+        (keyword)
+        (identifier)
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
 interface with type params
 ===================
 
@@ -213,6 +238,27 @@ class Main {
         (function_arg (identifier) (type (identifier)) (integer))
         (function_arg (identifier) (type (identifier)))
         (block)
+      )
+    )
+  )
+)
+
+===================
+class with property and read/write access
+===================
+
+class Main {
+  public var x(default, null):Int;
+}
+
+---
+
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration (keyword) (keyword) (identifier)
+        (access_identifiers (keyword) (keyword))
+        (type (identifier))
       )
     )
   )
@@ -668,7 +714,41 @@ typedef MyType = Array<Int>;
 var declaration with type
 ===================
 
-  var x:Int;
+var x:Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type (identifier))
+  )
+)
+
+===================
+var declaration with type and access_identifiers
+===================
+
+var x(get, set):Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (access_identifiers (keyword) (keyword))
+    (type (identifier))
+  )
+)
+
+
+===================
+var declaration with type and parenthesis
+===================
+
+var x:(((Int)));
 
 ---
 

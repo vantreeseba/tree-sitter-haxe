@@ -110,6 +110,8 @@ const haxe_grammar = {
         ),
       ),
 
+    type_trace_expression: ($) => seq(alias('$type', $.keyword), '(', $._rhs_expression, ')'),
+
     _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
 
     range_expression: ($) =>
@@ -128,6 +130,7 @@ const haxe_grammar = {
         $.subscript_expression,
         $.runtime_type_check_expression,
         $.cast_expression,
+        $.type_trace_expression,
         $.range_expression,
         $._parenthesized_expression,
         $.switch_expression,

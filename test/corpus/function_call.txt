@@ -120,3 +120,15 @@ some.package.fn();
     )
   )
 )
+
+===================
+compile time construct $type
+===================
+
+$type(0);
+
+---
+
+(module
+  (type_trace_expression (keyword) (integer))
+)

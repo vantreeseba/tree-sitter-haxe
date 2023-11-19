@@ -44,9 +44,9 @@ class Bar {
 }
 
 interface Foo {
-	function fn(arg:Int):Void {};
+	function fn(arg:Int):Void;
 }
 
 interface Foo {
-	function fn(arg:Array<Int>):Void {};
+	function fn(arg:Array<Int>):Void;
 }
