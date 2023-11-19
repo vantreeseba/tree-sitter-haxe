@@ -22,6 +22,31 @@ class main {
 )
 
 ===================
+int literal with seperators.
+===================
+
+class main {
+  var x = 12_000;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (integer)
+      )
+    )
+  )
+)
+
+
+
+===================
 int hex literal.
 ===================
 
@@ -45,6 +70,30 @@ class main {
 )
 
 ===================
+int hex literal with seperators.
+===================
+
+class main {
+  var x = 0xFF_42;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (integer)
+      )
+    )
+  )
+)
+
+
+===================
 float literal.
 ===================
 
@@ -66,6 +115,32 @@ class main {
     )
   )
 )
+
+===================
+float literal with seperators.
+===================
+
+class main {
+  var x = 4_0.2_0;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (float)
+      )
+    )
+  )
+)
+
+
+
 
 ===================
 float literal with no trailing number.
@@ -112,6 +187,30 @@ class main {
     )
   )
 )
+
+===================
+float literal e notation with seperators.
+===================
+
+class main {
+  var x = 4_0.3_0e1_5;
+}
+
+---
+
+(module 
+  (class_declaration (keyword) (identifier) 
+    (block 
+      (variable_declaration 
+        (keyword) 
+        (identifier) 
+        (operator)
+        (float)
+      )
+    )
+  )
+)
+
 
 ===================
 float literal e notation error (this is not working).

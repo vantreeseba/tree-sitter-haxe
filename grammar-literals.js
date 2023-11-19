@@ -7,9 +7,9 @@ module.exports = {
     choice($.integer, $.float, $.string, $.bool, $.null, $.array, $.map, $.object, $.pair),
 
   // Match any [42, 0xFF43]
-  integer: ($) => choice(/[\d]+/, /0x[a-fA-F\d]+/),
+  integer: ($) => choice(/[\d_]+/, /0x[a-fA-F\d_]+/),
   // Match any [0.32, 3., 2.1e5]
-  float: ($) => choice(/[\d]+[\.]+[\d]*/, /[\d]+[\.]+[\d]*e[\d]*/),
+  float: ($) => choice(/[\d_]+[\.]+[\d_]*/, /[\d_]+[\.]+[\d_]*e[\d_]*/),
   // Match either [true, false]
   bool: ($) => choice('true', 'false'),
   // Match any ["XXX", 'XXX']

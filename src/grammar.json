@@ -2221,11 +2221,11 @@
       "members": [
         {
           "type": "PATTERN",
-          "value": "[\\d]+"
+          "value": "[\\d_]+"
         },
         {
           "type": "PATTERN",
-          "value": "0x[a-fA-F\\d]+"
+          "value": "0x[a-fA-F\\d_]+"
         }
       ]
     },
@@ -2234,11 +2234,11 @@
       "members": [
         {
           "type": "PATTERN",
-          "value": "[\\d]+[\\.]+[\\d]*"
+          "value": "[\\d_]+[\\.]+[\\d_]*"
         },
         {
           "type": "PATTERN",
-          "value": "[\\d]+[\\.]+[\\d]*e[\\d]*"
+          "value": "[\\d_]+[\\.]+[\\d_]*e[\\d_]*"
         }
       ]
     },
