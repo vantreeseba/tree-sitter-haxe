@@ -5,7 +5,7 @@ const declarations = require('./grammar-declarations');
 const keywords = require('./grammar-keywords');
 const builtins = require('./grammar-builtins');
 
-const { commaSep } = require('./utils');
+const { commaSep, commaSep1 } = require('./utils');
 
 const preprocessor_statement_start_tokens = ['if', 'elseif'];
 const preprocessor_statement_end_tokens = ['else', 'end'];
@@ -24,10 +24,15 @@ const haxe_grammar = {
   conflicts: ($) => [
     [$.block, $.object],
     [$.typedef_declaration, $.type],
+    //     [$.variable_declaration, $._function_arg_list],
+    //     [$.variable_declaration, $.function_type],
     [$.call_expression, $._constructor_call],
     [$._rhs_expression, $.pair],
     [$._literal, $.pair],
     [$.function_declaration],
+    [$.function_type, $.variable_declaration],
+    [$.type, $.function_type, $.variable_declaration],
+    [$.type, $._function_type_args],
     [$.function_declaration, $.variable_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
@@ -162,14 +167,27 @@ const haxe_grammar = {
     _lhs_expression: ($) => prec(1, choice($.identifier, $.member_expression)),
 
     builtin_type: ($) => prec.right(choice(...builtins)),
+    _function_type_args: ($) => commaSep1(seq(optional(seq($.identifier, ':')), $.type)),
+    function_type: ($) =>
+      prec.right(
+        choice(
+          seq('(', ')', '->', $.type),
+          seq($.type, '->', field('return_type', $.type)),
+          seq('(', $._function_type_args, ')', '->', $.type),
+        ),
+      ),
     type: ($) =>
       prec.right(
-        seq(
-          choice(
-            field('type_name', $._lhs_expression),
-            field('built_in', alias($.builtin_type, $.identifier)),
+        choice(
+          seq(
+            choice(
+              field('type_name', $._lhs_expression),
+              field('built_in', alias($.builtin_type, $.identifier)),
+            ),
+            optional($.type_params),
           ),
-          optional($.type_params),
+          $.function_type,
+          seq('(', alias($.type, '_type'), ')'),
         ),
       ),
 

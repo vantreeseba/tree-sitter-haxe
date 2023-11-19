@@ -801,3 +801,199 @@ var a = [for (i in 0...5) i];
     )
   )
 )
+
+===================
+var declaration with function type with no inputs 
+===================
+
+var x:() -> Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (function_type
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+var declaration with function type 
+===================
+
+var x:Int -> Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (function_type
+        (type (identifier))
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+var declaration with function type with named input 
+===================
+
+var x:(arg:Int) -> Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (function_type
+        (identifier)
+        (type (identifier))
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+var declaration with function type with named input nested function
+===================
+
+var x:(arg:()->Int) -> Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    name: (identifier)
+    type: (type
+      (function_type
+        (identifier)
+        (type (function_type
+          (type built_in: (identifier))
+        ))
+        (type built_in: (identifier))
+      )
+    )
+  )
+)
+
+===================
+var declaration with function type with named input multiple nested function
+===================
+
+var e:(fn:Int->Bool, Float, sub:(Bool, Bool) -> Int) -> Bool;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type (function_type             
+        (identifier)          
+        (type (function_type                 
+          (type (identifier))                 
+          (type                   
+          (identifier))
+        ))             
+      (type (identifier))     
+      (identifier)            
+      (type (function_type    
+        (type (identifier))                 
+        (type (identifier))                 
+        (type (identifier))
+      ))             
+      (type (identifier))    
+    ))
+  )
+)
+
+===================
+var declaration with function type with named input multiple nested function with lots of params
+===================
+
+var e:((fn:(Int->Bool), Float, sub:((Bool, Bool) -> Int))->Bool);
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type (function_type             
+        (identifier)          
+        (type (function_type                 
+          (type (identifier))                 
+          (type                   
+          (identifier))
+        ))             
+      (type (identifier))     
+      (identifier)            
+      (type (function_type    
+        (type (identifier))                 
+        (type (identifier))                 
+        (type (identifier))
+      ))             
+      (type (identifier))    
+    ))
+  )
+)
+
+===================
+var declaration with function type with wrapped parens 
+===================
+
+var x:((arg:Int) -> Int);
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (function_type
+        (identifier)
+        (type (identifier))
+        (type (identifier))
+      )
+    )
+  )
+)
+
+
+
+===================
+var declaration with function type 
+===================
+
+var x:(Int,Int) -> Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (function_type
+        (type (identifier))
+        (type (identifier))
+        (type (identifier))
+      )
+    )
+  )
+)
+

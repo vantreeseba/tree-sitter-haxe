@@ -64,7 +64,7 @@ module.exports = {
       optional(field('body', $.block)),
     ),
 
-  _function_arg_list: ($) => seq('(', commaSep($.function_arg), ')'),
+  _function_arg_list: ($) => prec(1, seq('(', commaSep($.function_arg), ')')),
   function_arg: ($) =>
     prec(
       1,
@@ -83,12 +83,7 @@ module.exports = {
       choice(alias('var', $.keyword), alias('final', $.keyword)),
       field('name', $._lhs_expression),
       optional($.access_identifiers),
-      optional(seq(
-        ':', 
-        optional(repeat('(')), 
-        field('type', $.type),
-        optional(repeat(')')), 
-      )),
+      optional(seq(':', optional(repeat('(')), field('type', $.type), optional(repeat(')')))),
       optional(seq(($._assignmentOperator, $.operator), $.expression)),
       $._semicolon,
     ),
