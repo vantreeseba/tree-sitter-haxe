@@ -656,11 +656,34 @@
             }
           },
           {
-            "type": "TOKEN",
-            "content": {
-              "type": "STRING",
-              "value": "."
-            }
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": "."
+                }
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "STRING",
+                      "value": "?"
+                    },
+                    "named": true,
+                    "value": "operator"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "."
+                  }
+                ]
+              }
+            ]
           },
           {
             "type": "REPEAT1",
@@ -1498,6 +1521,10 @@
         {
           "type": "STRING",
           "value": "=>"
+        },
+        {
+          "type": "STRING",
+          "value": "??"
         }
       ]
     },

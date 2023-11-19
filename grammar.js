@@ -159,7 +159,10 @@ const haxe_grammar = {
       prec.right(
         seq(
           field('object', choice(alias('this', $.keyword), $.identifier)),
-          token('.'),
+          choice(
+            token('.'),
+            seq(alias('?', $.operator),'.'),
+          ),
           repeat1(field('member', $._lhs_expression)),
         ),
       ),

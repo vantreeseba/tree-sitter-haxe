@@ -50,3 +50,5 @@ interface Foo {
 interface Foo {
 	function fn(arg:Array<Int>):Void;
 }
+
+bar.foo?.banana();
