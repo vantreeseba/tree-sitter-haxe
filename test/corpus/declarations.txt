@@ -25,6 +25,7 @@ interface Printable {
     (block
       (function_declaration
         (keyword)
+        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -724,6 +725,24 @@ var x:Int;
     (type (identifier))
   )
 )
+
+===================
+var declaration with type and access_identifiers
+===================
+
+var x(get, set):Int;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (access_identifiers (keyword) (keyword))
+    (type (identifier))
+  )
+)
+
 
 ===================
 var declaration with type and parenthesis

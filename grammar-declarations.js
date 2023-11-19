@@ -10,6 +10,12 @@ module.exports = {
       $.function_declaration,
       $.variable_declaration,
     ),
+  _access_identifier: ($) =>
+    alias(choice('default', 'null', 'get', 'set', 'dynamic', 'never'), $.keyword),
+  access_identifiers: ($) =>
+    seq('(', $._access_identifier, optional(seq(',', $._access_identifier)), ')'),
+  type_param: ($) => $._lhs_expression,
+  type_params: ($) => prec(1, seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
 
   class_declaration: ($) =>
     seq(
@@ -27,7 +33,6 @@ module.exports = {
 
   interface_declaration: ($) =>
     seq(
-      //       repeat($.metadata),
       optional(alias('final', $.keyword)),
       alias('interface', $.keyword),
       field('name', $._lhs_expression),
@@ -47,9 +52,6 @@ module.exports = {
       seq('=', choice($.block, $._lhs_expression, $.type)),
     ),
 
-  type_param: ($) => $._lhs_expression,
-  type_params: ($) => prec(1, seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
-
   function_declaration: ($) =>
     seq(
       repeat($.metadata),
@@ -59,9 +61,10 @@ module.exports = {
       optional($.type_params),
       $._function_arg_list,
       optional(seq(':', field('return_type', $.type))),
-      field('body', $.block),
+      optional(field('body', $.block)),
     ),
 
+  _function_arg_list: ($) => seq('(', commaSep($.function_arg), ')'),
   function_arg: ($) =>
     prec(
       1,
@@ -73,15 +76,19 @@ module.exports = {
       ),
     ),
 
-  _function_arg_list: ($) => seq('(', commaSep($.function_arg), ')'),
-
   variable_declaration: ($) =>
     seq(
       repeat($.metadata),
       repeat($.keyword),
       choice(alias('var', $.keyword), alias('final', $.keyword)),
       field('name', $._lhs_expression),
-      optional(seq(':', field('type', $.type), optional($.type_params))),
+      optional($.access_identifiers),
+      optional(seq(
+        ':', 
+        optional(repeat('(')), 
+        field('type', $.type),
+        optional(repeat(')')), 
+      )),
       optional(seq(($._assignmentOperator, $.operator), $.expression)),
       $._semicolon,
     ),

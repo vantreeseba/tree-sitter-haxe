@@ -130,5 +130,5 @@ $type(0);
 ---
 
 (module
-  (type_call (integer))
+  (type_trace_expression (keyword) (integer))
 )
