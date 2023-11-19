@@ -13,6 +13,25 @@ var x = 1;
 )
 
 ===================
+Assign an int with nullable.
+===================
+var y = null;
+var x = y ?? 1;
+
+---
+(module 
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (null))
+  (variable_declaration (keyword) (identifier) 
+    (operator)
+    (identifier)
+    (operator)
+    (integer)
+  )
+)
+
+===================
 Assign an expression.
 ===================
 

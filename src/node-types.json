@@ -1232,6 +1232,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2704,6 +2714,10 @@
   },
   {
     "type": "?",
+    "named": false
+  },
+  {
+    "type": "??",
     "named": false
   },
   {

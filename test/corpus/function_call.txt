@@ -122,6 +122,29 @@ some.package.fn();
 )
 
 ===================
+package method call with safe navigation operator
+===================
+
+some.package?.fn();
+
+---
+
+(module
+  (call_expression 
+    (member_expression 
+      (identifier)
+      (member_expression 
+        (identifier)
+        (operator)
+        (identifier)
+      )
+    )
+  )
+)
+
+
+
+===================
 compile time construct $type
 ===================
 

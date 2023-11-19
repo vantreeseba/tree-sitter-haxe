@@ -26,7 +26,7 @@ module.exports = {
   _bitwiseOperator: ($) => choice('<<', '>>', '>>>', '&', '|', '^'),
   _logicalOperator: ($) => choice('&&', '||'),
   _comparisonOperator: ($) => choice('==', '!=', '<', '<=', '>', '>='),
-  _miscOperator: ($) => choice('=>'),
+  _miscOperator: ($) => choice('=>', '??'),
   //   _miscOperator: ($) => choice('...', '=>'),
   _assignmentOperator: ($) => '=',
   _compoundAssignmentOperator: ($) =>
