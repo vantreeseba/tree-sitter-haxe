@@ -7,6 +7,11 @@ var x = 12;
 // <- keyword
 //      ^ number
 
+// int literal.
+var x = 12_00;
+// <- keyword
+//      ^ number
+
 // int hex literal.
 var x = 0xFF42;
 // <- keyword
