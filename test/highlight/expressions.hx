@@ -35,6 +35,18 @@ cast (x, Int);
 // runtime type check
 (x : Int);
 
+
+// if else
+if(true) {
+} else {
+}
+
+// if else
+if(true) {
+} else if {
+}
+
+
 // preprocessor macro
 #if !condition
 trace(x);

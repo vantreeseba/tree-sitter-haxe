@@ -54,6 +54,33 @@ interface Main<T,U> {}
 )
 
 ===================
+interface with nested type params
+===================
+
+interface Main<T, Other<U, V>> {}
+
+---
+
+(module
+  (interface_declaration
+    (keyword)
+    (identifier)
+    (type_params
+      (type_param (identifier))
+      (type_param 
+        (identifier)
+        (type_params
+          (type_param (identifier))
+          (type_param (identifier))
+        )
+      )
+    )
+    (block)
+  )
+)
+
+
+===================
 interface extending another
 ===================
 
