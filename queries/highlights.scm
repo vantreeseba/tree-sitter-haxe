@@ -29,6 +29,14 @@
 ;   (_(_(_(_ (identifier) @type))))
 ;   (_(_(_(_(_ (identifier) @type)))))
 ])
+
+; lol this is jank but okay.
+(import_statement name: (_ (identifier) @type))
+(import_statement name: (_(_ (identifier) @type)))
+(import_statement name: (_(_(_ (identifier) @type))))
+(import_statement name: (_(_(_(_ (identifier) @type)))))
+(import_statement name: (_(_(_(_(_ (identifier) @type))))))
+
 (package_statement name: (identifier) @type) 
 
 (class_declaration name: (identifier) @type.definition)

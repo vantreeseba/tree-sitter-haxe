@@ -216,7 +216,7 @@ const haxe_grammar = {
           field('name', alias('if', $.keyword)),
           field('arguments_list', $._arg_list),
           optional($.block),
-          optional(seq(alias('else', $.keyword), $.block)),
+          optional(seq(alias(choice('else', 'else if'), $.keyword), $.block)),
         ),
       ),
 

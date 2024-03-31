@@ -15,7 +15,6 @@ class Main<T,Other<T, Y>> {}
 //                 ^ variable
 //                    ^ variable
 
-
 final class Main {}
 // <- keyword
 //    ^ keyword
@@ -41,9 +40,7 @@ class Main implements ITest implements IAnother {}
 //                          ^ keyword
 //                                     ^ variable
 
-class foo extends Main {
-  
-}
+class foo extends Main {}
 
 typedef foo = Array<Int>;
 
@@ -58,5 +55,3 @@ interface Foo {
 interface Foo {
 	function fn(arg:Array<Int>):Void;
 }
-
-bar.foo?.banana();
