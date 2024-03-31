@@ -26,50 +26,6 @@
     ]
   },
   {
-    "type": "_type",
-    "named": false,
-    "fields": {
-      "built_in": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "type_name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "member_expression",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "function_type",
-          "named": true
-        },
-        {
-          "type": "type_params",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "access_identifiers",
     "named": true,
     "fields": {},
@@ -2292,7 +2248,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -2301,6 +2257,10 @@
         },
         {
           "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "type_params",
           "named": true
         }
       ]

@@ -965,7 +965,7 @@
                   "name": "type"
                 },
                 "named": false,
-                "value": "_type"
+                "value": "type"
               },
               {
                 "type": "STRING",
@@ -1656,11 +1656,29 @@
       ]
     },
     "type_param": {
-      "type": "SYMBOL",
-      "name": "_lhs_expression"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_lhs_expression"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_lhs_expression"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "type_params"
+            }
+          ]
+        }
+      ]
     },
     "type_params": {
-      "type": "PREC",
+      "type": "PREC_RIGHT",
       "value": 1,
       "content": {
         "type": "SEQ",
@@ -1670,24 +1688,29 @@
             "value": "<"
           },
           {
-            "type": "REPEAT",
-            "content": {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "type_param"
-                },
-                {
-                  "type": "STRING",
-                  "value": ","
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_param"
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": ","
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "type_param"
+                    }
+                  ]
                 }
-              ]
-            }
-          },
-          {
-            "type": "SYMBOL",
-            "name": "type_param"
+              }
+            ]
           },
           {
             "type": "STRING",

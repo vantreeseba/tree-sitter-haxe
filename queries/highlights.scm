@@ -1,4 +1,4 @@
-(identifier !type) @variable
+(identifier) @variable
 (comment) @comment
 
 ; Preprocessor Statement
@@ -98,3 +98,4 @@
 ;   "."
   ","
 ] @punctuation.delimiter
+

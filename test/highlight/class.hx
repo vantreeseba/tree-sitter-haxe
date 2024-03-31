@@ -8,6 +8,14 @@ class Main<T,Y> {}
 //         ^ variable
 //           ^ variable
 
+class Main<T,Other<T, Y>> {}
+// <- keyword
+//    ^  variable
+//         ^ variable
+//                 ^ variable
+//                    ^ variable
+
+
 final class Main {}
 // <- keyword
 //    ^ keyword
