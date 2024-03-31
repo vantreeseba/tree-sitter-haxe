@@ -1,4 +1,4 @@
-const { commaSep } = require('./utils');
+const { commaSep, commaSep1 } = require('./utils');
 
 module.exports = {
   // Declarations
@@ -14,8 +14,11 @@ module.exports = {
     alias(choice('default', 'null', 'get', 'set', 'dynamic', 'never'), $.keyword),
   access_identifiers: ($) =>
     seq('(', $._access_identifier, optional(seq(',', $._access_identifier)), ')'),
-  type_param: ($) => $._lhs_expression,
-  type_params: ($) => prec(1, seq('<', repeat(seq($.type_param, ',')), $.type_param, '>')),
+  type_param: ($) => choice(
+    $._lhs_expression, 
+    seq($._lhs_expression, $.type_params)
+  ),
+  type_params: ($) => prec.right(1, seq('<', commaSep1($.type_param), '>')),
 
   class_declaration: ($) =>
     seq(
