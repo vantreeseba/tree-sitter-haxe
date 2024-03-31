@@ -16,23 +16,18 @@ const haxe_grammar = {
   inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
   supertypes: ($) => [$.declaration],
-  precedences: ($) => [
-    [$._unaryOperator, $._binaryOperator],
-    [$._rangeOperator, $._literal],
-    [$.runtime_type_check_expression, $.pair],
-  ],
   conflicts: ($) => [
     [$.block, $.object],
     [$.typedef_declaration, $.type],
-    //     [$.variable_declaration, $._function_arg_list],
-    //     [$.variable_declaration, $.function_type],
     [$.call_expression, $._constructor_call],
     [$._rhs_expression, $.pair],
     [$._literal, $.pair],
+    [$.pair, $.pair],
     [$.function_declaration],
     [$.function_type, $.variable_declaration],
     [$.type, $.function_type, $.variable_declaration],
     [$.type, $._function_type_args],
+    [$.structure_type_pair, $._function_type_args],
     [$.function_declaration, $.variable_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
@@ -85,7 +80,7 @@ const haxe_grammar = {
     throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $.expression)),
 
     _rhs_expression: ($) =>
-      choice($._literal, $.identifier, $.member_expression, $.call_expression),
+      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
 
     _unaryExpression: ($) =>
       prec.left(
@@ -98,7 +93,9 @@ const haxe_grammar = {
         ),
       ),
 
-    runtime_type_check_expression: ($) => prec(2, seq('(', $.expression, ':', $.type, ')')),
+    runtime_type_check_expression: ($) =>
+      prec(20, seq('(', alias($.structure_type_pair, 'type_check'), ')')),
+    //     runtime_type_check_expression: ($) => prec.left(10, seq('(', $.pair, ')')),
 
     switch_expression: ($) =>
       seq(alias('switch', $.keyword), choice($.identifier, $._parenthesized_expression)),
@@ -158,7 +155,10 @@ const haxe_grammar = {
     member_expression: ($) =>
       prec.right(
         seq(
-          field('object', choice(alias('this', $.keyword), $.identifier)),
+          choice(
+            field('object', choice(alias('this', $.keyword), $.identifier)),
+            field('literal', $._literal),
+          ),
           choice(token('.'), seq(alias('?', $.operator), '.')),
           repeat1(field('member', $._lhs_expression)),
         ),
@@ -167,7 +167,9 @@ const haxe_grammar = {
     _lhs_expression: ($) => prec(1, choice($.identifier, $.member_expression)),
 
     builtin_type: ($) => prec.right(choice(...builtins)),
+
     _function_type_args: ($) => commaSep1(seq(optional(seq($.identifier, ':')), $.type)),
+
     function_type: ($) =>
       prec.right(
         choice(
@@ -176,6 +178,7 @@ const haxe_grammar = {
           seq('(', $._function_type_args, ')', '->', $.type),
         ),
       ),
+
     type: ($) =>
       prec.right(
         choice(
@@ -205,7 +208,7 @@ const haxe_grammar = {
 
     case_statement: ($) =>
       choice(
-        seq(alias('case', $.keyword), choice($._literal, alias('_', $.literal)), ':', $.statement),
+        seq(alias('case', $.keyword), choice($._literal, alias('_', $._literal)), ':', $.statement),
         seq(alias('default', $.keyword), ':', $.statement),
       ),
 
