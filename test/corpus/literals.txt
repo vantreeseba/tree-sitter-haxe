@@ -644,3 +644,24 @@ var y = {x:1, y:2};
   )
 )
 
+===================
+int literal.
+===================
+
+var x = "12".code;
+
+---
+
+(module 
+  (variable_declaration 
+    (keyword) 
+    (identifier) 
+    (operator)
+    (member_expression
+      (string)
+      (identifier)
+    )
+  )
+)
+
+
