@@ -98,7 +98,28 @@ const haxe_grammar = {
     //     runtime_type_check_expression: ($) => prec.left(10, seq('(', $.pair, ')')),
 
     switch_expression: ($) =>
-      seq(alias('switch', $.keyword), choice($.identifier, $._parenthesized_expression)),
+      prec.right(
+        seq(
+          alias('switch', $.keyword),
+          choice($.identifier, $._parenthesized_expression),
+          //           optional(alias($.switch_block, $.block)),
+        ),
+      ),
+
+    switch_block: ($) => seq('{', repeat($.case_statement), '}'),
+
+    case_statement: ($) =>
+      prec.right(
+        choice(
+          seq(
+            alias('case', $.keyword),
+            choice($._rhs_expression, alias('_', $._rhs_expression)),
+            ':',
+            $.statement,
+          ),
+          seq(alias('default', $.keyword), ':', $.statement),
+        ),
+      ),
 
     cast_expression: ($) =>
       choice(
@@ -205,12 +226,6 @@ const haxe_grammar = {
 
     // arg list is () with any amount of expressions followed by commas
     _arg_list: ($) => seq('(', commaSep($.expression), ')'),
-
-    case_statement: ($) =>
-      choice(
-        seq(alias('case', $.keyword), choice($._literal, alias('_', $._literal)), ':', $.statement),
-        seq(alias('default', $.keyword), ':', $.statement),
-      ),
 
     conditional_statement: ($) =>
       prec.right(

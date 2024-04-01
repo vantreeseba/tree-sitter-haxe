@@ -228,3 +228,34 @@ switch (x) {
   )
 )
 
+===================
+case expr statement in case.
+===================
+
+case "1": func();
+
+---
+
+(module
+  (case_statement 
+    (keyword)
+    (string) 
+    (call_expression (identifier))
+  )
+)
+
+===================
+case expr with member_expression in case.
+===================
+
+case "1".code: func();
+
+---
+
+(module
+  (case_statement 
+    (keyword)
+    (member_expression (string) (identifier))
+    (call_expression (identifier))
+  )
+)
