@@ -1,6 +1,6 @@
 package my;
 // <- keyword
-//      ^ variable
+//      ^ type
 // (module (package_statement (identifier)))
 
 package my.other.package;

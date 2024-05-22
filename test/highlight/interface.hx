@@ -1,17 +1,17 @@
 interface TestInterface {}
 // <- keyword
-//        ^ variable
+//        ^ type.definition
 
 interface Main<T,Y> {}
 // <- keyword
-//        ^  variable
+//        ^  type.definition
 //             ^ variable
-//               ^ variable
+//               ^ type
 
 interface TestInterface extends IAnother {}
 // <- keyword
-//        ^ variable
+//        ^ type.definition
 //                      ^ keyword
-//                              ^ variable
+//                              ^ type.definition
 
 

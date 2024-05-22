@@ -3,8 +3,11 @@
   "version": "0.9.0",
   "description": "A tree sitter parser for haxe.",
   "main": "bindings/node",
+  "types": "bindings/node",
   "scripts": {
-    "test": "tree-sitter generate && tree-sitter test"
+    "test": "tree-sitter generate && tree-sitter test",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
   },
   "author": "vantreeseba@gmail.com",
   "license": "MIT",
@@ -14,7 +17,8 @@
   },
   "devDependencies": {
     "nan": "^2.14.2",
-    "tree-sitter-cli": "^0.20.7"
+    "tree-sitter-cli": "^0.22.6",
+    "prebuildify": "^6.0.0"
   },
   "tree-sitter": [
     {
@@ -27,5 +31,24 @@
       ],
       "injection-regex": "^(hx|haxe)$"
     }
+  ],
+  "dependencies": {
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
   ]
 }

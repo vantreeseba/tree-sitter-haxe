@@ -1,44 +1,44 @@
 class Main {}
 // <- keyword
-//    ^ variable
+//    ^ type.definition
 
 class Main<T,Y> {}
 // <- keyword
-//    ^  variable
+//    ^  type.definition
 //         ^ variable
-//           ^ variable
+//           ^ type
 
 class Main<T,Other<T, Y>> {}
 // <- keyword
-//    ^  variable
+//    ^  type.definition
 //         ^ variable
 //                 ^ variable
-//                    ^ variable
+//                    ^ type
 
 final class Main {}
 // <- keyword
 //    ^ keyword
-//          ^ variable
+//          ^ type.definition
 
 abstract class Main {}
 // <- keyword
 //       ^ keyword
-//             ^ variable
+//             ^ type.definition
 
 
 class Main implements ITest {}
 // <- keyword
-//    ^ variable
+//    ^ type.definition
 //         ^ keyword
-//                    ^ variable
+//                    ^ type.definition
 
 class Main implements ITest implements IAnother {}
 // <- keyword
-//    ^ variable
+//    ^ type.definition
 //         ^ keyword
-//                    ^ variable
+//                    ^ type.definition
 //                          ^ keyword
-//                                     ^ variable
+//                                     ^ type.definition
 
 class foo extends Main {}
 

@@ -1,16 +1,25 @@
 public function bar() {}
 // ^keyword
 //       ^ keyword
-//              ^ variable
+//              ^ function
 
 banana();
-// <- variable
+// <- function
 
 banana.bar(foo);
 // <- variable
-//     ^ variable
+//     ^ function
 
 banana.foo.bar();
+// <- variable
+//     ^ variable
+//     		 ^ function
+
+banana.foo.baz.bar();
+// <- variable
+//     ^ variable
+//     	   ^ variable
+//     		     ^ function
 
 banana.foo.bar(apple);
 

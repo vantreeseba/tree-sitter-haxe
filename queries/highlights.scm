@@ -22,22 +22,22 @@
 ; Declarations
 ; ------------
 (import_statement name: [
-  (identifier) @type 
-;   (_ (identifier) @type)
-;   (_(_ (identifier) @type))
-;   (_(_(_ (identifier) @type)))
-;   (_(_(_(_ (identifier) @type))))
-;   (_(_(_(_(_ (identifier) @type)))))
+  (identifier) @type
+	(_ (identifier) @type)
+	(_(_ (identifier) @type))
+	(_(_(_ (identifier) @type)))
+	(_(_(_(_ (identifier) @type))))
+	(_(_(_(_(_ (identifier) @type)))))
 ])
 
 ; lol this is jank but okay.
-(import_statement name: (_ (identifier) @type))
-(import_statement name: (_(_ (identifier) @type)))
-(import_statement name: (_(_(_ (identifier) @type))))
-(import_statement name: (_(_(_(_ (identifier) @type)))))
-(import_statement name: (_(_(_(_(_ (identifier) @type))))))
+; (import_statement name: (_ (identifier) @type))
+; (import_statement name: (_(_ (identifier) @type)))
+; (import_statement name: (_(_(_ (identifier) @type))))
+; (import_statement name: (_(_(_(_ (identifier) @type)))))
+; (import_statement name: (_(_(_(_(_ (identifier) @type))))))
 
-(package_statement name: (identifier) @type) 
+(package_statement name: (identifier) @type)
 
 (class_declaration name: (identifier) @type.definition)
 (class_declaration super_class_name: (identifier) @type.definition)
@@ -56,12 +56,12 @@
 ; TODO: Figure out how to determined when "nested member call" is last ident.
 ; apparently this is a known issue https://github.com/tree-sitter/tree-sitter/issues/880
 (call_expression object: [
-  (identifier) @function 
-  (_ (identifier) @method .)
-  (_(_ (identifier) @method .))
-  (_(_(_ (identifier) @method .)))
-  (_(_(_(_ (identifier) @method .))))
-  (_(_(_(_(_ (identifier) @method .)))))
+  (_) @function
+  (_ (identifier) @function .)
+;   (_(_ (identifier) @function .))
+;   (_(_(_ (identifier) @function .)))
+;   (_(_(_(_ (identifier) @function .))))
+;   (_(_(_(_(_ (identifier) @function .)))))
 ])
 
 ; Literals
@@ -75,14 +75,6 @@
 (bool) @constant
 (operator) @operator
 (escape_sequence) @punctuation
-
-; Interpolation
-; -------------
-(interpolation "$" @punctuation.special)
-(interpolation
-  "${" @punctuation.special
-  "}" @punctuation.special
-) @embedded
 
 
 ; Tokens
@@ -106,4 +98,13 @@
 ;   "."
   ","
 ] @punctuation.delimiter
+
+
+; Interpolation
+; -------------
+(interpolation "$" @punctuation.special)
+(interpolation
+  "${" @punctuation.special
+  "}" @punctuation.special
+) @embedded
 
