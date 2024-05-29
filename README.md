@@ -24,7 +24,7 @@ You may have to create the haxe folder.
 
 Add these snippets to your treesitter config or anywhere in your `init.lua`:
 
-This enables and ensures the parser is installed, and that highlight is enabled.kj
+This enables and ensures the parser is installed, and that highlight is enabled.
 ```
 local configs = require "nvim-treesitter.configs"
 configs.setup {
