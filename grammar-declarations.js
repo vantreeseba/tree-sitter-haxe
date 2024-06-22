@@ -14,10 +14,7 @@ module.exports = {
     alias(choice('default', 'null', 'get', 'set', 'dynamic', 'never'), $.keyword),
   access_identifiers: ($) =>
     seq('(', $._access_identifier, optional(seq(',', $._access_identifier)), ')'),
-  type_param: ($) => choice(
-    $._lhs_expression, 
-    seq($._lhs_expression, $.type_params)
-  ),
+  type_param: ($) => choice($._lhs_expression, seq($._lhs_expression, $.type_params)),
   type_params: ($) => prec.right(1, seq('<', commaSep1($.type_param), '>')),
 
   class_declaration: ($) =>
@@ -27,9 +24,21 @@ module.exports = {
       alias('class', $.keyword),
       field('name', $._lhs_expression),
       optional($.type_params),
-      optional(seq(alias('extends', $.keyword), field('super_class_name', $._lhs_expression))),
       optional(
-        repeat(seq(alias('implements', $.keyword), field('interface_name', $._lhs_expression))),
+        seq(
+          alias('extends', $.keyword),
+          field('super_class_name', $._lhs_expression),
+          optional($.type_params),
+        ),
+      ),
+      optional(
+        repeat(
+          seq(
+            alias('implements', $.keyword),
+            field('interface_name', $._lhs_expression),
+            optional($.type_params),
+          ),
+        ),
       ),
       field('body', $.block),
     ),
@@ -41,7 +50,13 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        repeat(seq(alias('extends', $.keyword), field('interface_name', $._lhs_expression))),
+        repeat(
+          seq(
+            alias('extends', $.keyword),
+            field('interface_name', $._lhs_expression),
+            optional($.type_params),
+          ),
+        ),
       ),
       field('body', $.block),
     ),
