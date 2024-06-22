@@ -22,7 +22,19 @@ cp queries/* ~/.local/share/nvim/lazy/nvim-treesitter/queries/haxe
 
 You may have to create the haxe folder.
 
-Add this snippet to your treesitter config or anywhere in your `init.lua`:
+Add these snippets to your treesitter config or anywhere in your `init.lua`:
+
+This enables and ensures the parser is installed, and that highlight is enabled.
+```
+local configs = require "nvim-treesitter.configs"
+configs.setup {
+  ensure_installed = { "haxe" }, -- Install the Haxe parser
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    additional_vim_regex_highlighting = false,
+  },
+}
+```
 
 ```
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
