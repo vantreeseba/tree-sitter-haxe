@@ -1,12 +1,52 @@
 ===================
+subtract
+===================
+
+1 - 2;
+1 - 2 - 1;
+
+---
+(module
+	(integer) (operator) (integer)
+	(integer) (operator) (integer) (operator) (integer)
+)
+
+===================
+multiply
+===================
+
+1 * 2;
+1 * 2 * 1;
+
+---
+(module
+	(integer) (operator) (integer)
+	(integer) (operator) (integer) (operator) (integer)
+)
+
+===================
+divide
+===================
+
+1 / 2;
+1 / 2 / 1;
+
+---
+(module
+	(integer) (operator) (integer)
+	(integer) (operator) (integer) (operator) (integer)
+)
+
+
+===================
 add two integers (both literals)
 ===================
 
 var x = 1 + 2;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (keyword) (identifier)
     (operator)
     (integer) (operator) (integer))
 )
@@ -18,8 +58,8 @@ add two strings (both literals)
 var x = "a" + "b";
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (keyword) (identifier)
     (operator)
     (string) (operator) (string))
 )
@@ -32,30 +72,109 @@ add three integers (all literals)
 var x = 1 + 2 + 3;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (keyword) (identifier)
     (operator)
     (integer)
-    (operator) 
+    (operator)
     (integer)
-    (operator) 
+    (operator)
     (integer)
   )
 )
 
-
-
 ===================
-add two integers, one is a variable 
+add two integers, one is a variable
 ===================
 
 var y = 1;
 var x = 1 + y;
 
 ---
-(module 
+(module
   (variable_declaration (keyword) (identifier) (operator) (integer))
   (variable_declaration (keyword) (identifier) (operator)
     (integer) (operator) (identifier)
   )
+)
+
+===================
+modulus
+===================
+
+1 % 2;
+1 % 2 % 2;
+
+---
+(module
+	(integer) (operator) (integer)
+	(integer) (operator) (integer) (operator) (integer)
+)
+
+===================
+compare two ints eq
+===================
+
+1 == 2;
+
+---
+(module
+	(integer) (operator) (integer)
+)
+
+===================
+compare two ints neq
+===================
+
+1 != 2;
+
+---
+(module
+	(integer) (operator) (integer)
+)
+
+
+===================
+compare two ints gt
+===================
+
+1 > 2;
+
+---
+(module
+	(integer) (operator) (integer)
+)
+
+===================
+compare two ints gte
+===================
+
+1 >= 2;
+
+---
+(module
+	(integer) (operator) (integer)
+)
+
+===================
+compare two ints lt
+===================
+
+1 < 2;
+
+---
+(module
+	(integer) (operator) (integer)
+)
+
+
+===================
+compare two ints lte
+===================
+
+1 <= 2;
+
+---
+(module
+	(integer) (operator) (integer)
 )

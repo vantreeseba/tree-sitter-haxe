@@ -4,32 +4,33 @@ module.exports = {
   operator: ($) => choice($._binaryOperator, $._unaryOperator),
 
   // From: https://haxe.org/manual/expression-operators-unops.html
-  _unaryOperator: ($) => prec.right(choice($._prefixUnaryOperator, $._postfixUnaryOperator)),
-  _prefixUnaryOperator: ($) => choice('~', '!', '-', '++', '--'),
-  _postfixUnaryOperator: ($) => choice('++', '--'),
+  _unaryOperator: ($) => prec.right(choice($._prefixUnaryOperator, $._eitherUnaryOperator)),
+  _prefixUnaryOperator: ($) => token(choice('~', '!', '-')),
+  _eitherUnaryOperator: ($) => token(choice('++', '--')),
 
   // From: https://haxe.org/manual/expression-operators-binops.html
   _binaryOperator: ($) =>
     prec.left(
       choice(
-        $._arithmeticOperator,
-        $._bitwiseOperator,
-        $._logicalOperator,
-        $._comparisonOperator,
-        $._miscOperator,
-        $._assignmentOperator,
-        $._compoundAssignmentOperator,
-        $._rangeOperator,
+        $._arithmetic_operator,
+        $._bitwise_operator,
+        $._logical_operator,
+        $._comparison_operator,
+        $._map_operator,
+        $._null_colalese_operator,
+        $._assignment_operator,
+        $._compound_assignment_operator,
+        $._range_operator,
       ),
     ),
-  _arithmeticOperator: ($) => choice('%', '*', '/', '+', '-'),
-  _bitwiseOperator: ($) => choice('<<', '>>', '>>>', '&', '|', '^'),
-  _logicalOperator: ($) => choice('&&', '||'),
-  _comparisonOperator: ($) => choice('==', '!=', '<', '<=', '>', '>='),
-  _miscOperator: ($) => choice('=>', '??'),
-  //   _miscOperator: ($) => choice('...', '=>'),
-  _assignmentOperator: ($) => '=',
-  _compoundAssignmentOperator: ($) =>
-    seq(choice($._arithmeticOperator, $._bitwiseOperator), $._assignmentOperator),
-  _rangeOperator: ($) => '...',
+  _arithmetic_operator: ($) => token(choice('%', '*', '/', '+', '-')),
+  _bitwise_operator: ($) => token(choice('<<', '>>', '>>>', '&', '|', '^')),
+  _logical_operator: ($) => token(choice('&&', '||')),
+  _comparison_operator: ($) => token(choice('==', '!=', '<', '<=', '>', '>=')),
+  _map_operator: ($) => token(choice('=>')),
+  _null_colalese_operator: ($) => token(choice('??')),
+  _assignment_operator: ($) => token('='),
+  _compound_assignment_operator: ($) =>
+    seq(choice($._arithmetic_operator, $._bitwise_operator), $._assignment_operator),
+  _range_operator: ($) => token('...'),
 };

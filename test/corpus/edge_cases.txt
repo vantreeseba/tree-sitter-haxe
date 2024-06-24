@@ -7,12 +7,12 @@ function stuff(y:Array<String> = null) {
 
 ---
 
-(module 
-  (function_declaration (keyword) (identifier) 
-    (function_arg 
-      (identifier) 
+(module
+  (function_declaration (keyword) (identifier)
+    (function_arg
+      (identifier)
       (type (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
       (null)
     )
@@ -30,12 +30,12 @@ function stuff(y:Array<String> = null) {
 
 ---
 
-(module 
-  (function_declaration (keyword) (identifier) 
-    (function_arg 
-      (identifier) 
+(module
+  (function_declaration (keyword) (identifier)
+    (function_arg
+      (identifier)
       (type (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
       (null)
     )

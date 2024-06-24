@@ -31,7 +31,7 @@ fn(1,2,3);
 ---
 
 (module
-  (call_expression (identifier) 
+  (call_expression (identifier)
     (integer)
     (integer)
     (integer)
@@ -71,7 +71,7 @@ fn("Some" + "Combined" + "String");
 )
 
 ===================
-call with type params 
+call with type params
 ===================
 
 fn<Int>(123);
@@ -82,7 +82,7 @@ fn<Int>(123);
   (call_expression
     (identifier)
     (type_params
-      (type_param (identifier))
+      (type (identifier))
     )
     (integer)
   )
@@ -110,10 +110,10 @@ some.package.fn();
 ---
 
 (module
-  (call_expression 
-    (member_expression 
+  (call_expression
+    (member_expression
       (identifier)
-      (member_expression 
+      (member_expression
         (identifier)
         (identifier)
       )
@@ -130,18 +130,35 @@ some.package?.fn();
 ---
 
 (module
-  (call_expression 
-    (member_expression 
+  (call_expression
+    (member_expression
       (identifier)
-      (member_expression 
+      (member_expression
         (identifier)
-        (operator)
         (identifier)
       )
     )
   )
 )
 
+
+===================
+package member access with safe navigation operator
+===================
+
+some.package?.fn;
+
+---
+
+(module
+	(member_expression
+		(identifier)
+		(member_expression
+			(identifier)
+			(identifier)
+		)
+	)
+)
 
 
 ===================
