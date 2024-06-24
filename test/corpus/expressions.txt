@@ -41,7 +41,7 @@ if (true) {
 ---
 
 (module
-  (conditional_statement 
+  (conditional_statement
     (keyword) (bool)
     (block
       (identifier) (operator) (integer)
@@ -63,10 +63,10 @@ a = (1+1);
 ---
 
 (module
-  (identifier) 
+  (identifier)
   (operator)
   (integer)
-  (operator) 
+  (operator)
   (integer)
 )
 
@@ -79,7 +79,7 @@ a = b[1];
 ---
 
 (module
-  (identifier) 
+  (identifier)
   (operator)
   (subscript_expression
     (identifier)
@@ -96,7 +96,7 @@ a = b[c + 1];
 ---
 
 (module
-  (identifier) 
+  (identifier)
   (operator)
   (subscript_expression
     (identifier)
@@ -115,7 +115,7 @@ cast x;
 
 ---
 
-(module 
+(module
   (cast_expression
     (keyword) (identifier)
   )
@@ -129,10 +129,10 @@ cast (x, Int);
 
 ---
 
-(module 
+(module
   (cast_expression
-    (keyword) 
-    (identifier) 
+    (keyword)
+    (identifier)
     (type (identifier))
   )
 )
@@ -145,7 +145,7 @@ runtime type check
 
 ---
 
-(module 
+(module
   (runtime_type_check_expression
     (identifier) (type (identifier))
   )
@@ -188,9 +188,9 @@ switch (x) {
 (module
   (switch_expression (keyword) (identifier))
   (block
-    (case_statement 
+    (case_statement
       (keyword)
-      (integer) 
+      (integer)
       (call_expression (identifier))
     )
   )
@@ -211,17 +211,17 @@ switch (x) {
 (module
   (switch_expression (keyword) (identifier))
   (block
-    (case_statement 
+    (case_statement
       (keyword)
-      (integer) 
+      (integer)
       (call_expression (identifier))
     )
-    (case_statement 
+    (case_statement
       (keyword)
-      (integer) 
+      (integer)
       (call_expression (identifier))
     )
-    (case_statement 
+    (case_statement
       (keyword)
       (call_expression (identifier))
     )
@@ -237,9 +237,9 @@ case "1": func();
 ---
 
 (module
-  (case_statement 
+  (case_statement
     (keyword)
-    (string) 
+    (string)
     (call_expression (identifier))
   )
 )
@@ -253,7 +253,7 @@ case "1".code: func();
 ---
 
 (module
-  (case_statement 
+  (case_statement
     (keyword)
     (member_expression (string) (identifier))
     (call_expression (identifier))

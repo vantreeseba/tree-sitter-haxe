@@ -14,8 +14,9 @@ module.exports = {
     alias(choice('default', 'null', 'get', 'set', 'dynamic', 'never'), $.keyword),
   access_identifiers: ($) =>
     seq('(', $._access_identifier, optional(seq(',', $._access_identifier)), ')'),
-  type_param: ($) => choice($._lhs_expression, seq($._lhs_expression, $.type_params)),
-  type_params: ($) => prec.right(1, seq('<', commaSep1($.type_param), '>')),
+  //   _type_param: ($) => $.type,
+  _type_param: ($) => $.type,
+  type_params: ($) => seq('<', commaSep1($._type_param), '>'),
 
   class_declaration: ($) =>
     seq(
@@ -90,19 +91,22 @@ module.exports = {
         field('name', $._lhs_expression),
         optional('?'),
         optional(seq(':', alias(choice($._lhs_expression, $.type, $.structure_type), $.type))),
-        optional(seq($._assignmentOperator, $._literal)),
+        optional(seq($._assignment_operator, $._literal)),
       ),
     ),
 
   variable_declaration: ($) =>
-    seq(
-      repeat($.metadata),
-      repeat($.keyword),
-      choice(alias('var', $.keyword), alias('final', $.keyword)),
-      field('name', $._lhs_expression),
-      optional($.access_identifiers),
-      optional(seq(':', optional(repeat('(')), field('type', $.type), optional(repeat(')')))),
-      optional(seq(($._assignmentOperator, $.operator), $.expression)),
-      $._semicolon,
+    prec.right(
+      seq(
+        prec.left(repeat($.metadata)),
+        prec.left(repeat($.keyword)),
+        choice(alias('var', $.keyword), alias('final', $.keyword)),
+        field('name', $.identifier),
+        optional($.access_identifiers),
+        optional(seq(':', field('type', $.type))),
+        //         optional(seq(':', optional(repeat('(')), field('type', $.type), optional(repeat(')')))),
+        optional(seq(($._assignment_operator, $.operator), $._expression)),
+        $._semicolon,
+      ),
     ),
 };

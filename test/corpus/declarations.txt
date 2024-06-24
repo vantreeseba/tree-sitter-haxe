@@ -46,8 +46,8 @@ interface Main<T,U> {}
     (keyword)
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param (identifier))
+      (type (identifier))
+      (type (identifier))
     )
     (block)
   )
@@ -66,12 +66,12 @@ interface Main<T, Other<U, V>> {}
     (keyword)
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param 
+      (type (identifier))
+      (type
         (identifier)
         (type_params
-          (type_param (identifier))
-          (type_param (identifier))
+          (type (identifier))
+          (type (identifier))
         )
       )
     )
@@ -88,9 +88,9 @@ interface ITest extends IBanana {}
 
 ---
 
-(module (interface_declaration 
-  (keyword) (identifier) 
-  (keyword) (identifier) 
+(module (interface_declaration
+  (keyword) (identifier)
+  (keyword) (identifier)
   (block)
 ))
 
@@ -113,10 +113,10 @@ class Main implements ITest implements IAnother {}
 
 ---
 
-(module (class_declaration 
-  (keyword) (identifier) 
-  (keyword) (identifier) 
-  (keyword) (identifier) 
+(module (class_declaration
+  (keyword) (identifier)
+  (keyword) (identifier)
+  (keyword) (identifier)
   (block)
 ))
 
@@ -156,8 +156,8 @@ class Main<T,U> {}
     (keyword)
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param (identifier))
+      (type (identifier))
+      (type (identifier))
     )
     (block)
   )
@@ -218,8 +218,8 @@ class Main {
         (keyword)
         (identifier)
         (type_params
-          (type_param (identifier))
-          (type_param (identifier))
+          (type (identifier))
+          (type (identifier))
         )
         (block))
     )
@@ -292,7 +292,7 @@ class Main {
 )
 
 ===================
-function with generic typed arg 
+function with generic typed arg
 ===================
 
 function foo(x:Array<Int>){}
@@ -300,14 +300,14 @@ function foo(x:Array<Int>){}
 ---
 
 (module
-  (function_declaration 
-    (keyword) 
+  (function_declaration
+    (keyword)
     (identifier)
-    (function_arg 
-      (identifier) 
-      (type 
+    (function_arg
+      (identifier)
+      (type
         (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
     )
     (block)
@@ -315,7 +315,7 @@ function foo(x:Array<Int>){}
 )
 
 ===================
-function with anonymous struct arg 
+function with anonymous struct arg
 ===================
 
 function foo(x:{z:int, y:float}){}
@@ -323,12 +323,12 @@ function foo(x:{z:int, y:float}){}
 ---
 
 (module
-  (function_declaration 
-    (keyword) 
+  (function_declaration
+    (keyword)
     (identifier)
-    (function_arg 
-      (identifier) 
-      (type 
+    (function_arg
+      (identifier)
+      (type
         (pair (identifier) (type (identifier)))
         (pair (identifier) (type (identifier)))
       )
@@ -551,7 +551,7 @@ class Main {
 )
 
 ===================
-class function with this 
+class function with this
 ===================
 
 class Main {
@@ -646,9 +646,9 @@ class Main {
         (keyword)
         (keyword)
         (identifier)
-        (type 
-          (identifier) 
-          (type_params (type_param (identifier)))
+        (type
+          (identifier)
+          (type_params (type (identifier)))
         )
       )
     )
@@ -702,7 +702,7 @@ typedef MyType = {
 )
 
 ===================
-type def 'alias' 
+type def 'alias'
 ===================
 
 typedef MyType = Int;
@@ -710,15 +710,15 @@ typedef MyType = Int;
 ---
 
 (module
-  (typedef_declaration 
-    (keyword) 
+  (typedef_declaration
+    (keyword)
     (identifier)
     (type (identifier))
   )
 )
 
 ===================
-type def 'alias' 
+type def 'alias'
 ===================
 
 typedef MyType = Array<Int>;
@@ -726,12 +726,12 @@ typedef MyType = Array<Int>;
 ---
 
 (module
-  (typedef_declaration 
-    (keyword) 
+  (typedef_declaration
+    (keyword)
     (identifier)
-    (type 
+    (type
       (identifier)
-      (type_params (type_param (identifier)))
+      (type_params (type (identifier)))
     )
   )
 )
@@ -799,15 +799,15 @@ var x:Array<Int>;
   (variable_declaration
     (keyword)
     (identifier)
-    (type 
+    (type
       (identifier)
-      (type_params (type_param (identifier)))
+      (type_params (type (identifier)))
     )
   )
 )
 
 ===================
-var declaration array comprehension 
+var declaration array comprehension
 ===================
 
 var a = [for (i in 0...5) i];
@@ -830,7 +830,7 @@ var a = [for (i in 0...5) i];
 )
 
 ===================
-var declaration with function type with no inputs 
+var declaration with function type with no inputs
 ===================
 
 var x:() -> Int;
@@ -850,7 +850,7 @@ var x:() -> Int;
 )
 
 ===================
-var declaration with function type 
+var declaration with function type
 ===================
 
 var x:Int -> Int;
@@ -871,7 +871,7 @@ var x:Int -> Int;
 )
 
 ===================
-var declaration with function type with named input 
+var declaration with function type with named input
 ===================
 
 var x:(arg:Int) -> Int;
@@ -928,21 +928,21 @@ var e:(fn:Int->Bool, Float, sub:(Bool, Bool) -> Int) -> Bool;
   (variable_declaration
     (keyword)
     (identifier)
-    (type (function_type             
-        (identifier)          
-        (type (function_type                 
-          (type (identifier))                 
-          (type                   
+    (type (function_type
+        (identifier)
+        (type (function_type
+          (type (identifier))
+          (type
           (identifier))
-        ))             
-      (type (identifier))     
-      (identifier)            
-      (type (function_type    
-        (type (identifier))                 
-        (type (identifier))                 
+        ))
+      (type (identifier))
+      (identifier)
+      (type (function_type
         (type (identifier))
-      ))             
-      (type (identifier))    
+        (type (identifier))
+        (type (identifier))
+      ))
+      (type (identifier))
     ))
   )
 )
@@ -959,27 +959,27 @@ var e:((fn:(Int->Bool), Float, sub:((Bool, Bool) -> Int))->Bool);
   (variable_declaration
     (keyword)
     (identifier)
-    (type (function_type             
-        (identifier)          
-        (type (function_type                 
-          (type (identifier))                 
-          (type                   
+    (type (function_type
+        (identifier)
+        (type (function_type
+          (type (identifier))
+          (type
           (identifier))
-        ))             
-      (type (identifier))     
-      (identifier)            
-      (type (function_type    
-        (type (identifier))                 
-        (type (identifier))                 
+        ))
+      (type (identifier))
+      (identifier)
+      (type (function_type
         (type (identifier))
-      ))             
-      (type (identifier))    
+        (type (identifier))
+        (type (identifier))
+      ))
+      (type (identifier))
     ))
   )
 )
 
 ===================
-var declaration with function type with wrapped parens 
+var declaration with function type with wrapped parens
 ===================
 
 var x:((arg:Int) -> Int);
@@ -1003,7 +1003,7 @@ var x:((arg:Int) -> Int);
 
 
 ===================
-var declaration with function type 
+var declaration with function type
 ===================
 
 var x:(Int,Int) -> Int;

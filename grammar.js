@@ -13,24 +13,20 @@ const preprocessor_statement_end_tokens = ['else', 'end'];
 const haxe_grammar = {
   name: 'haxe',
   word: ($) => $.identifier,
-  inline: ($) => [$.statement, $.expression],
+  inline: ($) => [$.statement, $._expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
-  supertypes: ($) => [$.declaration],
+  supertypes: ($) => [
+    $.declaration,
+    //     $._expression,
+    //     $.statement,
+  ],
   conflicts: ($) => [
-    [$.block, $.object],
     [$.typedef_declaration, $.type],
     [$.call_expression, $._constructor_call],
-    [$._rhs_expression, $.pair],
     [$._literal, $.pair],
-    [$.pair, $.pair],
     [$.function_declaration],
-    [$.function_type, $.variable_declaration],
-    [$.type, $.function_type, $.variable_declaration],
     [$.type, $._function_type_args],
     [$.structure_type_pair, $._function_type_args],
-    [$.function_declaration, $.variable_declaration],
-    [$._prefixUnaryOperator, $._arithmeticOperator],
-    [$._prefixUnaryOperator, $._postfixUnaryOperator],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -47,7 +43,7 @@ const haxe_grammar = {
             $.using_statement,
             $.package_statement,
             $.declaration,
-            $.expression,
+            $._expression,
             $.conditional_statement,
             $.case_statement,
             $.throw_statement,
@@ -77,19 +73,19 @@ const haxe_grammar = {
     using_statement: ($) =>
       seq(alias('using', $.keyword), field('name', $._lhs_expression), $._semicolon),
 
-    throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $.expression)),
-
-    _rhs_expression: ($) =>
-      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+    throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $._expression)),
 
     _unaryExpression: ($) =>
       prec.left(
         1,
         choice(
           // unary on LHS
-          seq($.operator, $._rhs_expression),
+          seq(
+            alias(choice($._prefixUnaryOperator, $._eitherUnaryOperator), $.operator),
+            $._rhs_expression,
+          ),
           // unary on RHS
-          seq($._rhs_expression, $.operator),
+          seq($._rhs_expression, alias($._eitherUnaryOperator, $.operator)),
         ),
       ),
 
@@ -135,7 +131,7 @@ const haxe_grammar = {
 
     type_trace_expression: ($) => seq(alias('$type', $.keyword), '(', $._rhs_expression, ')'),
 
-    _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
+    _parenthesized_expression: ($) => seq('(', repeat1(prec.left($._expression)), ')'),
 
     range_expression: ($) =>
       prec(
@@ -143,22 +139,8 @@ const haxe_grammar = {
         seq(
           $.identifier,
           alias('in', $.keyword),
-          choice(seq($.integer, $._rangeOperator, $.integer), $.identifier),
+          choice(seq($.integer, $._range_operator, $.integer), $.identifier),
         ),
-      ),
-
-    expression: ($) =>
-      choice(
-        $._unaryExpression,
-        $.subscript_expression,
-        $.runtime_type_check_expression,
-        $.cast_expression,
-        $.type_trace_expression,
-        $.range_expression,
-        $._parenthesized_expression,
-        $.switch_expression,
-        // simple expression, or chained.
-        seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
       ),
 
     subscript_expression: ($) =>
@@ -166,11 +148,11 @@ const haxe_grammar = {
         1,
         seq(
           choice($.identifier, $._parenthesized_expression, $.member_expression),
-          '[',
-          field('index', $.expression),
-          ']',
+          token('['),
+          field('index', $._expression),
+          token(']'),
         ),
-        //           seq($._parenthesized_expression, '[', field('index', $.expression), ']'),
+        //           seq($._parenthesized_expression, '[', field('index', $._expression), ']'),
       ),
 
     member_expression: ($) =>
@@ -180,12 +162,46 @@ const haxe_grammar = {
             field('object', choice(alias('this', $.keyword), $.identifier)),
             field('literal', $._literal),
           ),
-          choice(token('.'), seq(alias('?', $.operator), '.')),
+          token(choice('?.', '.')),
           repeat1(field('member', $._lhs_expression)),
         ),
       ),
 
+    _binary_expression: ($) =>
+      prec.left(10, seq($._expression, alias($._binaryOperator, $.operator), $._expression)),
+
+    ternary_expression: ($) =>
+      prec.right(
+        5,
+        seq(
+          field('condition', $._expression),
+          alias('?', $.operator),
+          field('true_result', $._expression),
+          alias(':', $.operator),
+          field('false_result', $._expression),
+        ),
+      ),
+
     _lhs_expression: ($) => prec(1, choice($.identifier, $.member_expression)),
+    _rhs_expression: ($) =>
+      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+
+    _expression: ($) =>
+      choice(
+        $._rhs_expression,
+        $._unaryExpression,
+        $.subscript_expression,
+        $.runtime_type_check_expression,
+        $.cast_expression,
+        $.type_trace_expression,
+        $.range_expression,
+        $._parenthesized_expression,
+        $.switch_expression,
+        $._binary_expression,
+        $.ternary_expression,
+        // simple expression, or chained.
+        //         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+      ),
 
     builtin_type: ($) => prec.right(choice(...builtins)),
 
@@ -221,11 +237,11 @@ const haxe_grammar = {
       seq(
         choice(token('@'), token('@:')),
         field('name', $._lhs_expression),
-        optional(seq('(', $.expression, ')')),
+        optional(seq('(', $._expression, ')')),
       ),
 
     // arg list is () with any amount of expressions followed by commas
-    _arg_list: ($) => seq('(', commaSep($.expression), ')'),
+    _arg_list: ($) => seq('(', commaSep($._expression), ')'),
 
     conditional_statement: ($) =>
       prec.right(
