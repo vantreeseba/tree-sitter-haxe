@@ -1,4 +1,14 @@
 ===================
+Empty Package Name
+===================
+
+package;
+
+---
+
+(module (package_statement (keyword)))
+
+===================
 Package Name
 ===================
 

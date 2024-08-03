@@ -1,3 +1,7 @@
+package;
+// <- keyword
+// (module (package_statement))
+
 package my;
 // <- keyword
 //      ^ type
