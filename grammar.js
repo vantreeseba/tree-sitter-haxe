@@ -75,7 +75,8 @@ const haxe_grammar = {
     using_statement: ($) =>
       seq(alias('using', $.keyword), field('name', $._lhs_expression), $._semicolon),
 
-    throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $.expression, $._lookback_semicolon)),
+    throw_statement: ($) =>
+      prec.right(seq(alias('throw', $.keyword), $.expression, $._lookback_semicolon)),
 
     _rhs_expression: ($) =>
       prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
@@ -264,7 +265,7 @@ const haxe_grammar = {
     keyword: ($) => prec.right(choice(...keywords)),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
     // Hidden Nodes in tree.
-    _semicolon: ($) => ';',
+    _semicolon: ($) => $._lookback_semicolon,
   },
 };
 
