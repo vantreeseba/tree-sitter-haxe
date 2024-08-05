@@ -100,7 +100,7 @@ const haxe_grammar = {
         seq(
           alias('switch', $.keyword),
           choice($.identifier, $._parenthesized_expression),
-          //           optional(alias($.switch_block, $.block)),
+          alias($.switch_block, $.block),
         ),
       ),
 
