@@ -412,10 +412,6 @@
           "named": true
         },
         {
-          "type": "case_statement",
-          "named": true
-        },
-        {
           "type": "cast_expression",
           "named": true
         },
@@ -1369,10 +1365,6 @@
           "named": true
         },
         {
-          "type": "case_statement",
-          "named": true
-        },
-        {
           "type": "cast_expression",
           "named": true
         },
@@ -1626,10 +1618,6 @@
           "named": true
         },
         {
-          "type": "block",
-          "named": true
-        },
-        {
           "type": "bool",
           "named": true
         },
@@ -1638,19 +1626,7 @@
           "named": true
         },
         {
-          "type": "case_statement",
-          "named": true
-        },
-        {
           "type": "cast_expression",
-          "named": true
-        },
-        {
-          "type": "conditional_statement",
-          "named": true
-        },
-        {
-          "type": "declaration",
           "named": true
         },
         {
@@ -1659,10 +1635,6 @@
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "import_statement",
           "named": true
         },
         {
@@ -1690,15 +1662,7 @@
           "named": true
         },
         {
-          "type": "package_statement",
-          "named": true
-        },
-        {
           "type": "pair",
-          "named": true
-        },
-        {
-          "type": "preprocessor_statement",
           "named": true
         },
         {
@@ -1722,15 +1686,7 @@
           "named": true
         },
         {
-          "type": "throw_statement",
-          "named": true
-        },
-        {
           "type": "type_trace_expression",
-          "named": true
-        },
-        {
-          "type": "using_statement",
           "named": true
         }
       ]
@@ -1971,6 +1927,10 @@
       "types": [
         {
           "type": "array",
+          "named": true
+        },
+        {
+          "type": "block",
           "named": true
         },
         {
