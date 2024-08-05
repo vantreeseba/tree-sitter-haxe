@@ -1,25 +1,51 @@
 ===================
-or two bools
+"or" two bools
 ===================
 
-var x = true || false;
+true || false;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
-    (operator)
-    (bool) (operator) (bool))
+(module
+	(bool) (operator) (bool)
 )
 
 ===================
-or two bools
+"and" two bools
 ===================
 
-var x = true && false;
+true && false;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
-    (operator)
-    (bool) (operator) (bool))
+(module
+	(bool) (operator) (bool)
+)
+
+
+===================
+GT comparison with variables
+===================
+var x = 1;
+var y = 2;
+
+x > y;
+
+---
+(module
+	(variable_declaration (keyword) (identifier) (operator) (integer))
+	(variable_declaration (keyword) (identifier) (operator) (integer))
+	(identifier) (operator) (identifier)
+)
+===================
+LT comparison with variables
+===================
+var x = 1;
+var y = 2;
+
+x < y;
+
+---
+(module
+	(variable_declaration (keyword) (identifier) (operator) (integer))
+	(variable_declaration (keyword) (identifier) (operator) (integer))
+	(identifier) (operator) (identifier)
 )

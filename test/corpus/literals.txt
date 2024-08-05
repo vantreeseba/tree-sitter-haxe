@@ -8,12 +8,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
@@ -31,12 +31,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
@@ -56,12 +56,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
@@ -79,12 +79,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
@@ -103,12 +103,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (float)
       )
@@ -126,12 +126,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (float)
       )
@@ -152,12 +152,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (float)
       )
@@ -175,12 +175,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (float)
       )
@@ -198,12 +198,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (float)
       )
@@ -222,12 +222,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (float)
         (ERROR (identifier))
@@ -246,12 +246,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string)
       )
@@ -269,12 +269,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string (escape_sequence))
       )
@@ -292,12 +292,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string (escape_sequence))
       )
@@ -306,7 +306,7 @@ class main {
 )
 
 ===================
-string literal double quote with escape sequence 
+string literal double quote with escape sequence
 ===================
 
 class main {
@@ -315,12 +315,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string (escape_sequence))
       )
@@ -339,12 +339,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string)
       )
@@ -363,18 +363,18 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string (interpolation (identifier)))
       )
@@ -393,18 +393,18 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (string (interpolation (identifier)))
       )
@@ -424,20 +424,20 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (integer)
       )
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
-        (string (interpolation 
+        (string (interpolation
           (identifier) (operator) (integer)
         ))
       )
@@ -455,12 +455,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (array)
       )
@@ -478,12 +478,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (array (integer))
       )
@@ -499,37 +499,37 @@ Array literal with multiple elements
 
 ---
 
-(module 
-  (variable_declaration 
-    (keyword) 
-    (identifier) 
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
     (operator)
     (array (integer) (integer) (integer))
   )
 )
 
 ===================
-Array literal with object element 
+Array literal with object element
 ===================
 
   var y = [{x:1}];
 
 ---
 
-(module 
-  (variable_declaration 
-    (keyword) 
-    (identifier) 
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
     (operator)
-    (array 
-      (object 
+    (array
+      (object
       (pair (identifier) (integer)))
     )
   )
 )
 
 ===================
-Array literal with string element 
+Array literal with string element
 ===================
 
 class main {
@@ -538,12 +538,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (array (string))
       )
@@ -552,26 +552,44 @@ class main {
 )
 
 ===================
-simple pair literal 
+simple pair literal
 ===================
 
 x:1
 
 ---
 
-(module 
+(module
   (pair (identifier) (integer))
 )
 
 ===================
-simple map pair literal 
+expression pair literal
+===================
+
+x:1+1
+
+---
+
+(module
+  (pair
+		(identifier)
+		(integer)
+		(operator)
+		(integer)
+	)
+)
+
+
+===================
+simple map pair literal
 ===================
 
 "test"=>1
 
 ---
 
-(module 
+(module
   (pair (string) (integer))
 )
 
@@ -587,12 +605,12 @@ class main {
 
 ---
 
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (variable_declaration 
-        (keyword) 
-        (identifier) 
+(module
+  (class_declaration (keyword) (identifier)
+    (block
+      (variable_declaration
+        (keyword)
+        (identifier)
         (operator)
         (map (pair (string) (integer)))
       )
@@ -601,20 +619,20 @@ class main {
 )
 
 ===================
-Map literal with nested 
+Map literal with nested
 ===================
 
 var y = ["string" =>  ["bar" => 2]];
 
 ---
 
-(module 
-  (variable_declaration 
-    (keyword) 
-    (identifier) 
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
     (operator)
-    (map 
-      (pair 
+    (map
+      (pair
         (string)
         (map
           (pair (string) (integer))
@@ -625,19 +643,19 @@ var y = ["string" =>  ["bar" => 2]];
 )
 
 ===================
-Object literal 
+Object literal
 ===================
 
-var y = {x:1, y:2}; 
+var y = {x:1, y:2};
 
 ---
 
-(module 
-  (variable_declaration 
-    (keyword) 
-    (identifier) 
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
     (operator)
-    (object 
+    (object
       (pair (identifier) (integer))
       (pair (identifier) (integer))
     )
@@ -652,10 +670,10 @@ var x = "12".code;
 
 ---
 
-(module 
-  (variable_declaration 
-    (keyword) 
-    (identifier) 
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
     (operator)
     (member_expression
       (string)

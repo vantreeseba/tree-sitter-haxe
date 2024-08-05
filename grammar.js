@@ -15,22 +15,18 @@ const haxe_grammar = {
   word: ($) => $.identifier,
   inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
-  supertypes: ($) => [$.declaration],
+  supertypes: ($) => [
+    $.declaration,
+    //     $.expression,
+    //     $.statement,
+  ],
   conflicts: ($) => [
-    [$.block, $.object],
     [$.typedef_declaration, $.type],
     [$.call_expression, $._constructor_call],
-    [$._rhs_expression, $.pair],
     [$._literal, $.pair],
-    [$.pair, $.pair],
     [$.function_declaration],
-    [$.function_type, $.variable_declaration],
-    [$.type, $.function_type, $.variable_declaration],
     [$.type, $._function_type_args],
     [$.structure_type_pair, $._function_type_args],
-    [$.function_declaration, $.variable_declaration],
-    [$._prefixUnaryOperator, $._arithmeticOperator],
-    [$._prefixUnaryOperator, $._postfixUnaryOperator],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -79,17 +75,17 @@ const haxe_grammar = {
 
     throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $.expression)),
 
-    _rhs_expression: ($) =>
-      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
-
     _unaryExpression: ($) =>
       prec.left(
         1,
         choice(
           // unary on LHS
-          seq($.operator, $._rhs_expression),
+          seq(
+            alias(choice($._prefixUnaryOperator, $._eitherUnaryOperator), $.operator),
+            $._rhs_expression,
+          ),
           // unary on RHS
-          seq($._rhs_expression, $.operator),
+          seq($._rhs_expression, alias($._eitherUnaryOperator, $.operator)),
         ),
       ),
 
@@ -143,22 +139,8 @@ const haxe_grammar = {
         seq(
           $.identifier,
           alias('in', $.keyword),
-          choice(seq($.integer, $._rangeOperator, $.integer), $.identifier),
+          choice(seq($.integer, $._range_operator, $.integer), $.identifier),
         ),
-      ),
-
-    expression: ($) =>
-      choice(
-        $._unaryExpression,
-        $.subscript_expression,
-        $.runtime_type_check_expression,
-        $.cast_expression,
-        $.type_trace_expression,
-        $.range_expression,
-        $._parenthesized_expression,
-        $.switch_expression,
-        // simple expression, or chained.
-        seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
       ),
 
     subscript_expression: ($) =>
@@ -166,9 +148,9 @@ const haxe_grammar = {
         1,
         seq(
           choice($.identifier, $._parenthesized_expression, $.member_expression),
-          '[',
+          token('['),
           field('index', $.expression),
-          ']',
+          token(']'),
         ),
         //           seq($._parenthesized_expression, '[', field('index', $.expression), ']'),
       ),
@@ -180,12 +162,46 @@ const haxe_grammar = {
             field('object', choice(alias('this', $.keyword), $.identifier)),
             field('literal', $._literal),
           ),
-          choice(token('.'), seq(alias('?', $.operator), '.')),
+          token(choice('?.', '.')),
           repeat1(field('member', $._lhs_expression)),
         ),
       ),
 
+    _binary_expression: ($) =>
+      prec.left(10, seq($.expression, alias($._binaryOperator, $.operator), $.expression)),
+
+    ternary_expression: ($) =>
+      prec.right(
+        5,
+        seq(
+          field('condition', $.expression),
+          alias('?', $.operator),
+          field('true_result', $.expression),
+          alias(':', $.operator),
+          field('false_result', $.expression),
+        ),
+      ),
+
     _lhs_expression: ($) => prec(1, choice($.identifier, $.member_expression)),
+    _rhs_expression: ($) =>
+      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+
+    expression: ($) =>
+      choice(
+        $._rhs_expression,
+        $._unaryExpression,
+        $.subscript_expression,
+        $.runtime_type_check_expression,
+        $.cast_expression,
+        $.type_trace_expression,
+        $.range_expression,
+        $._parenthesized_expression,
+        $.switch_expression,
+        $._binary_expression,
+        $.ternary_expression,
+        // simple expression, or chained.
+        //         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+      ),
 
     builtin_type: ($) => prec.right(choice(...builtins)),
 

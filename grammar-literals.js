@@ -42,7 +42,7 @@ module.exports = {
     prec.right(
       choice(
         seq(choice($.identifier, $.string), ':', $.expression),
-        seq(choice($.identifier, $._literal), '=>', $.expression),
+        seq(choice($.identifier, $._literal), $._map_operator, $.expression),
       ),
     ),
 

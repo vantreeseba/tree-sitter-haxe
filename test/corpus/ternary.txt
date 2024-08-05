@@ -1,0 +1,96 @@
+===================
+ternary expression
+===================
+
+true ? 1 : 0;
+
+---
+
+(module
+	(ternary_expression
+		(bool)
+		(operator)
+		(integer)
+		(operator)
+		(integer)
+	)
+)
+
+===================
+ternary expression
+===================
+
+true ? -1 : -5;
+
+---
+
+(module
+	(ternary_expression
+		(bool)
+		(operator)
+		(operator)
+		(integer)
+		(operator)
+		(operator)
+		(integer)
+	)
+)
+
+===================
+ternary expression with condition as expression
+===================
+
+1 > 2 ? -1 : -5;
+
+---
+
+(module
+	(ternary_expression
+		(integer) (operator) (integer)
+		(operator)
+		(operator) (integer)
+		(operator)
+		(operator) (integer)
+	)
+)
+
+===================
+ternary expression with condition as expression
+===================
+
+1 < 2 ? -1 : -5;
+
+---
+
+(module
+	(ternary_expression
+		(integer) (operator) (integer)
+		(operator)
+		(operator) (integer)
+		(operator)
+		(operator) (integer)
+	)
+)
+
+===================
+ternary expression with condition as expression with variables
+===================
+var x = 1;
+var y = 1;
+
+x < y ? -1 : -5;
+
+---
+
+(module
+	(variable_declaration (keyword) (identifier) (operator) (integer))
+	(variable_declaration (keyword) (identifier) (operator) (integer))
+
+	(ternary_expression
+		(identifier) (operator) (identifier)
+		(operator)
+		(operator) (integer)
+		(operator)
+		(operator) (integer)
+	)
+)
