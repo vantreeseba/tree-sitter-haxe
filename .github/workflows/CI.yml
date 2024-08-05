@@ -1,0 +1,32 @@
+name: HAXE_CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+# TODO add rest of os to matrix
+# os: [ubuntu-latest, macos-latest]
+
+jobs:
+  unit_tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        haxe: [4.3.0]
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+      - name: Install Treesitter
+        run: npm install tree-sitter
+      - name: Run Tests
+        run: |
+          npm run test
