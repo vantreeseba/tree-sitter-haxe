@@ -25,6 +25,8 @@ jobs:
         with:
           node-version: 16
           cache: "npm"
+      - name: Install Treesitter
+        run: npm install tree-sitter
       - name: Run Tests
         run: |
           npm run test
