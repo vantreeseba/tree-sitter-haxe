@@ -32,9 +32,9 @@ module.exports = {
   map: ($) => prec(1, seq('[', commaSep1($.pair), ']')),
 
   // https://haxe.org/manual/expression-object-declaration.html
-  object: ($) => prec(1, seq('{', commaSep($.pair), '}')),
+  object: ($) => prec(1, seq('{', commaSep($.pair), $._closing_brace)),
 
-  structure_type: ($) => prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), '}')),
+  structure_type: ($) => prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), $._closing_brace)),
   structure_type_pair: ($) => prec.left(seq(choice($.identifier), ':', $.type)),
 
   // Sub part of map and object literals

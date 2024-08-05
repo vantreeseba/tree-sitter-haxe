@@ -68,6 +68,7 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       seq('=', choice($.block, $._lhs_expression, $.type)),
+      $._lookback_semicolon,
     ),
 
   function_declaration: ($) =>
@@ -80,6 +81,7 @@ module.exports = {
       $._function_arg_list,
       optional(seq(':', field('return_type', $.type))),
       optional(field('body', $.block)),
+      $._lookback_semicolon,
     ),
 
   _function_arg_list: ($) => prec(1, seq('(', commaSep($.function_arg), ')')),
@@ -103,6 +105,6 @@ module.exports = {
       optional($.access_identifiers),
       optional(seq(':', optional(repeat('(')), field('type', $.type), optional(repeat(')')))),
       optional(seq(($._assignmentOperator, $.operator), $.expression)),
-      $._semicolon,
+      $._lookback_semicolon,
     ),
 };
