@@ -555,7 +555,7 @@ class main {
 simple pair literal 
 ===================
 
-x:1
+x:1;
 
 ---
 
@@ -567,7 +567,7 @@ x:1
 simple map pair literal 
 ===================
 
-"test"=>1
+"test"=>1;
 
 ---
 
