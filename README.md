@@ -1,8 +1,9 @@
 ##
-
 A tree sitter parser for haxe.
 
 I've only testing this using nvim-treesitter.
+
+If you are getting an error on loading parser after 0.11.x, check config below and ensure you are including "src/scanner.c" in file list for config.
 
 ## Use
 
@@ -41,7 +42,7 @@ local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 parser_config.haxe = {
   install_info = {
     url = "https://github.com/vantreeseba/tree-sitter-haxe",
-    files = {"src/parser.c"},
+    files = {"src/parser.c", "src/scanner.c"},
     -- optional entries:
     branch = "main",
   },
