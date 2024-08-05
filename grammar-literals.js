@@ -24,8 +24,8 @@ module.exports = {
   // https://haxe.org/manual/expression-array-declaration.html
   array: ($) =>
     choice(
-      seq('[', commaSep(prec.left($._expression)), ']'),
-      seq('[', $._expression, $.identifier, ']'), //array comprehension
+      seq('[', commaSep(prec.left($.expression)), ']'),
+      seq('[', $.expression, $.identifier, ']'), //array comprehension
     ),
 
   // https://haxe.org/manual/expression-map-declaration.html
@@ -41,8 +41,8 @@ module.exports = {
   pair: ($) =>
     prec.right(
       choice(
-        seq(choice($.identifier, $.string), ':', $._expression),
-        seq(choice($.identifier, $._literal), $._map_operator, $._expression),
+        seq(choice($.identifier, $.string), ':', $.expression),
+        seq(choice($.identifier, $._literal), $._map_operator, $.expression),
       ),
     ),
 
@@ -53,10 +53,10 @@ module.exports = {
       $._interpolated_identifier,
       //         $._interpolated_expression
     ),
-  _interpolated_block: ($) => seq('${', $._expression, '}'),
+  _interpolated_block: ($) => seq('${', $.expression, '}'),
   _interpolated_identifier: ($) =>
     choice(seq('$', $._lhs_expression), seq('${', $._lhs_expression, '}')),
-  _interpolated_expression: ($) => seq('$', seq(token.immediate('{'), $._expression, '}')),
+  _interpolated_expression: ($) => seq('$', seq(token.immediate('{'), $.expression, '}')),
 
   escape_sequence: ($) =>
     token.immediate(

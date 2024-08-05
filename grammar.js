@@ -13,11 +13,11 @@ const preprocessor_statement_end_tokens = ['else', 'end'];
 const haxe_grammar = {
   name: 'haxe',
   word: ($) => $.identifier,
-  inline: ($) => [$.statement, $._expression],
+  inline: ($) => [$.statement, $.expression],
   extras: ($) => [$.comment, /[\s\uFEFF\u2060\u200B\u00A0]/],
   supertypes: ($) => [
     $.declaration,
-    //     $._expression,
+    //     $.expression,
     //     $.statement,
   ],
   conflicts: ($) => [
@@ -43,7 +43,7 @@ const haxe_grammar = {
             $.using_statement,
             $.package_statement,
             $.declaration,
-            $._expression,
+            $.expression,
             $.conditional_statement,
             $.case_statement,
             $.throw_statement,
@@ -73,7 +73,7 @@ const haxe_grammar = {
     using_statement: ($) =>
       seq(alias('using', $.keyword), field('name', $._lhs_expression), $._semicolon),
 
-    throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $._expression)),
+    throw_statement: ($) => prec.right(seq(alias('throw', $.keyword), $.expression)),
 
     _unaryExpression: ($) =>
       prec.left(
@@ -131,7 +131,7 @@ const haxe_grammar = {
 
     type_trace_expression: ($) => seq(alias('$type', $.keyword), '(', $._rhs_expression, ')'),
 
-    _parenthesized_expression: ($) => seq('(', repeat1(prec.left($._expression)), ')'),
+    _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
 
     range_expression: ($) =>
       prec(
@@ -149,10 +149,10 @@ const haxe_grammar = {
         seq(
           choice($.identifier, $._parenthesized_expression, $.member_expression),
           token('['),
-          field('index', $._expression),
+          field('index', $.expression),
           token(']'),
         ),
-        //           seq($._parenthesized_expression, '[', field('index', $._expression), ']'),
+        //           seq($._parenthesized_expression, '[', field('index', $.expression), ']'),
       ),
 
     member_expression: ($) =>
@@ -168,17 +168,17 @@ const haxe_grammar = {
       ),
 
     _binary_expression: ($) =>
-      prec.left(10, seq($._expression, alias($._binaryOperator, $.operator), $._expression)),
+      prec.left(10, seq($.expression, alias($._binaryOperator, $.operator), $.expression)),
 
     ternary_expression: ($) =>
       prec.right(
         5,
         seq(
-          field('condition', $._expression),
+          field('condition', $.expression),
           alias('?', $.operator),
-          field('true_result', $._expression),
+          field('true_result', $.expression),
           alias(':', $.operator),
-          field('false_result', $._expression),
+          field('false_result', $.expression),
         ),
       ),
 
@@ -186,7 +186,7 @@ const haxe_grammar = {
     _rhs_expression: ($) =>
       prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
 
-    _expression: ($) =>
+    expression: ($) =>
       choice(
         $._rhs_expression,
         $._unaryExpression,
@@ -237,11 +237,11 @@ const haxe_grammar = {
       seq(
         choice(token('@'), token('@:')),
         field('name', $._lhs_expression),
-        optional(seq('(', $._expression, ')')),
+        optional(seq('(', $.expression, ')')),
       ),
 
     // arg list is () with any amount of expressions followed by commas
-    _arg_list: ($) => seq('(', commaSep($._expression), ')'),
+    _arg_list: ($) => seq('(', commaSep($.expression), ')'),
 
     conditional_statement: ($) =>
       prec.right(

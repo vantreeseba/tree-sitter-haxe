@@ -105,7 +105,7 @@ module.exports = {
         optional($.access_identifiers),
         optional(seq(':', field('type', $.type))),
         //         optional(seq(':', optional(repeat('(')), field('type', $.type), optional(repeat(')')))),
-        optional(seq(($._assignment_operator, $.operator), $._expression)),
+        optional(seq(($._assignment_operator, $.operator), $.expression)),
         $._semicolon,
       ),
     ),
