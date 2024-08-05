@@ -69,7 +69,11 @@ const haxe_grammar = {
       ),
 
     package_statement: ($) =>
-      seq(alias('package', $.keyword), field('name', $._lhs_expression), $._semicolon),
+      seq(
+        alias('package', $.keyword),
+        optional(field('name', $._lhs_expression)),
+        $._semicolon
+      ),
 
     import_statement: ($) =>
       seq(alias('import', $.keyword), field('name', $._lhs_expression), $._semicolon),
