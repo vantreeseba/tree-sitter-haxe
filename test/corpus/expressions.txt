@@ -58,15 +58,13 @@ if (true) {
 parenthesis
 ===================
 
-a = (1+1);
+(1+1);
 
 ---
 
 (module
-  (identifier) 
-  (operator)
   (integer)
-  (operator) 
+  (operator)
   (integer)
 )
 
@@ -74,13 +72,11 @@ a = (1+1);
 subscript_expression
 ===================
 
-a = b[1];
+b[1];
 
 ---
 
 (module
-  (identifier) 
-  (operator)
   (subscript_expression
     (identifier)
     (integer)
@@ -91,13 +87,11 @@ a = b[1];
 subscript_expression
 ===================
 
-a = b[c + 1];
+a[b + 1];
 
 ---
 
 (module
-  (identifier) 
-  (operator)
   (subscript_expression
     (identifier)
     (identifier)
