@@ -180,14 +180,14 @@ switch (x) {
 ---
 
 (module
-  (switch_expression (keyword) (identifier))
+  (switch_expression (keyword) (identifier)
   (block
-    (case_statement 
+    (case_statement
       (keyword)
-      (integer) 
+      (integer)
       (call_expression (identifier))
     )
-  )
+  ))
 )
 
 ===================
@@ -203,53 +203,68 @@ switch (x) {
 ---
 
 (module
-  (switch_expression (keyword) (identifier))
+  (switch_expression (keyword) (identifier)
   (block
-    (case_statement 
+    (case_statement
       (keyword)
-      (integer) 
+      (integer)
       (call_expression (identifier))
     )
-    (case_statement 
+    (case_statement
       (keyword)
-      (integer) 
+      (integer)
       (call_expression (identifier))
     )
-    (case_statement 
+    (case_statement
       (keyword)
       (call_expression (identifier))
     )
-  )
+  ))
 )
 
 ===================
 case expr statement in case.
 ===================
 
-case "1": func();
+switch a {
+  case "1": func();
+}
 
 ---
 
 (module
-  (case_statement 
+  (switch_expression
+  (keyword)
+        (identifier)
+        (block
+  (case_statement
     (keyword)
-    (string) 
+    (string)
     (call_expression (identifier))
-  )
+  )))
 )
 
 ===================
 case expr with member_expression in case.
 ===================
 
-case "1".code: func();
+switch a {
+  case "1".code: func();
+}
 
 ---
 
 (module
-  (case_statement 
+  (switch_expression
     (keyword)
-    (member_expression (string) (identifier))
-    (call_expression (identifier))
-  )
+    (identifier)
+      (block
+        (case_statement
+          (keyword)
+          (member_expression
+            (string)
+            (identifier))
+          (call_expression
+            (identifier)))))
 )
+
