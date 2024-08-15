@@ -1,6 +1,6 @@
 var x = null;
 // <- keyword
-//      ^ keyword
+//      ^ constant.builtin
 
 // int literal.
 var x = 12;

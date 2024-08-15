@@ -66,7 +66,7 @@
 
 ; Literals
 ; --------
-[(keyword) (null)] @keyword
+[(keyword)] @keyword
 ; (type) @type
 (type (identifier) !built_in) @type
 (type built_in: (identifier)) @type.builtin
@@ -75,6 +75,7 @@
 (bool) @constant
 (operator) @operator
 (escape_sequence) @punctuation
+(null) @constant.builtin
 
 
 ; Tokens
