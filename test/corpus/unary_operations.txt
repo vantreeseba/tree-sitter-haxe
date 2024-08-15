@@ -9,10 +9,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
           (identifier) (operator)
         )
@@ -32,10 +32,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
           (operator) (identifier)
         )
@@ -55,10 +55,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
           (identifier) (operator)
         )
@@ -79,10 +79,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
            (operator) (identifier)
         )
@@ -92,7 +92,7 @@ class main {
 )
 
 ===================
-logical not unop 
+logical not unop
 ===================
 
 class main {
@@ -102,10 +102,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
            (operator) (identifier)
         )
@@ -115,7 +115,7 @@ class main {
 )
 
 ===================
-negative unop 
+negative unop
 ===================
 
 class main {
@@ -125,10 +125,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
            (operator) (identifier)
         )
@@ -138,7 +138,7 @@ class main {
 )
 
 ===================
-bitwise_negative_unop 
+bitwise_negative_unop
 ===================
 
 class main {
@@ -148,10 +148,10 @@ class main {
 }
 
 ---
-(module 
-  (class_declaration (keyword) (identifier) 
-    (block 
-      (function_declaration (keyword) (identifier)
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
         (block
            (operator) (identifier)
         )

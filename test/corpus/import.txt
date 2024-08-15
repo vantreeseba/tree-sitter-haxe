@@ -6,7 +6,7 @@ import somePackage;
 
 ---
 
-(module (import_statement (keyword) (identifier)))
+(module (import_statement (identifier)))
 
 ===================
 import statement with path
@@ -16,12 +16,11 @@ import my.other.package;
 
 ---
 
-(module 
-  (import_statement 
-    (keyword) 
-    (member_expression 
+(module
+  (import_statement
+    (member_expression
       (identifier)
-      (member_expression 
+      (member_expression
         (identifier)
         (identifier)
       )
@@ -39,26 +38,23 @@ import test.other.SomeClass;
 
 ---
 
-(module 
-  (import_statement 
-    (keyword)
-    (member_expression 
+(module
+  (import_statement
+    (member_expression
       (identifier)
-      (member_expression 
+      (member_expression
         (identifier)
         (identifier)
       )
     )
   )
-  (import_statement 
-    (keyword) 
+  (import_statement
     (identifier)
   )
-  (import_statement 
-    (keyword)
-    (member_expression 
+  (import_statement
+    (member_expression
       (identifier)
-      (member_expression 
+      (member_expression
         (identifier)
         (identifier)
       )
@@ -74,6 +70,6 @@ using somePackage;
 
 ---
 
-(module (using_statement (keyword) (identifier)))
+(module (using_statement (identifier)))
 
 

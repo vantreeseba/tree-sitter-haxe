@@ -7,7 +7,6 @@ var a = 10
 ---
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (integer)
@@ -24,7 +23,6 @@ var a = {}
 ---
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (object)
@@ -40,7 +38,6 @@ var a = { }
 ---
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (object)
@@ -57,7 +54,6 @@ var a = {
 ---
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (object)
@@ -75,7 +71,6 @@ var a = {
 ---
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (object (pair (identifier) (string)))
@@ -91,7 +86,6 @@ var a = 10 + {}
 ---
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (integer)

@@ -7,7 +7,7 @@ throw "error";
 ---
 
 (module
-  (throw_statement (keyword) (string))
+  (throw_statement (string))
 )
 
 ===================
@@ -21,7 +21,7 @@ if (true) {
 ---
 
 (module
-  (conditional_statement (keyword) (bool)
+  (conditional_statement (bool)
     (block
       (identifier) (operator) (integer)
     )
@@ -41,12 +41,11 @@ if (true) {
 ---
 
 (module
-  (conditional_statement 
-    (keyword) (bool)
+  (conditional_statement
+    (bool)
     (block
       (identifier) (operator) (integer)
     )
-    (keyword)
     (block
       (identifier) (operator) (integer)
     )
@@ -109,9 +108,9 @@ cast x;
 
 ---
 
-(module 
+(module
   (cast_expression
-    (keyword) (identifier)
+    (identifier)
   )
 )
 
@@ -123,10 +122,9 @@ cast (x, Int);
 
 ---
 
-(module 
+(module
   (cast_expression
-    (keyword) 
-    (identifier) 
+    (identifier)
     (type (identifier))
   )
 )
@@ -139,7 +137,7 @@ runtime type check
 
 ---
 
-(module 
+(module
   (runtime_type_check_expression
     (identifier) (type (identifier))
   )
@@ -180,10 +178,9 @@ switch (x) {
 ---
 
 (module
-  (switch_expression (keyword) (identifier)
+  (switch_expression (identifier)
   (block
     (case_statement
-      (keyword)
       (integer)
       (call_expression (identifier))
     )
@@ -203,20 +200,17 @@ switch (x) {
 ---
 
 (module
-  (switch_expression (keyword) (identifier)
+  (switch_expression (identifier)
   (block
     (case_statement
-      (keyword)
       (integer)
       (call_expression (identifier))
     )
     (case_statement
-      (keyword)
       (integer)
       (call_expression (identifier))
     )
     (case_statement
-      (keyword)
       (call_expression (identifier))
     )
   ))
@@ -234,11 +228,9 @@ switch a {
 
 (module
   (switch_expression
-  (keyword)
-        (identifier)
-        (block
+    (identifier)
+    (block
   (case_statement
-    (keyword)
     (string)
     (call_expression (identifier))
   )))
@@ -256,11 +248,9 @@ switch a {
 
 (module
   (switch_expression
-    (keyword)
     (identifier)
       (block
         (case_statement
-          (keyword)
           (member_expression
             (string)
             (identifier))

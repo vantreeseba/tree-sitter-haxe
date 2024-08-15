@@ -7,7 +7,7 @@ class Main {}
 
 ---
 
-(module (comment) (class_declaration (keyword) (identifier) (block)))
+(module (comment) (class_declaration (identifier) (block)))
 
 
 ===================
@@ -21,6 +21,6 @@ class Main {}
 
 ---
 
-(module (comment) (class_declaration (keyword) (identifier) (block)))
+(module (comment) (class_declaration (identifier) (block)))
 
 
