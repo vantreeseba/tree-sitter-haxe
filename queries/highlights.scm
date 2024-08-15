@@ -66,7 +66,7 @@
 
 ; Literals
 ; --------
-[(keyword) (null)] @keyword
+(null) @keyword
 ; (type) @type
 (type (identifier) !built_in) @type
 (type built_in: (identifier)) @type.builtin
@@ -76,6 +76,52 @@
 (operator) @operator
 (escape_sequence) @punctuation
 
+; Keywords
+; --------
+[
+  "abstract"
+  "break"
+  "case"
+  "cast"
+  "catch"
+  "class"
+  "continue"
+  "default"
+  "do"
+  "dynamic"
+  "else"
+  "enum"
+  "extends"
+  "extern"
+  "final"
+  "for"
+  "function"
+  "if"
+  "implements"
+  "import"
+  "in"
+  "inline"
+  "interface"
+  "macro"
+  "new"
+  "operator"
+  "overload"
+  "override"
+  "package"
+  "private"
+  "public"
+  "return"
+  "static"
+  "switch"
+  "this"
+  "throw"
+  "try"
+  "typedef"
+  "untyped"
+  "using"
+  "var"
+  "while"
+] @keyword
 
 ; Tokens
 ; ------
