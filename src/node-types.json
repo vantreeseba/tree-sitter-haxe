@@ -955,28 +955,25 @@
   {
     "type": "import_statement",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "member_expression",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "keyword",
+          "named": true
+        },
+        {
+          "type": "package_name",
+          "named": true
+        },
+        {
+          "type": "type_name",
           "named": true
         }
       ]
@@ -1485,19 +1482,24 @@
     "fields": {}
   },
   {
+    "type": "package_name",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "package_statement",
     "named": true,
     "fields": {
       "name": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "identifier",
-            "named": true
+            "type": ".",
+            "named": false
           },
           {
-            "type": "member_expression",
+            "type": "package_name",
             "named": true
           }
         ]
@@ -2179,6 +2181,11 @@
     }
   },
   {
+    "type": "type_name",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "type_param",
     "named": true,
     "fields": {},
@@ -2336,28 +2343,21 @@
   {
     "type": "using_statement",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "member_expression",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "keyword",
+          "named": true
+        },
+        {
+          "type": "package_name",
+          "named": true
+        },
+        {
+          "type": "type_name",
           "named": true
         }
       ]
