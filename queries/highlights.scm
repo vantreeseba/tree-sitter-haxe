@@ -21,23 +21,6 @@
 
 ; Declarations
 ; ------------
-(import_statement name: [
-  (identifier) @type
-	(_ (identifier) @type)
-	(_(_ (identifier) @type))
-	(_(_(_ (identifier) @type)))
-	(_(_(_(_ (identifier) @type))))
-	(_(_(_(_(_ (identifier) @type)))))
-])
-
-; lol this is jank but okay.
-; (import_statement name: (_ (identifier) @type))
-; (import_statement name: (_(_ (identifier) @type)))
-; (import_statement name: (_(_(_ (identifier) @type))))
-; (import_statement name: (_(_(_(_ (identifier) @type)))))
-; (import_statement name: (_(_(_(_(_ (identifier) @type))))))
-
-(package_statement name: (identifier) @type)
 
 (class_declaration name: (identifier) @type.definition)
 (class_declaration super_class_name: (identifier) @type.definition)
@@ -68,6 +51,8 @@
 ; --------
 [(keyword) (null)] @keyword
 ; (type) @type
+(type_name) @type
+(package_name) @module
 (type (identifier) !built_in) @type
 (type built_in: (identifier)) @type.builtin
 [(integer) (float)] @number

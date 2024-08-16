@@ -69,15 +69,33 @@ const haxe_grammar = {
     package_statement: ($) =>
       seq(
         alias('package', $.keyword),
-        optional(field('name', $._lhs_expression)),
+        optional(field('name', seq(repeat(seq($.package_name, '.')), $.package_name))),
         $._semicolon
       ),
 
+    package_name: ($) => $._camelCaseIdentifier,
+    type_name: ($) => $._pascalCaseIdentifier,
     import_statement: ($) =>
-      seq(alias('import', $.keyword), field('name', $._lhs_expression), $._semicolon),
+      seq(
+        alias('import', $.keyword),
+        seq(
+          repeat(seq($.package_name, '.')),
+          repeat(seq($.type_name, '.')),
+          seq($.type_name, optional(seq('.', alias($._camelCaseIdentifier, $.identifier)))),
+        ),
+        $._semicolon
+      ),
 
     using_statement: ($) =>
-      seq(alias('using', $.keyword), field('name', $._lhs_expression), $._semicolon),
+      seq(
+        alias('using', $.keyword),
+        seq(
+          repeat(seq($.package_name, '.')),
+          repeat(seq($.type_name, '.')),
+          $.type_name
+        ),
+        $._semicolon
+      ),
 
     throw_statement: ($) =>
       prec.right(seq(alias('throw', $.keyword), $.expression, $._lookback_semicolon)),
@@ -269,6 +287,8 @@ const haxe_grammar = {
     keyword: ($) => prec.right(choice(...keywords)),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
     // Hidden Nodes in tree.
+    _camelCaseIdentifier: ($) => /[a-z_]+[a-zA-Z0-9]*/,
+    _pascalCaseIdentifier: ($) => /[A-Z]+[a-zA-Z0-9]*/,
     _semicolon: ($) => $._lookback_semicolon,
   },
 };
