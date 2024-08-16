@@ -4,12 +4,12 @@ package;
 
 package my;
 // <- keyword
-//      ^ type
-// (module (package_statement (identifier)))
+//      ^ module
+// (module (package_statement (package_name)))
 
 package my.other.package;
 // <- keyword
-//      ^ variable
-//         ^ variable
-//               ^ variable
-// (module (package_statement (identifier)(identifier)(identifier)))
+//      ^ module
+//         ^ module
+//               ^ module
+// (module (package_statement (package_name)(package_name)(package_name)))
