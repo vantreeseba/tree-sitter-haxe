@@ -5,14 +5,14 @@ class Main {}
 class Main<T,Y> {}
 // <- keyword
 //    ^  type.definition
-//         ^ variable
+//         ^ type
 //           ^ type
 
 class Main<T,Other<T, Y>> {}
 // <- keyword
 //    ^  type.definition
-//         ^ variable
-//                 ^ variable
+//         ^ type
+//                 ^ type
 //                    ^ type
 
 final class Main {}

@@ -46,8 +46,8 @@ interface Main<T,U> {}
     (keyword)
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param (identifier))
+      (type (identifier))
+      (type (identifier))
     )
     (block)
   )
@@ -66,12 +66,12 @@ interface Main<T, Other<U, V>> {}
     (keyword)
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param 
+      (type (identifier))
+      (type
         (identifier)
         (type_params
-          (type_param (identifier))
-          (type_param (identifier))
+          (type (identifier))
+          (type (identifier))
         )
       )
     )
@@ -156,8 +156,8 @@ class Main<T,U> {}
     (keyword)
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param (identifier))
+      (type (identifier))
+      (type (identifier))
     )
     (block)
   )
@@ -218,8 +218,8 @@ class Main {
         (keyword)
         (identifier)
         (type_params
-          (type_param (identifier))
-          (type_param (identifier))
+          (type (identifier))
+          (type (identifier))
         )
         (block))
     )
@@ -307,7 +307,7 @@ function foo(x:Array<Int>){}
       (identifier) 
       (type 
         (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
     )
     (block)
@@ -647,8 +647,8 @@ class Main {
         (keyword)
         (identifier)
         (type 
-          (identifier) 
-          (type_params (type_param (identifier)))
+          (identifier)
+          (type_params (type (identifier)))
         )
       )
     )
@@ -731,7 +731,7 @@ typedef MyType = Array<Int>;
     (identifier)
     (type 
       (identifier)
-      (type_params (type_param (identifier)))
+      (type_params (type (identifier)))
     )
   )
 )
@@ -801,7 +801,7 @@ var x:Array<Int>;
     (identifier)
     (type 
       (identifier)
-      (type_params (type_param (identifier)))
+      (type_params (type (identifier)))
     )
   )
 )

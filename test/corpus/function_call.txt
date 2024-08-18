@@ -82,7 +82,7 @@ fn<Int>(123);
   (call_expression
     (identifier)
     (type_params
-      (type_param (identifier))
+      (type (identifier))
     )
     (integer)
   )
