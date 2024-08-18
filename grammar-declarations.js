@@ -14,8 +14,7 @@ module.exports = {
     alias(choice('default', 'null', 'get', 'set', 'dynamic', 'never'), $.keyword),
   access_identifiers: ($) =>
     seq('(', $._access_identifier, optional(seq(',', $._access_identifier)), ')'),
-  type_param: ($) => choice($._lhs_expression, seq($._lhs_expression, $.type_params)),
-  type_params: ($) => prec.right(1, seq('<', commaSep1($.type_param), '>')),
+  type_params: ($) => prec.right(1, seq('<', commaSep1($.type), '>')),
 
   class_declaration: ($) =>
     seq(

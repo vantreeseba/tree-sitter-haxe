@@ -15,7 +15,6 @@
 ; --------------
 (type_params
   "<" @punctuation.bracket
-  (type_param (identifier) @type)
   ">" @punctuation.bracket
 )
 
