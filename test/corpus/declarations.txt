@@ -1024,3 +1024,49 @@ var x:(Int,Int) -> Int;
   )
 )
 
+===================
+var declaration with type parameter
+===================
+
+var x:T<S>;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (identifier)
+      (type_params
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+var declaration with function type parameter
+===================
+
+var x:T<S -> R>;
+
+---
+
+(module
+  (variable_declaration
+    (keyword)
+    (identifier)
+    (type
+      (identifier)
+      (type_params
+        (type
+          (function_type
+            (type (identifier))
+            (type (identifier))
+          )
+        )
+      )
+    )
+  )
+)
