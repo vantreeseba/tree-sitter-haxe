@@ -66,9 +66,8 @@
 ; Literals
 ; --------
 [(keyword) (null)] @keyword
-; (type) @type
-(type (identifier) !built_in) @type
-(type built_in: (identifier)) @type.builtin
+(type (identifier) @type !built_in)
+(type built_in: (identifier) @type.builtin)
 [(integer) (float)] @number
 (string) @string
 (bool) @constant
