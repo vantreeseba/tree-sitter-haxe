@@ -80,7 +80,10 @@ const haxe_grammar = {
         seq(
           repeat(seq($.package_name, '.')),
           repeat(seq($.type_name, '.')),
-          seq($.type_name, optional(seq('.', alias($._camelCaseIdentifier, $.identifier)))),
+          choice(
+            seq('*'),
+            seq($.type_name, optional(seq('.', alias($._camelCaseIdentifier, $.identifier)))),
+          )
         ),
         $._semicolon,
       ),
