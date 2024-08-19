@@ -26,3 +26,14 @@ import my.other.Type.field;
 //        ^ module
 //              ^ type
 //                   ^ variable
+
+import my.other.*;
+// <- keyword
+//     ^ module
+//        ^ module
+
+import my.other.Type.*;
+// <- keyword
+//     ^ module
+//        ^ module
+//              ^ type

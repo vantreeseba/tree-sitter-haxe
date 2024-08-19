@@ -89,6 +89,39 @@ import my.other.package.Class.field;
 )
 
 ===================
+wilcard import statements
+===================
+
+import my.other.package.*;
+
+---
+
+(module
+  (import_statement
+    (package_name)
+    (package_name)
+    (package_name)
+  )
+)
+
+===================
+wildcard import fields
+===================
+
+import my.other.package.Class.*;
+
+---
+
+(module
+  (import_statement
+    (package_name)
+    (package_name)
+    (package_name)
+    (type_name)
+  )
+)
+
+===================
 using statement
 ===================
 
