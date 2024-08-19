@@ -74,7 +74,7 @@ module.exports = {
       repeat($.metadata),
       repeat($._modifier),
       'function',
-      choice(field('name', $._lhs_expression), field('name', alias('new', $.identifier))),
+      field('name', choice($._lhs_expression, 'new')),
       optional($.type_params),
       $._function_arg_list,
       optional(seq(':', field('return_type', $.type))),

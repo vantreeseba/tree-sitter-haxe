@@ -89,7 +89,6 @@
   "inline"
   "interface"
   "macro"
-  "new"
   "operator"
   "overload"
   "override"
@@ -108,6 +107,12 @@
   "var"
   "while"
 ] @keyword
+
+(function_declaration name: "new" @constructor)
+(call_expression
+  "new" @keyword
+  object: (identifier) @constructor
+)
 
 ; Tokens
 ; ------
