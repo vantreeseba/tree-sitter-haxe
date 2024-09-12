@@ -3,7 +3,7 @@
 if (true) {
 // <- keyword
 // ^ @punctuation.bracket
-//  ^ constant  
+//  ^ boolean
 //      ^ @punctuation.bracket
 //        ^ @punctuation.bracket
   a = 1;
@@ -15,20 +15,20 @@ if (true) {
 // parenthesis
 
 a = (1+1);
-// <- variable 
+// <- variable
 //  ^ @punctuation.bracket
-//   ^ number  
-//     ^ number 
+//   ^ number
+//     ^ number
 //      ^ @punctuation.bracket
 
 // unsafe cast
 cast x;
-// <- keyword 
-//   ^ variable 
+// <- keyword
+//   ^ variable
 
 // safe cast
 cast (x, Int);
-// <- keyword 
+// <- keyword
 //    ^ variable
 //       ^ @type.builtin
 
