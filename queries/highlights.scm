@@ -71,7 +71,7 @@
 (type built_in: (identifier)) @type.builtin
 [(integer) (float)] @number
 (string) @string
-(bool) @constant
+(bool) @boolean
 (operator) @operator
 (escape_sequence) @punctuation
 (null) @constant.builtin
