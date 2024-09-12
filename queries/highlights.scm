@@ -123,6 +123,8 @@
   "while"
 ] @keyword
 
+(access_identifiers "null" @keyword)
+
 ; Tokens
 ; ------
 
