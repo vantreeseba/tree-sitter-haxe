@@ -60,6 +60,7 @@
 (operator) @operator
 (escape_sequence) @punctuation
 (null) @constant.builtin
+(access_identifiers "null" @keyword)
 
 ; Keywords
 ; --------
@@ -89,7 +90,6 @@
   "interface"
   "macro"
   "new"
-	"null"
   "operator"
   "overload"
   "override"
