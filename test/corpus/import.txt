@@ -2,29 +2,44 @@
 import statement
 ===================
 
-import somePackage;
+import Type;
 
 ---
 
-(module (import_statement (identifier)))
+(module (import_statement (type_name)))
 
 ===================
 import statement with path
 ===================
 
-import my.other.package;
+import my.other.package.Type;
 
 ---
 
 (module
   (import_statement
-    (member_expression
-      (identifier)
-      (member_expression
-        (identifier)
-        (identifier)
-      )
-    )
+    (package_name)
+    (package_name)
+    (package_name)
+    (type_name)
+  )
+)
+
+===================
+import statement
+===================
+
+import my.other.package.Type.OtherType;
+
+---
+
+(module
+  (import_statement
+    (package_name)
+    (package_name)
+    (package_name)
+    (type_name)
+    (type_name)
   )
 )
 
@@ -32,33 +47,44 @@ import my.other.package;
 multiple import statements
 ===================
 
-import my.other.package;
-import banana;
+import my.other.package.Type;
+import Banana;
 import test.other.SomeClass;
 
 ---
 
 (module
   (import_statement
-    (member_expression
-      (identifier)
-      (member_expression
-        (identifier)
-        (identifier)
-      )
-    )
+    (package_name)
+    (package_name)
+    (package_name)
+    (type_name)
   )
   (import_statement
+    (type_name)
+  )
+  (import_statement
+    (package_name)
+    (package_name)
+    (type_name)
+  )
+)
+
+===================
+import class field
+===================
+
+import my.other.package.Class.field;
+
+---
+
+(module
+  (import_statement
+    (package_name)
+    (package_name)
+    (package_name)
+    (type_name)
     (identifier)
-  )
-  (import_statement
-    (member_expression
-      (identifier)
-      (member_expression
-        (identifier)
-        (identifier)
-      )
-    )
   )
 )
 
@@ -66,10 +92,10 @@ import test.other.SomeClass;
 using statement
 ===================
 
-using somePackage;
+using Type;
 
 ---
 
-(module (using_statement (identifier)))
+(module (using_statement (type_name)))
 
 

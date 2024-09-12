@@ -12,7 +12,7 @@ function stuff(y:Array<String> = null) {
     (function_arg
       (identifier)
       (type (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
       (null)
     )
@@ -35,7 +35,7 @@ function stuff(y:Array<String> = null) {
     (function_arg
       (identifier)
       (type (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
       (null)
     )

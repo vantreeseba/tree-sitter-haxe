@@ -42,8 +42,8 @@ interface Main<T,U> {}
   (interface_declaration
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param (identifier))
+      (type (identifier))
+      (type (identifier))
     )
     (block)
   )
@@ -61,12 +61,12 @@ interface Main<T, Other<U, V>> {}
   (interface_declaration
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param
+      (type (identifier))
+      (type
         (identifier)
         (type_params
-          (type_param (identifier))
-          (type_param (identifier))
+          (type (identifier))
+          (type (identifier))
         )
       )
     )
@@ -150,8 +150,8 @@ class Main<T,U> {}
   (class_declaration
     (identifier)
     (type_params
-      (type_param (identifier))
-      (type_param (identifier))
+      (type (identifier))
+      (type (identifier))
     )
     (block)
   )
@@ -211,8 +211,8 @@ class Main {
       (function_declaration
         (identifier)
         (type_params
-          (type_param (identifier))
-          (type_param (identifier))
+          (type (identifier))
+          (type (identifier))
         )
         (block))
     )
@@ -299,7 +299,7 @@ function foo(x:Array<Int>){}
       (identifier)
       (type
         (identifier)
-        (type_params (type_param (identifier)))
+        (type_params (type (identifier)))
       )
     )
     (block)
@@ -623,7 +623,7 @@ class Main {
         (identifier)
         (type
           (identifier)
-          (type_params (type_param (identifier)))
+          (type_params (type (identifier)))
         )
       )
     )
@@ -701,7 +701,7 @@ typedef MyType = Array<Int>;
     (identifier)
     (type
       (identifier)
-      (type_params (type_param (identifier)))
+      (type_params (type (identifier)))
     )
   )
 )
@@ -767,7 +767,7 @@ var x:Array<Int>;
     (identifier)
     (type
       (identifier)
-      (type_params (type_param (identifier)))
+      (type_params (type (identifier)))
     )
   )
 )
@@ -981,3 +981,47 @@ var x:(Int,Int) -> Int;
   )
 )
 
+===================
+var declaration with type parameter
+===================
+
+var x:T<S>;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (type
+      (identifier)
+      (type_params
+        (type (identifier))
+      )
+    )
+  )
+)
+
+===================
+var declaration with function type parameter
+===================
+
+var x:T<S -> R>;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (type
+      (identifier)
+      (type_params
+        (type
+          (function_type
+            (type (identifier))
+            (type (identifier))
+          )
+        )
+      )
+    )
+  )
+)

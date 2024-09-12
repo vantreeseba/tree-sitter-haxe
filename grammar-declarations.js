@@ -10,14 +10,24 @@ module.exports = {
       $.function_declaration,
       $.variable_declaration,
     ),
-  _access_identifier: ($) =>
-    choice('default', 'null', 'get', 'set', 'dynamic', 'never'),
+  _access_identifier: ($) => choice('default', 'null', 'get', 'set', 'dynamic', 'never'),
   access_identifiers: ($) =>
     seq('(', $._access_identifier, optional(seq(',', $._access_identifier)), ')'),
-  type_param: ($) => choice($._lhs_expression, seq($._lhs_expression, $.type_params)),
-  type_params: ($) => prec.right(1, seq('<', commaSep1($.type_param), '>')),
+  type_params: ($) => prec.right(1, seq('<', commaSep1($.type), '>')),
 
-  _modifier: ($) => choice('macro', 'abstract', 'static', 'public', 'private', 'extern', 'inline', 'overload', 'override', 'final'),
+  _modifier: ($) =>
+    choice(
+      'macro',
+      'abstract',
+      'static',
+      'public',
+      'private',
+      'extern',
+      'inline',
+      'overload',
+      'override',
+      'final',
+    ),
 
   class_declaration: ($) =>
     seq(
@@ -27,19 +37,11 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        seq(
-          'extends',
-          field('super_class_name', $._lhs_expression),
-          optional($.type_params),
-        ),
+        seq('extends', field('super_class_name', $._lhs_expression), optional($.type_params)),
       ),
       optional(
         repeat(
-          seq(
-            'implements',
-            field('interface_name', $._lhs_expression),
-            optional($.type_params),
-          ),
+          seq('implements', field('interface_name', $._lhs_expression), optional($.type_params)),
         ),
       ),
       field('body', $.block),
@@ -52,13 +54,7 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        repeat(
-          seq(
-            'extends',
-            field('interface_name', $._lhs_expression),
-            optional($.type_params),
-          ),
-        ),
+        repeat(seq('extends', field('interface_name', $._lhs_expression), optional($.type_params))),
       ),
       field('body', $.block),
     ),

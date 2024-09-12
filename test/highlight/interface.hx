@@ -5,7 +5,7 @@ interface TestInterface {}
 interface Main<T,Y> {}
 // <- keyword
 //        ^  type.definition
-//             ^ variable
+//             ^ type
 //               ^ type
 
 interface TestInterface extends IAnother {}
