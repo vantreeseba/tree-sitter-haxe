@@ -1694,28 +1694,6 @@
         }
       ]
     },
-    "type_param": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_lhs_expression"
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_lhs_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "type_params"
-            }
-          ]
-        }
-      ]
-    },
     "type_params": {
       "type": "PREC_RIGHT",
       "value": 1,
@@ -1731,7 +1709,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "type_param"
+                "name": "type"
               },
               {
                 "type": "REPEAT",
@@ -1744,7 +1722,7 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "type_param"
+                      "name": "type"
                     }
                   ]
                 }

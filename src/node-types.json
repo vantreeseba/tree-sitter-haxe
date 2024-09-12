@@ -2152,29 +2152,6 @@
     }
   },
   {
-    "type": "type_param",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "member_expression",
-          "named": true
-        },
-        {
-          "type": "type_params",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "type_params",
     "named": true,
     "fields": {},
@@ -2183,7 +2160,7 @@
       "required": true,
       "types": [
         {
-          "type": "type_param",
+          "type": "type",
           "named": true
         }
       ]

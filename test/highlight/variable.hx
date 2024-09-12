@@ -1,3 +1,3 @@
 var a(null, null):Int;
-//    ^ keyword
-//          ^ keyword
+//    ^ constant.builtin
+//          ^ constant.builtin

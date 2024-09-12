@@ -621,7 +621,7 @@ class Main {
     (block
       (variable_declaration
         (identifier)
-        (type 
+        (type
           (identifier)
           (type_params (type (identifier)))
         )
@@ -991,7 +991,6 @@ var x:T<S>;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (identifier)
@@ -1012,7 +1011,6 @@ var x:T<S -> R>;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (identifier)
