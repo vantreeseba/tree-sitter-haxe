@@ -153,5 +153,5 @@ $type(0);
 ---
 
 (module
-  (type_trace_expression (keyword) (integer))
+  (type_trace_expression (integer))
 )

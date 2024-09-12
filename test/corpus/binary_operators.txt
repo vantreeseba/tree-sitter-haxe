@@ -5,8 +5,8 @@ add two integers (both literals)
 var x = 1 + 2;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (integer) (operator) (integer))
 )
@@ -18,8 +18,8 @@ add two strings (both literals)
 var x = "a" + "b";
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (string) (operator) (string))
 )
@@ -32,13 +32,13 @@ add three integers (all literals)
 var x = 1 + 2 + 3;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (integer)
-    (operator) 
+    (operator)
     (integer)
-    (operator) 
+    (operator)
     (integer)
   )
 )
@@ -46,16 +46,16 @@ var x = 1 + 2 + 3;
 
 
 ===================
-add two integers, one is a variable 
+add two integers, one is a variable
 ===================
 
 var y = 1;
 var x = 1 + y;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) (operator) (integer))
-  (variable_declaration (keyword) (identifier) (operator)
+(module
+  (variable_declaration (identifier) (operator) (integer))
+  (variable_declaration (identifier) (operator)
     (integer) (operator) (identifier)
   )
 )
