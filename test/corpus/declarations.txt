@@ -6,7 +6,7 @@ interface Main {}
 
 ---
 
-(module (interface_declaration (keyword) (identifier) (block)))
+(module (interface_declaration (identifier) (block)))
 
 ===================
 interface with function
@@ -20,12 +20,9 @@ interface Printable {
 
 (module
   (interface_declaration
-    (keyword)
     (identifier)
     (block
       (function_declaration
-        (keyword)
-        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -43,7 +40,6 @@ interface Main<T,U> {}
 
 (module
   (interface_declaration
-    (keyword)
     (identifier)
     (type_params
       (type_param (identifier))
@@ -63,11 +59,10 @@ interface Main<T, Other<U, V>> {}
 
 (module
   (interface_declaration
-    (keyword)
     (identifier)
     (type_params
       (type_param (identifier))
-      (type_param 
+      (type_param
         (identifier)
         (type_params
           (type_param (identifier))
@@ -88,9 +83,9 @@ interface ITest extends IBanana {}
 
 ---
 
-(module (interface_declaration 
-  (keyword) (identifier) 
-  (keyword) (identifier) 
+(module (interface_declaration
+  (identifier)
+  (identifier)
   (block)
 ))
 
@@ -103,7 +98,7 @@ class Main implements ITest {}
 
 ---
 
-(module (class_declaration (keyword) (identifier) (keyword) (identifier) (block)))
+(module (class_declaration (identifier) (identifier) (block)))
 
 ===================
 class implementing multiple interfaces
@@ -113,10 +108,10 @@ class Main implements ITest implements IAnother {}
 
 ---
 
-(module (class_declaration 
-  (keyword) (identifier) 
-  (keyword) (identifier) 
-  (keyword) (identifier) 
+(module (class_declaration
+  (identifier)
+  (identifier)
+  (identifier)
   (block)
 ))
 
@@ -130,7 +125,7 @@ final class Main {}
 
 ---
 
-(module (class_declaration (keyword) (keyword) (identifier) (block)))
+(module (class_declaration (identifier) (block)))
 
 
 ===================
@@ -141,7 +136,7 @@ class Main {}
 
 ---
 
-(module (class_declaration (keyword) (identifier) (block)))
+(module (class_declaration (identifier) (block)))
 
 ===================
 class with type params
@@ -153,7 +148,6 @@ class Main<T,U> {}
 
 (module
   (class_declaration
-    (keyword)
     (identifier)
     (type_params
       (type_param (identifier))
@@ -175,9 +169,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (function_declaration (keyword) (identifier) (block))
+      (function_declaration (identifier) (block))
     )
   )
 )
@@ -194,9 +188,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (function_declaration (keyword) (identifier) (block))
+      (function_declaration (identifier) (block))
     )
   )
 )
@@ -212,10 +206,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (function_declaration
-        (keyword)
         (identifier)
         (type_params
           (type_param (identifier))
@@ -238,9 +231,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (function_declaration (keyword) (identifier)
+      (function_declaration (identifier)
         (function_arg (identifier))
         (block)
       )
@@ -259,9 +252,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (function_declaration (keyword) (identifier)
+      (function_declaration (identifier)
         (function_arg (identifier) (type (identifier)) (integer))
         (function_arg (identifier) (type (identifier)))
         (block)
@@ -281,10 +274,10 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (variable_declaration (keyword) (keyword) (identifier)
-        (access_identifiers (keyword) (keyword))
+      (variable_declaration (identifier)
+        (access_identifiers )
         (type (identifier))
       )
     )
@@ -292,7 +285,7 @@ class Main {
 )
 
 ===================
-function with generic typed arg 
+function with generic typed arg
 ===================
 
 function foo(x:Array<Int>){}
@@ -300,12 +293,11 @@ function foo(x:Array<Int>){}
 ---
 
 (module
-  (function_declaration 
-    (keyword) 
+  (function_declaration
     (identifier)
-    (function_arg 
-      (identifier) 
-      (type 
+    (function_arg
+      (identifier)
+      (type
         (identifier)
         (type_params (type_param (identifier)))
       )
@@ -315,7 +307,7 @@ function foo(x:Array<Int>){}
 )
 
 ===================
-function with anonymous struct arg 
+function with anonymous struct arg
 ===================
 
 function foo(x:{z:int, y:float}){}
@@ -323,12 +315,11 @@ function foo(x:{z:int, y:float}){}
 ---
 
 (module
-  (function_declaration 
-    (keyword) 
+  (function_declaration
     (identifier)
-    (function_arg 
-      (identifier) 
-      (type 
+    (function_arg
+      (identifier)
+      (type
         (pair (identifier) (type (identifier)))
         (pair (identifier) (type (identifier)))
       )
@@ -351,7 +342,7 @@ class Main {
 (module
   (class_declaration
     (metadata (identifier))
-    (keyword) (identifier)
+    (identifier)
     (block)
   )
 )
@@ -369,7 +360,7 @@ class Main {
 (module
   (class_declaration
     (metadata (identifier))
-    (keyword) (identifier)
+    (identifier)
     (block)
   )
 )
@@ -387,11 +378,10 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (function_declaration
         (metadata (identifier))
-        (keyword)
         (identifier)
         (block)
       )
@@ -411,11 +401,10 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (function_declaration
         (metadata (identifier))
-        (keyword)
         (identifier)
         (block)
       )
@@ -435,11 +424,10 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
         (metadata (identifier))
-        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -459,11 +447,10 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
         (metadata (identifier))
-        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -481,13 +468,9 @@ class Main {
 
 ---
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (function_declaration
-      (keyword)
-      (keyword)
-      (keyword)
-      (keyword)
       (identifier) (block))
     )
   )
@@ -507,12 +490,12 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (function_declaration (keyword) (identifier)
+      (function_declaration (identifier)
         (block
-          (variable_declaration (keyword) (identifier) (operator) (integer))
-          (variable_declaration (keyword) (identifier) (operator) (string))
+          (variable_declaration (identifier) (operator) (integer))
+          (variable_declaration (identifier) (operator) (string))
         )
       )
     )
@@ -536,12 +519,12 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
-      (function_declaration (keyword) (identifier)
+      (function_declaration (identifier)
         (block
-          (variable_declaration (keyword) (identifier))
-          (variable_declaration (keyword) (identifier))
+          (variable_declaration (identifier))
+          (variable_declaration (identifier))
           (identifier) (operator) (integer)
           (identifier) (operator) (identifier)
         )
@@ -551,7 +534,7 @@ class Main {
 )
 
 ===================
-class function with this 
+class function with this
 ===================
 
 class Main {
@@ -564,16 +547,14 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
-        (keyword)
-        (keyword)
         (identifier)
       )
-      (function_declaration (keyword) (identifier)
+      (function_declaration (identifier)
         (block
-          (member_expression (keyword) (identifier))
+          (member_expression (identifier))
           (operator)
           (integer)
         )
@@ -595,11 +576,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
-        (keyword)
-        (keyword)
         (identifier)
       )
     )
@@ -617,11 +596,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
-        (keyword)
-        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -640,14 +617,12 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
-        (keyword)
-        (keyword)
         (identifier)
-        (type 
-          (identifier) 
+        (type
+          (identifier)
           (type_params (type_param (identifier)))
         )
       )
@@ -667,11 +642,9 @@ class Main {
 ---
 
 (module
-  (class_declaration (keyword) (identifier)
+  (class_declaration (identifier)
     (block
       (variable_declaration
-        (keyword)
-        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -690,10 +663,9 @@ typedef MyType = {
 ---
 
 (module
-  (typedef_declaration (keyword) (identifier)
+  (typedef_declaration (identifier)
     (block
       (variable_declaration
-        (keyword)
         (identifier)
         (type (identifier))
       )
@@ -702,7 +674,7 @@ typedef MyType = {
 )
 
 ===================
-type def 'alias' 
+type def 'alias'
 ===================
 
 typedef MyType = Int;
@@ -710,15 +682,14 @@ typedef MyType = Int;
 ---
 
 (module
-  (typedef_declaration 
-    (keyword) 
+  (typedef_declaration
     (identifier)
     (type (identifier))
   )
 )
 
 ===================
-type def 'alias' 
+type def 'alias'
 ===================
 
 typedef MyType = Array<Int>;
@@ -726,10 +697,9 @@ typedef MyType = Array<Int>;
 ---
 
 (module
-  (typedef_declaration 
-    (keyword) 
+  (typedef_declaration
     (identifier)
-    (type 
+    (type
       (identifier)
       (type_params (type_param (identifier)))
     )
@@ -747,7 +717,6 @@ var x:Int;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type (identifier))
   )
@@ -763,9 +732,8 @@ var x(get, set):Int;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
-    (access_identifiers (keyword) (keyword))
+    (access_identifiers )
     (type (identifier))
   )
 )
@@ -781,7 +749,6 @@ var x:(((Int)));
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type (identifier))
   )
@@ -797,9 +764,8 @@ var x:Array<Int>;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
-    (type 
+    (type
       (identifier)
       (type_params (type_param (identifier)))
     )
@@ -807,7 +773,7 @@ var x:Array<Int>;
 )
 
 ===================
-var declaration array comprehension 
+var declaration array comprehension
 ===================
 
 var a = [for (i in 0...5) i];
@@ -816,13 +782,12 @@ var a = [for (i in 0...5) i];
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (operator)
     (array
       (call_expression
         (identifier)
-        (range_expression (identifier) (keyword) (integer) (integer))
+        (range_expression (identifier) (integer) (integer))
       )
       (identifier)
     )
@@ -830,7 +795,7 @@ var a = [for (i in 0...5) i];
 )
 
 ===================
-var declaration with function type with no inputs 
+var declaration with function type with no inputs
 ===================
 
 var x:() -> Int;
@@ -839,7 +804,6 @@ var x:() -> Int;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (function_type
@@ -850,7 +814,7 @@ var x:() -> Int;
 )
 
 ===================
-var declaration with function type 
+var declaration with function type
 ===================
 
 var x:Int -> Int;
@@ -859,7 +823,6 @@ var x:Int -> Int;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (function_type
@@ -871,7 +834,7 @@ var x:Int -> Int;
 )
 
 ===================
-var declaration with function type with named input 
+var declaration with function type with named input
 ===================
 
 var x:(arg:Int) -> Int;
@@ -880,7 +843,6 @@ var x:(arg:Int) -> Int;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (function_type
@@ -902,7 +864,6 @@ var x:(arg:()->Int) -> Int;
 
 (module
   (variable_declaration
-    (keyword)
     name: (identifier)
     type: (type
       (function_type
@@ -926,23 +887,22 @@ var e:(fn:Int->Bool, Float, sub:(Bool, Bool) -> Int) -> Bool;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
-    (type (function_type             
-        (identifier)          
-        (type (function_type                 
-          (type (identifier))                 
-          (type                   
+    (type (function_type
+        (identifier)
+        (type (function_type
+          (type (identifier))
+          (type
           (identifier))
-        ))             
-      (type (identifier))     
-      (identifier)            
-      (type (function_type    
-        (type (identifier))                 
-        (type (identifier))                 
+        ))
+      (type (identifier))
+      (identifier)
+      (type (function_type
         (type (identifier))
-      ))             
-      (type (identifier))    
+        (type (identifier))
+        (type (identifier))
+      ))
+      (type (identifier))
     ))
   )
 )
@@ -957,29 +917,28 @@ var e:((fn:(Int->Bool), Float, sub:((Bool, Bool) -> Int))->Bool);
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
-    (type (function_type             
-        (identifier)          
-        (type (function_type                 
-          (type (identifier))                 
-          (type                   
+    (type (function_type
+        (identifier)
+        (type (function_type
+          (type (identifier))
+          (type
           (identifier))
-        ))             
-      (type (identifier))     
-      (identifier)            
-      (type (function_type    
-        (type (identifier))                 
-        (type (identifier))                 
+        ))
+      (type (identifier))
+      (identifier)
+      (type (function_type
         (type (identifier))
-      ))             
-      (type (identifier))    
+        (type (identifier))
+        (type (identifier))
+      ))
+      (type (identifier))
     ))
   )
 )
 
 ===================
-var declaration with function type with wrapped parens 
+var declaration with function type with wrapped parens
 ===================
 
 var x:((arg:Int) -> Int);
@@ -988,7 +947,6 @@ var x:((arg:Int) -> Int);
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (function_type
@@ -1003,7 +961,7 @@ var x:((arg:Int) -> Int);
 
 
 ===================
-var declaration with function type 
+var declaration with function type
 ===================
 
 var x:(Int,Int) -> Int;
@@ -1012,7 +970,6 @@ var x:(Int,Int) -> Int;
 
 (module
   (variable_declaration
-    (keyword)
     (identifier)
     (type
       (function_type

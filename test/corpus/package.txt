@@ -6,7 +6,7 @@ package;
 
 ---
 
-(module (package_statement (keyword)))
+(module (package_statement))
 
 ===================
 Package Name
@@ -16,7 +16,7 @@ package my;
 
 ---
 
-(module (package_statement (keyword) (identifier)))
+(module (package_statement (identifier)))
 
 ===================
 Package Name with single path
@@ -26,9 +26,8 @@ package my.other;
 
 ---
 
-(module 
-  (package_statement 
-    (keyword) 
+(module
+  (package_statement
     (member_expression
       (identifier)
       (identifier)
@@ -44,9 +43,8 @@ package my.other.package;
 
 ---
 
-(module 
-  (package_statement 
-    (keyword) 
+(module
+  (package_statement
     (member_expression
       (identifier)
       (member_expression

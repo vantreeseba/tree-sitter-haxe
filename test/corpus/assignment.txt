@@ -5,8 +5,8 @@ Assign an int.
 var x = 1;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (integer)
   )
@@ -19,11 +19,11 @@ var y = null;
 var x = y ?? 1;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (null))
-  (variable_declaration (keyword) (identifier) 
+  (variable_declaration (identifier)
     (operator)
     (identifier)
     (operator)
@@ -38,8 +38,8 @@ Assign an expression.
 var x = 1 + 1;
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (integer)
     (operator)
@@ -54,8 +54,8 @@ Assign a string.
 var x = "hi";
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (string)
   )
@@ -68,11 +68,10 @@ Assign an instance of a class.
 var x = new MyClass();
 
 ---
-(module 
-  (variable_declaration (keyword) (identifier) 
+(module
+  (variable_declaration (identifier)
     (operator)
     (call_expression
-      (keyword)
       (identifier)
     )
   )
