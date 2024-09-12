@@ -2,7 +2,6 @@
 const operators = require('./grammar-operators.js');
 const literals = require('./grammar-literals.js');
 const declarations = require('./grammar-declarations');
-const keywords = require('./grammar-keywords');
 const builtins = require('./grammar-builtins');
 
 const { commaSep, commaSep1 } = require('./utils');
@@ -68,37 +67,32 @@ const haxe_grammar = {
 
     package_statement: ($) =>
       seq(
-        alias('package', $.keyword),
+        'package',
         optional(field('name', seq(repeat(seq($.package_name, '.')), $.package_name))),
-        $._semicolon
+        $._semicolon,
       ),
 
     package_name: ($) => $._camelCaseIdentifier,
     type_name: ($) => $._pascalCaseIdentifier,
     import_statement: ($) =>
       seq(
-        alias('import', $.keyword),
+        'import',
         seq(
           repeat(seq($.package_name, '.')),
           repeat(seq($.type_name, '.')),
           seq($.type_name, optional(seq('.', alias($._camelCaseIdentifier, $.identifier)))),
         ),
-        $._semicolon
+        $._semicolon,
       ),
 
     using_statement: ($) =>
       seq(
-        alias('using', $.keyword),
-        seq(
-          repeat(seq($.package_name, '.')),
-          repeat(seq($.type_name, '.')),
-          $.type_name
-        ),
-        $._semicolon
+        'using',
+        seq(repeat(seq($.package_name, '.')), repeat(seq($.type_name, '.')), $.type_name),
+        $._semicolon,
       ),
 
-    throw_statement: ($) =>
-      prec.right(seq(alias('throw', $.keyword), $.expression, $._lookback_semicolon)),
+    throw_statement: ($) => prec.right(seq('throw', $.expression, $._lookback_semicolon)),
 
     _rhs_expression: ($) =>
       prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
@@ -121,7 +115,7 @@ const haxe_grammar = {
     switch_expression: ($) =>
       prec.right(
         seq(
-          alias('switch', $.keyword),
+          'switch',
           choice($.identifier, $._parenthesized_expression),
           alias($.switch_block, $.block),
         ),
@@ -134,40 +128,25 @@ const haxe_grammar = {
     case_statement: ($) =>
       prec.right(
         choice(
-          seq(
-            alias('case', $.keyword),
-            choice($._rhs_expression, alias('_', $._rhs_expression)),
-            ':',
-            $.statement,
-          ),
-          seq(alias('default', $.keyword), ':', $.statement),
+          seq('case', choice($._rhs_expression, alias('_', $._rhs_expression)), ':', $.statement),
+          seq('default', ':', $.statement),
         ),
       ),
 
     cast_expression: ($) =>
       choice(
-        seq(alias('cast', $.keyword), $._rhs_expression),
-        seq(
-          alias('cast', $.keyword),
-          '(',
-          $._rhs_expression,
-          optional(seq(',', field('type', $.type))),
-          ')',
-        ),
+        seq('cast', $._rhs_expression),
+        seq('cast', '(', $._rhs_expression, optional(seq(',', field('type', $.type))), ')'),
       ),
 
-    type_trace_expression: ($) => seq(alias('$type', $.keyword), '(', $._rhs_expression, ')'),
+    type_trace_expression: ($) => seq('$type', '(', $._rhs_expression, ')'),
 
     _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
 
     range_expression: ($) =>
       prec(
         1,
-        seq(
-          $.identifier,
-          alias('in', $.keyword),
-          choice(seq($.integer, $._rangeOperator, $.integer), $.identifier),
-        ),
+        seq($.identifier, 'in', choice(seq($.integer, $._rangeOperator, $.integer), $.identifier)),
       ),
 
     expression: ($) =>
@@ -182,6 +161,10 @@ const haxe_grammar = {
         $.switch_expression,
         // simple expression, or chained.
         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+        seq('return', optional($._rhs_expression)),
+        seq('untyped', $._rhs_expression),
+        'break',
+        'continue',
       ),
 
     subscript_expression: ($) =>
@@ -199,10 +182,7 @@ const haxe_grammar = {
     member_expression: ($) =>
       prec.right(
         seq(
-          choice(
-            field('object', choice(alias('this', $.keyword), $.identifier)),
-            field('literal', $._literal),
-          ),
+          choice(field('object', choice('this', $.identifier)), field('literal', $._literal)),
           choice(token('.'), seq(alias('?', $.operator), '.')),
           repeat1(field('member', $._lhs_expression)),
         ),
@@ -254,10 +234,10 @@ const haxe_grammar = {
       prec.right(
         1,
         seq(
-          field('name', alias('if', $.keyword)),
+          field('name', 'if'),
           field('arguments_list', $._arg_list),
           optional($.block),
-          optional(seq(alias(choice('else', 'else if'), $.keyword), $.block)),
+          optional(seq(choice('else', 'else if'), $.block)),
         ),
       ),
 
@@ -273,7 +253,7 @@ const haxe_grammar = {
 
     _constructor_call: ($) =>
       seq(
-        optional(alias('new', $.keyword)), // for constructor calls.
+        optional('new'), // for constructor calls.
         $._call,
       ),
 
@@ -284,7 +264,10 @@ const haxe_grammar = {
     ...literals,
 
     comment: ($) => token(choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
-    keyword: ($) => prec.right(choice(...keywords)),
+    // TODO: implement the structures that use these
+    keyword: ($) => choice('catch', 'do', 'enum', 'for', 'try', 'while'),
+    // keywords reserved by the haxe compiler that are not currently used
+    reserved_keyword: ($) => choice('operator'),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
     // Hidden Nodes in tree.
     _camelCaseIdentifier: ($) => /[a-z_]+[a-zA-Z0-9]*/,

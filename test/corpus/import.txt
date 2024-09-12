@@ -6,7 +6,7 @@ import Type;
 
 ---
 
-(module (import_statement (keyword) (type_name)))
+(module (import_statement (type_name)))
 
 ===================
 import statement with path
@@ -18,7 +18,6 @@ import my.other.package.Type;
 
 (module
   (import_statement
-    (keyword)
     (package_name)
     (package_name)
     (package_name)
@@ -36,7 +35,6 @@ import my.other.package.Type.OtherType;
 
 (module
   (import_statement
-    (keyword)
     (package_name)
     (package_name)
     (package_name)
@@ -57,18 +55,15 @@ import test.other.SomeClass;
 
 (module
   (import_statement
-    (keyword)
     (package_name)
     (package_name)
     (package_name)
     (type_name)
   )
   (import_statement
-    (keyword)
     (type_name)
   )
   (import_statement
-    (keyword)
     (package_name)
     (package_name)
     (type_name)
@@ -85,7 +80,6 @@ import my.other.package.Class.field;
 
 (module
   (import_statement
-    (keyword)
     (package_name)
     (package_name)
     (package_name)
@@ -102,6 +96,6 @@ using Type;
 
 ---
 
-(module (using_statement (keyword) (type_name)))
+(module (using_statement (type_name)))
 
 
