@@ -91,6 +91,17 @@ interface ITest extends IBanana {}
 
 
 ===================
+interface with modifiers
+===================
+
+private extern final interface ITest {}
+
+---
+
+(module (interface_declaration (identifier) (block)))
+
+
+===================
 class implementing interface
 ===================
 
@@ -122,6 +133,18 @@ final class
 ===================
 
 final class Main {}
+
+---
+
+(module (class_declaration (identifier) (block)))
+
+
+
+===================
+class with modifiers
+===================
+
+private extern final class Main {}
 
 ---
 
@@ -705,6 +728,17 @@ typedef MyType = Array<Int>;
     )
   )
 )
+
+
+===================
+type def with modifiers
+===================
+
+private extern typedef MyType = {}
+
+---
+
+(module (typedef_declaration (identifier) (block)))
 
 
 ===================
