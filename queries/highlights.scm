@@ -66,6 +66,7 @@
 ; --------
 [
   "abstract"
+  "as"
   "break"
   "case"
   "cast"

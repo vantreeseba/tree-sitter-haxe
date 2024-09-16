@@ -85,6 +85,7 @@ const haxe_grammar = {
             seq($.type_name, optional(seq('.', alias($._camelCaseIdentifier, $.identifier)))),
           )
         ),
+        optional(seq(choice('as', 'in'), choice($.type_name, alias($._camelCaseIdentifier, $.identifier)))),
         $._semicolon,
       ),
 
