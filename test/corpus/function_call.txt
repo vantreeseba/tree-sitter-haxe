@@ -155,3 +155,33 @@ $type(0);
 (module
   (type_trace_expression (integer))
 )
+
+
+===================
+constructor call
+===================
+
+new Object();
+
+---
+
+(module (call_expression (type_name)))
+
+
+===================
+constructor call
+===================
+
+new Object<T>();
+
+---
+
+(module
+  (call_expression
+    (type_name)
+    (type_params
+      (type (identifier))
+    )
+  )
+)
+

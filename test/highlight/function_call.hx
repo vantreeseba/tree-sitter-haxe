@@ -26,3 +26,15 @@ banana.foo.bar(apple);
 public function foo(bar) {
 	bar = 3;
 }
+
+function new() {}
+//       ^ constructor
+
+new Object();
+// <- keyword
+//  ^ constructor
+
+new Object<T>();
+// <- keyword
+//  ^ constructor
+//         ^ type
