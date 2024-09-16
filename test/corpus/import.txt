@@ -132,3 +132,34 @@ using Type;
 (module (using_statement (type_name)))
 
 
+
+===================
+import type as
+===================
+
+import Type as Alias;
+
+---
+
+(module
+  (import_statement
+    (type_name)
+    (type_name)
+  )
+)
+
+===================
+import field as
+===================
+
+import Type.field as alias;
+
+---
+
+(module
+  (import_statement
+    (type_name)
+    (identifier)
+    (identifier)
+  )
+)

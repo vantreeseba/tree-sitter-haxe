@@ -37,3 +37,16 @@ import my.other.Type.*;
 //     ^ module
 //        ^ module
 //              ^ type
+
+import Type as Alias;
+// <- keyword
+//     ^ type
+//          ^ keyword
+//             ^ type
+
+import Type.field as alias;
+// <- keyword
+//     ^ type
+//          ^ variable
+//                ^ keyword
+//                   ^ variable
