@@ -253,7 +253,13 @@ const haxe_grammar = {
     _constructor_call: ($) =>
       seq(
         'new',
-        $._call,
+        seq(
+          repeat(seq($.package_name, '.')),
+          repeat(seq($.type_name, '.')),
+          field('constructor', $.type_name),
+          optional($.type_params),
+          field('arguments_list', $._arg_list),
+        ),
       ),
 
     call_expression: ($) => choice($._call, $._constructor_call),
