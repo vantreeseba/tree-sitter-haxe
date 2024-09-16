@@ -72,7 +72,7 @@ var x = new MyClass();
   (variable_declaration (identifier)
     (operator)
     (call_expression
-      (identifier)
+      (type_name)
     )
   )
 )

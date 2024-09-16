@@ -38,3 +38,27 @@ new Object<T>();
 // <- keyword
 //  ^ constructor
 //         ^ type
+
+new pack.Object();
+// <- keyword
+//  ^ module
+//       ^ constructor
+
+new pack.Object<T>();
+// <- keyword
+//  ^ module
+//       ^ constructor
+//              ^ type
+
+new pack.Module.Object();
+// <- keyword
+//  ^ module
+//       ^ type
+//              ^ constructor
+
+new pack.Module.Object<T>();
+// <- keyword
+//  ^ module
+//       ^ type
+//              ^ constructor
+//                     ^ type
