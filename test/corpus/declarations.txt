@@ -85,7 +85,23 @@ interface ITest extends IBanana {}
 
 (module (interface_declaration
   (identifier)
+  (type_name)
+  (block)
+))
+
+
+===================
+interface extending another from a package
+===================
+
+interface ITest extends fruitbowl.IBanana {}
+
+---
+
+(module (interface_declaration
   (identifier)
+  (package_name)
+  (type_name)
   (block)
 ))
 
@@ -98,7 +114,7 @@ class Main implements ITest {}
 
 ---
 
-(module (class_declaration (identifier) (identifier) (block)))
+(module (class_declaration (identifier) (type_name) (block)))
 
 ===================
 class implementing multiple interfaces
@@ -110,11 +126,25 @@ class Main implements ITest implements IAnother {}
 
 (module (class_declaration
   (identifier)
-  (identifier)
-  (identifier)
+  (type_name)
+  (type_name)
   (block)
 ))
 
+===================
+class extending parent class in package
+===================
+
+class Main extends pack.Test {}
+
+---
+
+(module (class_declaration
+  (identifier)
+  (package_name)
+  (type_name)
+  (block)
+))
 
 
 ===================

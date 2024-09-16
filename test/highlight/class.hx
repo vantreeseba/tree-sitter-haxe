@@ -30,15 +30,15 @@ class Main implements ITest {}
 // <- keyword
 //    ^ type.definition
 //         ^ keyword
-//                    ^ type.definition
+//                    ^ type
 
 class Main implements ITest implements IAnother {}
 // <- keyword
 //    ^ type.definition
 //         ^ keyword
-//                    ^ type.definition
+//                    ^ type
 //                          ^ keyword
-//                                     ^ type.definition
+//                                     ^ type
 
 class foo extends Main {}
 
