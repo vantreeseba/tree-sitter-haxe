@@ -37,11 +37,11 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        seq('extends', field('super_class_name', $._lhs_expression), optional($.type_params)),
+        seq('extends', field('super_class_name', $._type_path), optional($.type_params)),
       ),
       optional(
         repeat(
-          seq('implements', field('interface_name', $._lhs_expression), optional($.type_params)),
+          seq('implements', field('interface_name', $._type_path), optional($.type_params)),
         ),
       ),
       field('body', $.block),
@@ -54,7 +54,7 @@ module.exports = {
       field('name', $._lhs_expression),
       optional($.type_params),
       optional(
-        repeat(seq('extends', field('interface_name', $._lhs_expression), optional($.type_params))),
+        repeat(seq('extends', field('interface_name', $._type_path), optional($.type_params))),
       ),
       field('body', $.block),
     ),

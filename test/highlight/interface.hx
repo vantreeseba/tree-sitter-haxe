@@ -12,6 +12,6 @@ interface TestInterface extends IAnother {}
 // <- keyword
 //        ^ type.definition
 //                      ^ keyword
-//                              ^ type.definition
+//                              ^ type
 
 

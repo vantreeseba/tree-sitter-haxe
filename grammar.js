@@ -73,6 +73,8 @@ const haxe_grammar = {
 
     package_name: ($) => $._camelCaseIdentifier,
     type_name: ($) => $._pascalCaseIdentifier,
+    _type_path: ($) => seq(repeat(seq($.package_name, '.')), repeat(seq($.type_name, '.')), $.type_name),
+
     import_statement: ($) =>
       seq(
         'import',
