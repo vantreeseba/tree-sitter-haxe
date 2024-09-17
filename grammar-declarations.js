@@ -32,7 +32,7 @@ module.exports = {
   class_declaration: ($) =>
     seq(
       repeat($.metadata),
-      optional(choice('final', 'abstract')),
+      repeat($._modifier),
       'class',
       field('name', $._lhs_expression),
       optional($.type_params),
@@ -49,7 +49,7 @@ module.exports = {
 
   interface_declaration: ($) =>
     seq(
-      optional('final'),
+      repeat($._modifier),
       'interface',
       field('name', $._lhs_expression),
       optional($.type_params),
@@ -62,6 +62,7 @@ module.exports = {
   typedef_declaration: ($) =>
     seq(
       repeat($.metadata),
+      repeat($._modifier),
       'typedef',
       field('name', $._lhs_expression),
       optional($.type_params),
