@@ -155,3 +155,89 @@ $type(0);
 (module
   (type_trace_expression (integer))
 )
+
+
+===================
+constructor call
+===================
+
+new Object();
+
+---
+
+(module (call_expression (type_name)))
+
+
+===================
+constructor call
+===================
+
+new Object<T>();
+
+---
+
+(module
+  (call_expression
+    (type_name)
+    (type_params
+      (type (identifier))
+    )
+  )
+)
+
+
+===================
+constructor from package call
+===================
+
+new pack.Object();
+
+---
+
+(module (call_expression (package_name) (type_name)))
+
+
+===================
+constructor from package call with type parameter
+===================
+
+new pack.Object<T>();
+
+---
+
+(module
+  (call_expression (package_name) (type_name)
+    (type_params
+      (type (identifier))
+    )
+  )
+)
+
+
+
+===================
+constructor from module call
+===================
+
+new pack.Module.Object();
+
+---
+
+(module (call_expression (package_name) (type_name) (type_name)))
+
+
+===================
+constructor from module call with type parameter
+===================
+
+new pack.Module.Object<T>();
+
+---
+
+(module
+  (call_expression (package_name) (type_name) (type_name)
+    (type_params
+      (type (identifier))
+    )
+  )
+)

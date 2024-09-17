@@ -19,7 +19,6 @@ const haxe_grammar = {
   conflicts: ($) => [
     [$.block, $.object],
     [$.typedef_declaration, $.type],
-    [$.call_expression, $._constructor_call],
     [$._rhs_expression, $.pair],
     [$._literal, $.pair],
     [$.pair, $.pair],
@@ -257,8 +256,14 @@ const haxe_grammar = {
 
     _constructor_call: ($) =>
       seq(
-        optional('new'), // for constructor calls.
-        $._call,
+        'new',
+        seq(
+          repeat(seq($.package_name, '.')),
+          repeat(seq($.type_name, '.')),
+          field('constructor', $.type_name),
+          optional($.type_params),
+          field('arguments_list', $._arg_list),
+        ),
       ),
 
     call_expression: ($) => choice($._call, $._constructor_call),

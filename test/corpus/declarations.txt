@@ -194,7 +194,7 @@ class Main {
 (module
   (class_declaration (identifier)
     (block
-      (function_declaration (identifier) (block))
+      (function_declaration (block))
     )
   )
 )
