@@ -30,6 +30,8 @@ const haxe_grammar = {
     [$.function_declaration, $.variable_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
+    [$.enum_abstract_declaration, $.enum_declaration],
+    [$.typedef_declaration, $.structure_type],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -278,7 +280,7 @@ const haxe_grammar = {
 
     comment: ($) => token(choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
     // TODO: implement the structures that use these
-    keyword: ($) => choice('catch', 'do', 'enum', 'for', 'try', 'while'),
+    keyword: ($) => choice('catch', 'do', 'for', 'try', 'while'),
     // keywords reserved by the haxe compiler that are not currently used
     reserved_keyword: ($) => choice('operator'),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
