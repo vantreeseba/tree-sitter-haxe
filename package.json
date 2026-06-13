@@ -13,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vantreeseba/tree-sitter-haxe.git"
+    "url": "git+https://github.com/masquepublishing/tree-sitter-haxe.git"
   },
   "devDependencies": {
     "nan": "^2.14.2",
