@@ -970,40 +970,35 @@
       }
     },
     "member_expression": {
-      "type": "PREC_RIGHT",
-      "value": 0,
+      "type": "PREC_LEFT",
+      "value": 1,
       "content": {
         "type": "SEQ",
         "members": [
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "FIELD",
-                "name": "object",
-                "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "this"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "identifier"
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "FIELD",
-                "name": "literal",
-                "content": {
+            "type": "FIELD",
+            "name": "object",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "this"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "member_expression"
+                },
+                {
                   "type": "SYMBOL",
                   "name": "_literal"
                 }
-              }
-            ]
+              ]
+            }
           },
           {
             "type": "CHOICE",
@@ -1036,14 +1031,11 @@
             ]
           },
           {
-            "type": "REPEAT1",
+            "type": "FIELD",
+            "name": "member",
             "content": {
-              "type": "FIELD",
-              "name": "member",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_lhs_expression"
-              }
+              "type": "SYMBOL",
+              "name": "identifier"
             }
           }
         ]
@@ -3649,6 +3641,10 @@
     [
       "typedef_declaration",
       "structure_type"
+    ],
+    [
+      "member_expression",
+      "_lhs_expression"
     ]
   ],
   "precedences": [],

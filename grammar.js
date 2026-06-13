@@ -32,6 +32,7 @@ const haxe_grammar = {
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
     [$.enum_abstract_declaration, $.enum_declaration],
     [$.typedef_declaration, $.structure_type],
+    [$.member_expression, $._lhs_expression],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -189,11 +190,11 @@ const haxe_grammar = {
       ),
 
     member_expression: ($) =>
-      prec.right(
+      prec.left(1,
         seq(
-          choice(field('object', choice('this', $.identifier)), field('literal', $._literal)),
+          field('object', choice('this', $.identifier, $.member_expression, $._literal)),
           choice(token('.'), seq(alias('?', $.operator), '.')),
-          repeat1(field('member', $._lhs_expression)),
+          field('member', $.identifier),
         ),
       ),
 
