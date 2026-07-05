@@ -101,8 +101,14 @@ const haxe_grammar = {
 
     throw_statement: ($) => prec.right(seq('throw', $.expression, $._lookback_semicolon)),
 
+    // 'this' is added directly here (not just reachable via member_expression's
+    // object field) so bare `this` works as a standalone expression -- return
+    // value, assignment RHS, call argument, etc. -- not just as the head of a
+    // member-access chain (`this.foo`). Pre-existing gap, unrelated to the two
+    // fixes above; found by testing against real code in this depot, where
+    // bare `this` is common (589 files).
     _rhs_expression: ($) =>
-      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+      prec.right(choice($._literal, $.identifier, 'this', $.member_expression, $.call_expression)),
 
     _unaryExpression: ($) =>
       prec.left(
@@ -237,6 +243,16 @@ const haxe_grammar = {
     // arg list is () with any amount of expressions followed by commas
     _arg_list: ($) => seq('(', commaSep($.expression), ')'),
 
+    // 'else if' was previously a single literal token with no condition of
+    // its own -- `if (a) {} else if (c) {}` lost both `c` and the entire
+    // second block, since matching that literal token left nothing to
+    // consume `(c)` or the block after it, corrupting parse recovery for
+    // the rest of the statement. Extremely common real-world shape (1,352
+    // files in this depot use `else if`); pre-existing gap, unrelated to
+    // the fixes above. Now: 'else' 'if' as two separate tokens, each
+    // else-if branch gets its own condition/block via repeat(...), reusing
+    // the same 'arguments_list' field name across branches -- same
+    // convention as e.g. class_declaration's repeated 'implements' clauses.
     conditional_statement: ($) =>
       prec.right(
         1,
@@ -244,7 +260,15 @@ const haxe_grammar = {
           field('name', 'if'),
           field('arguments_list', $._arg_list),
           optional($.block),
-          optional(seq(choice('else', 'else if'), $.block)),
+          // $.block here must NOT be optional() (unlike the primary if's
+          // block above, matching the original design): with it optional,
+          // the parser could -- and silently did, with no ERROR node --
+          // end this repeat iteration early and let a real, present block
+          // become a separate top-level statement instead, splitting an
+          // `else if (c) {d();} else {e();}` tail into a bogus bare
+          // identifier "else" plus two unrelated floating blocks.
+          repeat(seq('else', 'if', field('arguments_list', $._arg_list), $.block)),
+          optional(seq('else', $.block)),
         ),
       ),
 
