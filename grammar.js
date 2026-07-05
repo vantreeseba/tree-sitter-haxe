@@ -35,6 +35,7 @@ const haxe_grammar = {
     [$._lhs_expression, $.pair],
     [$._ternary_condition, $.pair],
     [$._unaryExpression, $._ternary_condition, $.pair],
+    [$._chain_term, $._ternary_condition],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -175,6 +176,16 @@ const haxe_grammar = {
         seq($.identifier, 'in', choice(seq($.integer, $._rangeOperator, $.integer), $.identifier)),
       ),
 
+    // A chain term that may optionally carry a leading prefix-unary operator
+    // (`!y`, `-y`, etc.), used only in a chain's TAIL positions (never as a
+    // chain's head -- using this in head position reintroduces an extra
+    // reduce step that collides with the head's own shift/reduce decision
+    // and silently breaks even plain chains like `1 + 2`; confirmed by
+    // testing, not just theorized). Restricted to tail positions, it lets
+    // `a && !b`, `!a && !b`, etc. parse -- not just `!a && b`, which the
+    // leading-unary `expression` alternative below already covers.
+    _chain_term: ($) => seq(optional(alias($._prefixUnaryOperator, $.operator)), $._rhs_expression),
+
     // Deliberately excludes $.ternary_expression itself (and the statement-
     // like forms below) so a bare, unparenthesized ternary can't be used as
     // another ternary's condition -- `a ? b : c` must be wrapped in parens
@@ -227,7 +238,22 @@ const haxe_grammar = {
         $.switch_expression,
         $.ternary_expression,
         // simple expression, or chained.
-        seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+        seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
+        // Same chain, but with a leading prefix-unary term (`!x && y`,
+        // `-x + y`, etc.) -- requires repeat1 (at least one more operator/
+        // term after the head) so this alternative is never reachable for a
+        // solo unary term like `!x` alone; that continues to go exclusively
+        // through $._unaryExpression above. Without that exclusivity this
+        // would create a second, ambiguous derivation for every solo unary
+        // expression. $._unaryExpression's prefix-only reach (never chained)
+        // meant `!x && y` and similar always failed outright, even though
+        // it's extremely common real-world code (818 files in this depot
+        // use this shape).
+        seq(
+          alias($._prefixUnaryOperator, $.operator),
+          $._rhs_expression,
+          repeat1(seq($.operator, $._chain_term)),
+        ),
         seq('return', optional($._rhs_expression)),
         seq('untyped', $._rhs_expression),
         'break',
