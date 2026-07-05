@@ -156,6 +156,46 @@ const haxe_grammar = {
         seq($.identifier, 'in', choice(seq($.integer, $._rangeOperator, $.integer), $.identifier)),
       ),
 
+    // Deliberately excludes $.ternary_expression itself (and the statement-
+    // like forms below) so a bare, unparenthesized ternary can't be used as
+    // another ternary's condition -- `a ? b : c` must be wrapped in parens
+    // to serve as a condition. This keeps the grammar's only self-recursion
+    // on this rule in the `alternative` field, which is what gives
+    // `a ? b : c ? d : e` its right-associative ("else if" chain) reading
+    // instead of an ambiguous choice between two equally-valid nestings.
+    // prec(1, ...) on the whole choice, not just one branch: `pair`'s value
+    // slot is `$.expression`, which reaches every alternative below via
+    // ternary_expression's condition field, so any of them can be mid-parse
+    // when a '?' shows up. Higher precedence than `pair`'s default (0) means
+    // the parser shifts (keeps parsing toward the ternary) instead of
+    // reducing the pair immediately, so `x : y ? c : d` reads as
+    // `x : (y ? c : d)` rather than leaving `? c : d` dangling after a
+    // prematurely-closed pair.
+    _ternary_condition: ($) =>
+      prec(
+        1,
+        choice(
+          $._unaryExpression,
+          $.subscript_expression,
+          $.cast_expression,
+          $._parenthesized_expression,
+          seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+        ),
+      ),
+
+    // https://haxe.org/manual/expression-ternary.html
+    ternary_expression: ($) =>
+      prec.right(
+        2,
+        seq(
+          field('condition', $._ternary_condition),
+          '?',
+          field('consequence', $.expression),
+          ':',
+          field('alternative', $.expression),
+        ),
+      ),
+
     expression: ($) =>
       choice(
         $._unaryExpression,
@@ -166,6 +206,7 @@ const haxe_grammar = {
         $.range_expression,
         $._parenthesized_expression,
         $.switch_expression,
+        $.ternary_expression,
         // simple expression, or chained.
         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
         seq('return', optional($._rhs_expression)),
@@ -190,7 +231,15 @@ const haxe_grammar = {
       prec.right(
         seq(
           choice(field('object', choice('this', $.identifier)), field('literal', $._literal)),
-          choice(token('.'), seq(alias('?', $.operator), '.')),
+          // '?.' must be one atomic token (no space allowed, matching real
+          // Haxe syntax) rather than '?' and '.' as separate tokens. With
+          // them separate, `identifier '?'` is ambiguous between "start of
+          // safe-nav" and "start of a ternary_expression" -- resolving that
+          // needs to see whether '.' follows, i.e. 2 tokens of lookahead,
+          // more than LALR(1) has. Making '?.' atomic pushes the decision
+          // into the lexer (does the next char after '?' happen to be '.'?)
+          // instead of the parser.
+          choice(token('.'), alias(token(seq('?', '.')), $.operator)),
           repeat1(field('member', $._lhs_expression)),
         ),
       ),
