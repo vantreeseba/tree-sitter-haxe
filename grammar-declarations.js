@@ -100,17 +100,26 @@ module.exports = {
       field('body', $.block),
     ),
 
+  // prec(1, ...): a named function with a block, at statement position, is
+  // ambiguous between this rule and $.function_expression wrapped in an
+  // expression-statement (both are followed by the same
+  // $._lookback_semicolon there) -- but a bare named `function foo() {}`
+  // statement is always a declaration in Haxe, never a dangling expression
+  // statement, so this rule should win that tie outright.
   function_declaration: ($) =>
-    seq(
-      repeat($.metadata),
-      repeat($._modifier),
-      'function',
-      field('name', choice($._lhs_expression, 'new')),
-      optional($.type_params),
-      $._function_arg_list,
-      optional(seq(':', field('return_type', $.type))),
-      optional(field('body', $.block)),
-      $._lookback_semicolon,
+    prec(
+      1,
+      seq(
+        repeat($.metadata),
+        repeat($._modifier),
+        'function',
+        field('name', choice($._lhs_expression, 'new')),
+        optional($.type_params),
+        $._function_arg_list,
+        optional(seq(':', field('return_type', $.type))),
+        optional(field('body', $.block)),
+        $._lookback_semicolon,
+      ),
     ),
 
   _function_arg_list: ($) => prec(1, seq('(', commaSep($.function_arg), ')')),

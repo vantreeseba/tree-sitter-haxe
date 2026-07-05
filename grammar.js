@@ -28,6 +28,7 @@ const haxe_grammar = {
     [$.type, $._function_type_args],
     [$.structure_type_pair, $._function_type_args],
     [$.function_declaration, $.variable_declaration],
+    [$.function_expression, $.function_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
     [$.enum_abstract_declaration, $.enum_declaration],
@@ -151,6 +152,29 @@ const haxe_grammar = {
 
     type_trace_expression: ($) => seq('$type', '(', $._rhs_expression, ')'),
 
+    // Anonymous function literal used in expression position (callback
+    // arguments, variable-declaration RHS, etc.) -- `doThing(function(x) {
+    // ... })`. There was previously no way to write a function as an
+    // expression at all: $.function_declaration is a statement-level
+    // $.declaration that always ends in $._lookback_semicolon, which isn't
+    // present (and shouldn't be consumed) when a function literal is nested
+    // inside a call's argument list or ends right at ')'. Real-world code
+    // uses this constantly (373 files in this depot pass an anonymous
+    // function as a callback argument). Deliberately excludes
+    // $._modifier/type_params (not valid on an anonymous function) and the
+    // trailing semicolon (the function's block is the end of the
+    // expression, whatever follows -- ')', ',', ';' -- belongs to the
+    // enclosing construct, not this rule).
+    function_expression: ($) =>
+      seq(
+        repeat($.metadata),
+        'function',
+        optional(field('name', $._lhs_expression)),
+        $._function_arg_list,
+        optional(seq(':', field('return_type', $.type))),
+        field('body', $.block),
+      ),
+
     _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
 
     range_expression: ($) =>
@@ -169,6 +193,7 @@ const haxe_grammar = {
         $.range_expression,
         $._parenthesized_expression,
         $.switch_expression,
+        $.function_expression,
         // simple expression, or chained.
         seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
         seq('return', optional($._rhs_expression)),
