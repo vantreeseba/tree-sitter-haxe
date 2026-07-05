@@ -286,8 +286,8 @@ const haxe_grammar = {
     reserved_keyword: ($) => choice('operator'),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
     // Hidden Nodes in tree.
-    _camelCaseIdentifier: ($) => /[a-z_]+[a-zA-Z0-9]*/,
-    _pascalCaseIdentifier: ($) => /[A-Z]+[a-zA-Z0-9]*/,
+    _camelCaseIdentifier: ($) => /[a-z_]+[a-zA-Z0-9_]*/,
+    _pascalCaseIdentifier: ($) => /[A-Z_]+[a-zA-Z0-9_]*/,
     _semicolon: ($) => $._lookback_semicolon,
   },
 };
