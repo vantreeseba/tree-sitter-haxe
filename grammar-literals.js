@@ -40,6 +40,7 @@ module.exports = {
   // Sub part of map and object literals.
   pair: ($) =>
     prec.right(
+      1,
       choice(
         // Precedence -1, unlike the '=>' alternative below: `pair` is
         // reachable as a bare _literal outside of {}/[] too (e.g. the

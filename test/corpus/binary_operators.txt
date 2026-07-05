@@ -59,3 +59,104 @@ var x = 1 + y;
     (integer) (operator) (identifier)
   )
 )
+
+
+
+===================
+less than comparison
+===================
+
+var x = a < b;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+greater than comparison
+===================
+
+var x = a > b;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+less than or equal comparison
+===================
+
+var x = a <= b;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+greater than or equal comparison
+===================
+
+var x = a >= b;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+equality comparison
+===================
+
+var x = a == b;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+inequality comparison
+===================
+
+var x = a != b;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+less-than comparison does not get mistaken for a generic call's type params
+===================
+
+var x = a < b;
+var y = Vector<Float>(x);
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+  (variable_declaration (identifier) (operator)
+    (call_expression
+      (identifier)
+      (type_params (type (identifier)))
+      (identifier)
+    )
+  )
+)

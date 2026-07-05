@@ -30,6 +30,10 @@ const haxe_grammar = {
     [$.function_declaration, $.variable_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
+    [$._rhs_expression, $._lhs_expression],
+    [$._rhs_expression, $.subscript_expression],
+    [$._lhs_expression, $.pair],
+    [$._unaryExpression, $._ternary_condition, $.pair],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -102,11 +106,11 @@ const haxe_grammar = {
     throw_statement: ($) => prec.right(seq('throw', $.expression, $._lookback_semicolon)),
 
     _rhs_expression: ($) =>
-      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+      prec(1, choice($._literal, $.identifier, $.member_expression, $.call_expression)),
 
     _unaryExpression: ($) =>
       prec.left(
-        1,
+        2,
         choice(
           // unary on LHS
           seq($.operator, $._rhs_expression),
@@ -173,7 +177,7 @@ const haxe_grammar = {
     // prematurely-closed pair.
     _ternary_condition: ($) =>
       prec(
-        1,
+        2,
         choice(
           $._unaryExpression,
           $.subscript_expression,
@@ -186,7 +190,7 @@ const haxe_grammar = {
     // https://haxe.org/manual/expression-ternary.html
     ternary_expression: ($) =>
       prec.right(
-        2,
+        3,
         seq(
           field('condition', $._ternary_condition),
           '?',
