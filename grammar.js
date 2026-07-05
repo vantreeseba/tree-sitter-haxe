@@ -6,9 +6,6 @@ const builtins = require('./grammar-builtins');
 
 const { commaSep, commaSep1 } = require('./utils');
 
-const preprocessor_statement_start_tokens = ['if', 'elseif'];
-const preprocessor_statement_end_tokens = ['else', 'end'];
-
 const haxe_grammar = {
   name: 'haxe',
   externals: ($) => [$._lookback_semicolon, $._closing_brace_marker, $._closing_brace_unmarker],
@@ -33,6 +30,7 @@ const haxe_grammar = {
     [$.enum_abstract_declaration, $.enum_declaration],
     [$.typedef_declaration, $.structure_type],
     [$.member_expression, $._lhs_expression],
+    [$.preprocessor_statement],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -58,14 +56,37 @@ const haxe_grammar = {
         ),
       ),
 
+    // `#if`/`#elseif`/`#else`/`#end` previously matched as separate,
+    // unrelated $.statement siblings, with no structural link to the
+    // declarations/statements they're actually guarding -- `#if (sys ||
+    // nodejs)` and the `function benchmark() {...}` right after it came out
+    // as two disconnected nodes in a flat list, silently discarding the
+    // conditional-compilation relationship (no ERROR node; this is a
+    // "wrong tree, not a broken one" bug, github.com/vantreeseba/tree-sitter-haxe/issues/36).
+    // Extremely common in this depot: 534 files use `#if`/`#elseif`
+    // immediately guarding a declaration-shaped line (var/function/public/etc).
+    // Restructured to nest each branch's guarded statements as children of
+    // one preprocessor_statement node, the same "each branch owns its own
+    // condition and body" shape used for conditional_statement's
+    // (`if`/`else if`/`else`) fix earlier in this fork's history. This does
+    // NOT evaluate which branch is "active" -- all branches stay in the
+    // tree, since a single source file compiles to multiple targets
+    // (html5, flash, cpp, ...) and every variant needs to stay visible to
+    // tooling built on this grammar, not just whichever one a particular
+    // build's defines would keep.
     preprocessor_statement: ($) =>
       prec.right(
         seq(
           '#',
-          choice(
-            seq(token.immediate(choice(...preprocessor_statement_start_tokens)), $.expression),
-            token.immediate(choice(...preprocessor_statement_end_tokens)),
+          token.immediate('if'),
+          field('condition', $.expression),
+          repeat($.statement),
+          repeat(
+            seq('#', token.immediate('elseif'), field('condition', $.expression), repeat($.statement)),
           ),
+          optional(seq('#', token.immediate('else'), repeat($.statement))),
+          '#',
+          token.immediate('end'),
         ),
       ),
 

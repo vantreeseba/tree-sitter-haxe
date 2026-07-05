@@ -158,13 +158,13 @@ trace(z);
 ---
 
 (module
-  (preprocessor_statement (operator) (identifier))
-  (call_expression (identifier) (identifier))
-  (preprocessor_statement (identifier) (operator) (integer))
-  (call_expression (identifier) (identifier))
-  (preprocessor_statement)
-  (call_expression (identifier) (identifier))
-  (preprocessor_statement)
+  (preprocessor_statement
+    (operator) (identifier)
+    (call_expression (identifier) (identifier))
+    (identifier) (operator) (integer)
+    (call_expression (identifier) (identifier))
+    (call_expression (identifier) (identifier))
+  )
 )
 
 ===================
