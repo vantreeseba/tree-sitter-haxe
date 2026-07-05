@@ -33,6 +33,7 @@ const haxe_grammar = {
     [$._rhs_expression, $._lhs_expression],
     [$._rhs_expression, $.subscript_expression],
     [$._lhs_expression, $.pair],
+    [$._ternary_condition, $.pair],
     [$._unaryExpression, $._ternary_condition, $.pair],
   ],
   rules: {
@@ -108,14 +109,28 @@ const haxe_grammar = {
     _rhs_expression: ($) =>
       prec(1, choice($._literal, $.identifier, $.member_expression, $.call_expression)),
 
+    // Restricted to the actual unary operator sets (_prefixUnaryOperator/
+    // _postfixUnaryOperator), not the fully generic $.operator (which also
+    // includes every binary operator). The generic version let e.g. `width <`
+    // match here treating '<' as a bogus "postfix unary" operator -- almost
+    // never an issue on its own since it's semantically nonsensical, but it
+    // created a second, equally error-free reading for comparison-conditioned
+    // ternaries inside parens (`(width < height ? width : height)`, matching
+    // real code in this depot): _unaryExpression could swallow "width <" as
+    // one expression, leaving a second, separate ternary_expression for just
+    // "height ? width : height" -- silently misparsing `a < b ? c : d` as
+    // `a < (b ? c : d)` with no ERROR node to catch it. This was a
+    // pre-existing latent bug, not introduced by the < vs. type_params fix
+    // above; it surfaced now because it happened to share a state with the
+    // newly-added ternary_expression.
     _unaryExpression: ($) =>
       prec.left(
         2,
         choice(
           // unary on LHS
-          seq($.operator, $._rhs_expression),
+          seq(alias($._prefixUnaryOperator, $.operator), $._rhs_expression),
           // unary on RHS
-          seq($._rhs_expression, $.operator),
+          seq($._rhs_expression, alias($._postfixUnaryOperator, $.operator)),
         ),
       ),
 

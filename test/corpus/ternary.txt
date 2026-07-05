@@ -63,6 +63,28 @@ var x = a < b ? c : d;
 )
 
 ===================
+ternary with comparison condition in parens does not split the comparison off
+===================
+
+var x = (width < height ? width : height);
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier)
+      (operator)
+      (identifier)
+      (identifier)
+      (identifier)
+    )
+  )
+)
+
+===================
 nested ternary is right-associative
 ===================
 
