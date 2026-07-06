@@ -1,0 +1,128 @@
+===================
+simple ternary
+===================
+
+var x = a ? b : c;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier)
+      (identifier)
+      (identifier)
+    )
+  )
+)
+
+===================
+ternary with comparison condition, greater than
+===================
+
+var x = a > b ? c : d;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier)
+      (operator)
+      (identifier)
+      (identifier)
+      (identifier)
+    )
+  )
+)
+
+===================
+ternary with comparison condition, less than
+===================
+
+var x = a < b ? c : d;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier)
+      (operator)
+      (identifier)
+      (identifier)
+      (identifier)
+    )
+  )
+)
+
+===================
+ternary with comparison condition in parens does not split the comparison off
+===================
+
+var x = (width < height ? width : height);
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier)
+      (operator)
+      (identifier)
+      (identifier)
+      (identifier)
+    )
+  )
+)
+
+===================
+nested ternary is right-associative
+===================
+
+var x = a ? b : c ? d : e;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier)
+      (identifier)
+      (ternary_expression
+        (identifier)
+        (identifier)
+        (identifier)
+      )
+    )
+  )
+)
+
+===================
+ternary as a call argument
+===================
+
+foo(a ? b : c);
+
+---
+
+(module
+  (call_expression
+    (identifier)
+    (ternary_expression
+      (identifier)
+      (identifier)
+      (identifier)
+    )
+  )
+)
