@@ -119,6 +119,10 @@
           "named": true
         },
         {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
           "type": "type_trace_expression",
           "named": true
         }
@@ -239,6 +243,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
           "named": true
         },
         {
@@ -363,6 +371,10 @@
           },
           {
             "type": "switch_expression",
+            "named": true
+          },
+          {
+            "type": "ternary_expression",
             "named": true
           },
           {
@@ -533,6 +545,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
           "named": true
         },
         {
@@ -802,6 +818,10 @@
           },
           {
             "type": "switch_expression",
+            "named": true
+          },
+          {
+            "type": "ternary_expression",
             "named": true
           },
           {
@@ -1289,6 +1309,10 @@
           "named": true
         },
         {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
           "type": "type_trace_expression",
           "named": true
         }
@@ -1491,6 +1515,10 @@
           "named": true
         },
         {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
           "type": "type_trace_expression",
           "named": true
         }
@@ -1607,6 +1635,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
           "named": true
         },
         {
@@ -1755,6 +1787,10 @@
           "named": true
         },
         {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
           "type": "type",
           "named": true
         },
@@ -1843,6 +1879,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
           "named": true
         },
         {
@@ -2016,6 +2056,10 @@
             "named": true
           },
           {
+            "type": "ternary_expression",
+            "named": true
+          },
+          {
             "type": "type_trace_expression",
             "named": true
           },
@@ -2100,6 +2144,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
           "named": true
         },
         {
@@ -2194,10 +2242,350 @@
           "named": true
         },
         {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
           "type": "type_trace_expression",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "ternary_expression",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "array",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "break",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "continue",
+            "named": false
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "map",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "null",
+            "named": true
+          },
+          {
+            "type": "object",
+            "named": true
+          },
+          {
+            "type": "operator",
+            "named": true
+          },
+          {
+            "type": "pair",
+            "named": true
+          },
+          {
+            "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "return",
+            "named": false
+          },
+          {
+            "type": "runtime_type_check_expression",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "subscript_expression",
+            "named": true
+          },
+          {
+            "type": "switch_expression",
+            "named": true
+          },
+          {
+            "type": "ternary_expression",
+            "named": true
+          },
+          {
+            "type": "type_trace_expression",
+            "named": true
+          },
+          {
+            "type": "untyped",
+            "named": false
+          }
+        ]
+      },
+      "condition": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "array",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "break",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "continue",
+            "named": false
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "map",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "null",
+            "named": true
+          },
+          {
+            "type": "object",
+            "named": true
+          },
+          {
+            "type": "operator",
+            "named": true
+          },
+          {
+            "type": "pair",
+            "named": true
+          },
+          {
+            "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "return",
+            "named": false
+          },
+          {
+            "type": "runtime_type_check_expression",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "subscript_expression",
+            "named": true
+          },
+          {
+            "type": "switch_expression",
+            "named": true
+          },
+          {
+            "type": "ternary_expression",
+            "named": true
+          },
+          {
+            "type": "type_trace_expression",
+            "named": true
+          },
+          {
+            "type": "untyped",
+            "named": false
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "array",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "break",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "continue",
+            "named": false
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "map",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "null",
+            "named": true
+          },
+          {
+            "type": "object",
+            "named": true
+          },
+          {
+            "type": "operator",
+            "named": true
+          },
+          {
+            "type": "pair",
+            "named": true
+          },
+          {
+            "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "return",
+            "named": false
+          },
+          {
+            "type": "runtime_type_check_expression",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "subscript_expression",
+            "named": true
+          },
+          {
+            "type": "switch_expression",
+            "named": true
+          },
+          {
+            "type": "ternary_expression",
+            "named": true
+          },
+          {
+            "type": "type_trace_expression",
+            "named": true
+          },
+          {
+            "type": "untyped",
+            "named": false
+          }
+        ]
+      }
     }
   },
   {
@@ -2278,6 +2666,10 @@
         },
         {
           "type": "switch_expression",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
           "named": true
         },
         {
@@ -2628,6 +3020,10 @@
           "named": true
         },
         {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
           "type": "type_trace_expression",
           "named": true
         }
@@ -2708,6 +3104,10 @@
   },
   {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": "...",
     "named": false
   },
   {

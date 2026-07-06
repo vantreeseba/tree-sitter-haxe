@@ -1,0 +1,113 @@
+===================
+return with a comparison chain
+===================
+
+class F {
+  function b() {
+    return a == b;
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block (identifier) (operator) (identifier))
+      )
+    )
+  )
+)
+
+===================
+return with an assign-and-return chain
+===================
+
+class F {
+  function b() {
+    return a = b;
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block (identifier) (operator) (identifier))
+      )
+    )
+  )
+)
+
+===================
+return with a bare subscript, no operator
+===================
+
+class F {
+  function b() {
+    return arr[i];
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block (subscript_expression (identifier) (identifier)))
+      )
+    )
+  )
+)
+
+===================
+subscript_expression as the head of an assignment chain
+===================
+
+class F {
+  function b() {
+    arr[i] = value;
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (subscript_expression (identifier) (identifier))
+          (operator)
+          (identifier)
+        )
+      )
+    )
+  )
+)
+
+===================
+postfix unary as the head of a comparison chain
+===================
+
+class F {
+  function b() {
+    i-- > 0;
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block (identifier) (operator) (operator) (integer))
+      )
+    )
+  )
+)
