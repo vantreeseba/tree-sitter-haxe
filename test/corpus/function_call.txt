@@ -110,13 +110,13 @@ some.package.fn();
 ---
 
 (module
-  (call_expression 
-    (member_expression 
-      (identifier)
-      (member_expression 
+  (call_expression
+    (member_expression
+      (member_expression
         (identifier)
         (identifier)
       )
+      (identifier)
     )
   )
 )
@@ -130,14 +130,14 @@ some.package?.fn();
 ---
 
 (module
-  (call_expression 
-    (member_expression 
-      (identifier)
-      (member_expression 
+  (call_expression
+    (member_expression
+      (member_expression
         (identifier)
-        (operator)
         (identifier)
       )
+      (operator)
+      (identifier)
     )
   )
 )
