@@ -21,7 +21,7 @@ class main {
 )
 
 ===================
-int literal with seperators.
+int literal with separators.
 ===================
 
 class main {
@@ -67,7 +67,7 @@ class main {
 )
 
 ===================
-int hex literal with seperators.
+int hex literal with separators.
 ===================
 
 class main {
@@ -112,7 +112,7 @@ class main {
 )
 
 ===================
-float literal with seperators.
+float literal with separators.
 ===================
 
 class main {
@@ -181,7 +181,7 @@ class main {
 )
 
 ===================
-float literal e notation with seperators.
+float literal e notation with separators.
 ===================
 
 class main {
@@ -481,6 +481,38 @@ Array literal with multiple elements
     (identifier)
     (operator)
     (array (integer) (integer) (integer))
+  )
+)
+
+===================
+Array literal with trailing comma
+===================
+
+  var y = [1, 2, 3,];
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (array (integer) (integer) (integer))
+  )
+)
+
+===================
+Array literal with single element and trailing comma
+===================
+
+  var y = [1,];
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (array (integer))
   )
 )
 

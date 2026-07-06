@@ -31,7 +31,24 @@ fn(1,2,3);
 ---
 
 (module
-  (call_expression (identifier) 
+  (call_expression (identifier)
+    (integer)
+    (integer)
+    (integer)
+  )
+)
+
+
+===================
+call with trailing comma in args
+===================
+
+fn(1,2,3,);
+
+---
+
+(module
+  (call_expression (identifier)
     (integer)
     (integer)
     (integer)

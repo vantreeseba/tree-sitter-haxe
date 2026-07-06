@@ -556,7 +556,7 @@ class Main {
 )
 
 ===================
-class function with seperate declaration and assignment statements
+class function with separate declaration and assignment statements
 ===================
 
 class Main {
