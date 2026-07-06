@@ -101,3 +101,114 @@ if (a) { b(); } else if (c) { d(); } else if (e) { f(); } else { g(); }
     )
   )
 )
+===================
+if with a braceless body
+===================
+
+class F {
+  function b() {
+    if (a) trace(1);
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (conditional_statement (identifier) (call_expression (identifier) (integer)))
+        )
+      )
+    )
+  )
+)
+
+===================
+if-else with braceless bodies
+===================
+
+class F {
+  function b() {
+    if (a) trace(1); else trace(2);
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (conditional_statement
+            (identifier)
+            (call_expression (identifier) (integer))
+            (call_expression (identifier) (integer))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+if-else-if-else chain with braceless bodies
+===================
+
+class F {
+  function b() {
+    if (a) trace(1); else if (b) trace(2); else trace(3);
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (conditional_statement
+            (identifier)
+            (call_expression (identifier) (integer))
+            (identifier)
+            (call_expression (identifier) (integer))
+            (call_expression (identifier) (integer))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+if-else-if-else chain with block bodies (unaffected by the braceless fix)
+===================
+
+class F {
+  function b() {
+    if (a) { trace(1); } else if (b) { trace(2); } else { trace(3); }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (conditional_statement
+            (identifier)
+            (block (call_expression (identifier) (integer)))
+            (identifier)
+            (block (call_expression (identifier) (integer)))
+            (block (call_expression (identifier) (integer)))
+          )
+        )
+      )
+    )
+  )
+)

@@ -849,11 +849,11 @@ var a = [for (i in 0...5) i];
     (identifier)
     (operator)
     (array
-      (call_expression
+      (comprehension_for
         (identifier)
-        (range_expression (identifier) (integer) (integer))
+        (integer) (operator) (integer)
+        (identifier)
       )
-      (identifier)
     )
   )
 )
