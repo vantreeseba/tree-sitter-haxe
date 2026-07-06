@@ -33,6 +33,13 @@ const haxe_grammar = {
     [$.enum_abstract_declaration, $.enum_declaration],
     [$.typedef_declaration, $.structure_type],
     [$.member_expression, $._lhs_expression],
+    [$._rhs_expression, $._lhs_expression],
+    [$._rhs_expression, $.subscript_expression],
+    [$._lhs_expression, $.pair],
+    [$._ternary_condition, $.pair],
+    [$._unaryExpression, $._ternary_condition, $.pair],
+    [$._chain_term, $._ternary_condition],
+    [$._rhs_expression, $.member_expression],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -105,16 +112,16 @@ const haxe_grammar = {
     throw_statement: ($) => prec.right(seq('throw', $.expression, $._lookback_semicolon)),
 
     _rhs_expression: ($) =>
-      prec.right(choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+      prec(1, choice($._literal, $.identifier, $.member_expression, $.call_expression)),
 
     _unaryExpression: ($) =>
       prec.left(
-        1,
+        2,
         choice(
           // unary on LHS
-          seq($.operator, $._rhs_expression),
+          seq(alias($._prefixUnaryOperator, $.operator), $._rhs_expression),
           // unary on RHS
-          seq($._rhs_expression, $.operator),
+          seq($._rhs_expression, alias($._postfixUnaryOperator, $.operator)),
         ),
       ),
 
@@ -159,6 +166,33 @@ const haxe_grammar = {
         seq($.identifier, 'in', choice(seq($.integer, $._rangeOperator, $.integer), $.identifier)),
       ),
 
+    _chain_term: ($) => seq(optional(alias($._prefixUnaryOperator, $.operator)), $._rhs_expression),
+
+    _ternary_condition: ($) =>
+      prec(
+        2,
+        choice(
+          $._unaryExpression,
+          $.subscript_expression,
+          $.cast_expression,
+          $._parenthesized_expression,
+          seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+        ),
+      ),
+
+    // https://haxe.org/manual/expression-ternary.html
+    ternary_expression: ($) =>
+      prec.right(
+        3,
+        seq(
+          field('condition', $._ternary_condition),
+          '?',
+          field('consequence', $.expression),
+          ':',
+          field('alternative', $.expression),
+        ),
+      ),
+
     expression: ($) =>
       choice(
         $._unaryExpression,
@@ -169,10 +203,46 @@ const haxe_grammar = {
         $.range_expression,
         $._parenthesized_expression,
         $.switch_expression,
+        $.ternary_expression,
         // simple expression, or chained.
-        seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
-        seq('return', optional($._rhs_expression)),
-        seq('untyped', $._rhs_expression),
+        seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
+        seq(
+          alias($._prefixUnaryOperator, $.operator),
+          $._rhs_expression,
+          repeat1(seq($.operator, $._chain_term)),
+        ),
+        seq($.subscript_expression, repeat1(seq($.operator, $._chain_term))),
+        seq(
+          $._rhs_expression,
+          alias($._postfixUnaryOperator, $.operator),
+          repeat1(seq($.operator, $._chain_term)),
+        ),
+        seq(
+          'return',
+          optional(
+            choice(
+              seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
+              seq(
+                alias($._prefixUnaryOperator, $.operator),
+                $._rhs_expression,
+                repeat(seq($.operator, $._chain_term)),
+              ),
+              $.subscript_expression,
+            ),
+          ),
+        ),
+        seq(
+          'untyped',
+          choice(
+            seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
+            $.subscript_expression,
+            seq(
+              alias($._prefixUnaryOperator, $.operator),
+              $._rhs_expression,
+              repeat(seq($.operator, $._chain_term)),
+            ),
+          ),
+        ),
         'break',
         'continue',
       ),
@@ -193,7 +263,7 @@ const haxe_grammar = {
       prec.left(1,
         seq(
           field('object', choice('this', $.identifier, $.member_expression, $._literal)),
-          choice(token('.'), seq(alias('?', $.operator), '.')),
+          choice(token('.'), alias(token(seq('?', '.')), $.operator)),
           field('member', $.identifier),
         ),
       ),
@@ -286,8 +356,8 @@ const haxe_grammar = {
     reserved_keyword: ($) => choice('operator'),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,
     // Hidden Nodes in tree.
-    _camelCaseIdentifier: ($) => /[a-z_]+[a-zA-Z0-9]*/,
-    _pascalCaseIdentifier: ($) => /[A-Z]+[a-zA-Z0-9]*/,
+    _camelCaseIdentifier: ($) => /[a-z_]+[a-zA-Z0-9_]*/,
+    _pascalCaseIdentifier: ($) => /[A-Z_]+[a-zA-Z0-9_]*/,
     _semicolon: ($) => $._lookback_semicolon,
   },
 };
