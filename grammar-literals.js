@@ -39,11 +39,30 @@ module.exports = {
   structure_type: ($) => prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), $._closing_brace)),
   structure_type_pair: ($) => prec.left(seq(choice($.identifier), ':', $.type)),
 
-  // Sub part of map and object literals
+  // Sub part of map and object literals.
   pair: ($) =>
     prec.right(
+      1,
       choice(
-        seq(choice($.identifier, $.string), ':', $.expression),
+        // Precedence -1, unlike the '=>' alternative below: `pair` is
+        // reachable as a bare _literal outside of {}/[] too (e.g. the
+        // "simple pair literal" test, `x:1;`), which is unambiguous on its
+        // own, but that reachability also makes `identifier ':' expression`
+        // a standing alternate reading of any ternary_expression's
+        // condition/consequence/alternative slot. Without a lower
+        // precedence here, that ambiguity silently resolves in favor of
+        // `pair` (tree-sitter doesn't even report it as a conflict needing
+        // a decision), swallowing a ternary's ':' and everything after it
+        // into the pair's value instead of leaving it for the ternary. -1
+        // only matters when there's an actual competing interpretation to
+        // lose to; it doesn't change the unambiguous {}/[] contexts or the
+        // bare `x:1;` case. Scoped to just this alternative -- an earlier
+        // attempt at giving `pair` as a whole -1 also demoted the '=>'
+        // alternative, which broke map literals (`[k => v]`) by letting
+        // array's generic `expression` chain (which can itself represent
+        // `_literal '=>' _literal` as an inline operator chain) win a
+        // now-lopsided tie it used to lose fairly.
+        prec(-1, seq(choice($.identifier, $.string), ':', $.expression)),
         seq(choice($.identifier, $._literal), '=>', $.expression),
       ),
     ),
