@@ -1,0 +1,103 @@
+===================
+simple if
+===================
+
+if (a) { b(); }
+
+---
+
+(module
+  (conditional_statement
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+  )
+)
+
+===================
+if with else
+===================
+
+if (a) { b(); } else { c(); }
+
+---
+
+(module
+  (conditional_statement
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+  )
+)
+
+===================
+if with a single else if, own condition and block preserved
+===================
+
+if (a) { b(); } else if (c) { d(); }
+
+---
+
+(module
+  (conditional_statement
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+  )
+)
+
+===================
+if with multiple else if branches and a trailing else
+===================
+
+if (a) { b(); } else if (c) { d(); } else if (e) { f(); } else { g(); }
+
+---
+
+(module
+  (conditional_statement
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+    (identifier)
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+    (block
+      (call_expression
+        (identifier)
+      )
+    )
+  )
+)

@@ -123,10 +123,16 @@ module.exports = {
     ),
 
   _function_arg_list: ($) => prec(1, seq('(', commaSep($.function_arg), ')')),
+  // Haxe allows the nullable-parameter '?' marker either before the name
+  // (`?x:Int`, the classic/most common form) or after it (`x?:Int`) -- only
+  // the postfix form was supported here. Pre-existing gap, unrelated to the
+  // ternary/type_params fixes above; found by testing against real code in
+  // this depot, where the prefix form is common (176 files).
   function_arg: ($) =>
     prec(
       1,
       seq(
+        optional('?'),
         field('name', $._lhs_expression),
         optional('?'),
         optional(seq(':', alias(choice($._lhs_expression, $.type, $.structure_type), $.type))),

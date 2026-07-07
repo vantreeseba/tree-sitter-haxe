@@ -1,4 +1,5 @@
 {
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "haxe",
   "word": "identifier",
   "rules": {
@@ -469,6 +470,10 @@
           {
             "type": "SYMBOL",
             "name": "identifier"
+          },
+          {
+            "type": "STRING",
+            "value": "this"
           },
           {
             "type": "SYMBOL",
@@ -1904,23 +1909,42 @@
             ]
           },
           {
+            "type": "REPEAT",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "else"
+                },
+                {
+                  "type": "STRING",
+                  "value": "if"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "arguments_list",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_arg_list"
+                  }
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "block"
+                }
+              ]
+            }
+          },
+          {
             "type": "CHOICE",
             "members": [
               {
                 "type": "SEQ",
                 "members": [
                   {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": "else"
-                      },
-                      {
-                        "type": "STRING",
-                        "value": "else if"
-                      }
-                    ]
+                    "type": "STRING",
+                    "value": "else"
                   },
                   {
                     "type": "SYMBOL",
@@ -3108,6 +3132,18 @@
         "type": "SEQ",
         "members": [
           {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "?"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
             "type": "FIELD",
             "name": "name",
             "content": {
@@ -4137,5 +4173,6 @@
   ],
   "supertypes": [
     "declaration"
-  ]
+  ],
+  "reserved": {}
 }
