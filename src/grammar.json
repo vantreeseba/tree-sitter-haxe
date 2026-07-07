@@ -1025,7 +1025,32 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "_rhs_expression"
+                      "name": "_chain_term"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_parenthesized_expression"
+              },
+              {
+                "type": "REPEAT1",
+                "content": {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "operator"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_chain_term"
                     }
                   ]
                 }
@@ -1312,6 +1337,14 @@
                     {
                       "type": "SYMBOL",
                       "name": "subscript_expression"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "ternary_expression"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_parenthesized_expression"
                     }
                   ]
                 },
@@ -1360,6 +1393,14 @@
                 {
                   "type": "SYMBOL",
                   "name": "subscript_expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "ternary_expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_parenthesized_expression"
                 },
                 {
                   "type": "SEQ",

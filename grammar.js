@@ -273,7 +273,20 @@ const haxe_grammar = {
           $.subscript_expression,
           $.cast_expression,
           $._parenthesized_expression,
-          seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+          // Tail terms use $._chain_term (not $._rhs_expression) so a
+          // parenthesized tail term works here too -- `(x >= 0) && (x < 10)
+          // ? a : b` previously hard-errored even though the unparenthesized
+          // `x >= 0 && x < 10 ? a : b` worked fine, since $._rhs_expression
+          // still excludes $._parenthesized_expression. Found via the same
+          // depot-wide sweep as $._chain_term's own parenthesized-term fix
+          // above (haxe/src/com/masque/mah/common/ZMap.hx:210).
+          seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
+          // A parenthesized HEAD term followed by more chain -- `(x >= 0) &&
+          // y ? a : b`. Same head/tail split as $._parenthesized_expression's
+          // two fixes in $._chain_term / `expression` above; repeat1-gated so
+          // a solo `(x >= 0)` alone still resolves via the standalone
+          // $._parenthesized_expression choice above, not this one.
+          seq($._parenthesized_expression, repeat1(seq($.operator, $._chain_term))),
         ),
       ),
 
@@ -339,6 +352,8 @@ const haxe_grammar = {
                 repeat(seq($.operator, $._chain_term)),
               ),
               $.subscript_expression,
+              $.ternary_expression,
+              $._parenthesized_expression,
             ),
           ),
         ),
@@ -347,6 +362,8 @@ const haxe_grammar = {
           choice(
             seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
             $.subscript_expression,
+            $.ternary_expression,
+            $._parenthesized_expression,
             seq(
               alias($._prefixUnaryOperator, $.operator),
               $._rhs_expression,
