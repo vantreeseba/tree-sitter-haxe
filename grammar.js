@@ -487,13 +487,27 @@ const haxe_grammar = {
     // real depot usage of a conditional there -- narrower surface, less
     // GLR-conflict risk than a blanket injection.
     //
-    // Scoped to just this: a default/initializer value, if present, is
-    // shared and sits AFTER the #end (`= 1.0` above). Two rarer variants
-    // found while scoping are explicitly NOT handled here and remain a
-    // known limitation: ~7 files put a *different* default inside each
-    // branch (`wantFlush:#if flash Null<Bool> = false #else Bool = true
-    // #end` in haxe/src/com/masque/tools/miscutil/IAPN.hx), and 1 file
-    // duplicates the statement's own trailing ';' inside each branch
+    // Each branch also accepts its own optional default/initializer value
+    // (`optional(seq($._assignmentOperator, $._literal))` per branch),
+    // covering the ~7 files where the default differs per branch instead
+    // of being shared after #end (real example: `wantFlush:#if flash
+    // Null<Bool> = false #else Bool = true #end` in
+    // haxe/src/com/masque/tools/miscutil/IAPN.hx; also asymmetric --
+    // only one branch has a default at all -- in
+    // haxe/src/com/masque/wordchuck/WordChuckBase.hx's `artSwf1:#if
+    // USESWFLOADER SwfLoader #else String = "JustWords.swf" #end`). The
+    // shared-after-#end shape (`#if flash Null<Float> #else Float #end =
+    // 1.0`) still works too: it's just this rule's per-branch default
+    // staying empty both times, with the real function_arg/
+    // variable_declaration call site's own separate, pre-existing
+    // trailing default consuming the `= 1.0` as before. Harmless no-op
+    // at the return_type call site, which has no default/initializer
+    // concept to begin with -- real Haxe code never puts `= value` after
+    // a return type, so the optional default there simply never matches.
+    //
+    // Still NOT handled, remaining a known limitation: 1 file duplicates
+    // the statement's own trailing ';' inside each branch instead of a
+    // default value
     // (haxe/src/de/flintfabrik/starling/display/ffParticleSystem/SystemOptions.hx).
     _conditional_type: ($) =>
       prec.right(
@@ -502,7 +516,15 @@ const haxe_grammar = {
           token.immediate('if'),
           field('condition', $.expression),
           $.type,
-          optional(seq('#', token.immediate('else'), $.type)),
+          optional(seq($._assignmentOperator, $._literal)),
+          optional(
+            seq(
+              '#',
+              token.immediate('else'),
+              $.type,
+              optional(seq($._assignmentOperator, $._literal)),
+            ),
+          ),
           '#',
           token.immediate('end'),
         ),

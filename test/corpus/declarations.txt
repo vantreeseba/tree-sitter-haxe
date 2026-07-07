@@ -1298,3 +1298,48 @@ var fn = function(x:Int):#if flash Null<Bool> #else Bool #end { return true; };
         (identifier))
       (block
         (bool)))))
+
+===================
+function arg with a conditionally-compiled type and a different default per branch
+===================
+
+function saveSettings(wantFlush:#if flash Null<Bool> = false #else Bool = true #end):Void;
+
+---
+
+(module
+  (function_declaration
+    (identifier)
+    (function_arg
+      (identifier)
+      (type
+        (identifier)
+        (type
+          (identifier)
+          (type_params
+            (type
+              (identifier))))
+        (bool)
+        (type
+          (identifier))
+        (bool)))
+    (type
+      (identifier))))
+
+===================
+var declaration with a conditionally-compiled type and a default in only one branch
+===================
+
+private var artSwf1:#if USESWFLOADER SwfLoader #else String = "JustWords.swf" #end;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (identifier)
+    (type
+      (identifier))
+    (type
+      (identifier))
+    (string)))
