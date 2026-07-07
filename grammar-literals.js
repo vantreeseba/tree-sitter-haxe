@@ -15,8 +15,10 @@ module.exports = {
   // Match any ["XXX", 'XXX']
   string: ($) =>
     choice(
-      seq(/\'/, repeat(choice($.interpolation, $.escape_sequence, /[^\']/)), /\'/),
-      seq(/\"/, repeat(choice($.escape_sequence, /[^\"]/)), /\"/),
+      seq(/\'/, repeat(choice($.interpolation, $.escape_sequence, /[^\'\\]/)), /\'/),
+      // Double-quoted strings are atomic so that "//" inside a URL cannot be
+      // lexed as a comment extra by the tree-sitter extras mechanism.
+      token(seq('"', /([^"\\]|\\.)*/, '"')),
     ),
   // match only [null]
   null: ($) => 'null',

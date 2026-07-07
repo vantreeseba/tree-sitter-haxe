@@ -6,6 +6,8 @@ module.exports = {
     choice(
       $.interface_declaration,
       $.class_declaration,
+      $.enum_abstract_declaration,
+      $.enum_declaration,
       $.typedef_declaration,
       $.function_declaration,
       $.variable_declaration,
@@ -66,8 +68,36 @@ module.exports = {
       'typedef',
       field('name', $._lhs_expression),
       optional($.type_params),
-      seq('=', choice($.block, $._lhs_expression, $.type)),
+      seq('=', choice($.block, $.structure_type, $._lhs_expression, $.type)),
       $._lookback_semicolon,
+    ),
+
+  // enum Foo { VAL1; VAL2; }
+  enum_declaration: ($) =>
+    seq(
+      repeat($.metadata),
+      repeat($._modifier),
+      'enum',
+      field('name', $._lhs_expression),
+      optional($.type_params),
+      field('body', $.block),
+    ),
+
+  // enum abstract Foo(Int) from String to Int { var VAL = 0; }
+  enum_abstract_declaration: ($) =>
+    seq(
+      repeat($.metadata),
+      repeat($._modifier),
+      'enum',
+      'abstract',
+      field('name', $._lhs_expression),
+      optional($.type_params),
+      '(',
+      field('underlying_type', $.type),
+      ')',
+      repeat(seq('from', field('from_type', $.type))),
+      repeat(seq('to', field('to_type', $.type))),
+      field('body', $.block),
     ),
 
   function_declaration: ($) =>
