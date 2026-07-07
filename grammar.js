@@ -247,8 +247,23 @@ const haxe_grammar = {
     // `expression` below already covers. Found via a depot-wide sweep, not
     // assumed: `while (null != m_timer[id]) { ... }` is real code in this
     // depot.
+    //
+    // $._parenthesized_expression is included for the same reason: a
+    // parenthesized sub-expression could previously only appear as an
+    // ENTIRE standalone expression (the top-level $._parenthesized_expression
+    // choice in `expression` below), never as one term of a longer chain --
+    // so `0...(10)`, `a + (b)`, `total = (a + b) / 2`, etc. all hard-errored.
+    // Found via a depot-wide Haxe parse-error sweep (0...(width*height) in
+    // haxe/src/com/masque/mah/common/ZMap.hx), then confirmed general rather
+    // than range-operator-specific by testing plain arithmetic. This fixes
+    // the TAIL position; see the dedicated
+    // `seq($._parenthesized_expression, repeat1(...))` alternative in
+    // `expression` below for the analogous HEAD-position fix.
     _chain_term: ($) =>
-      seq(optional(alias($._prefixUnaryOperator, $.operator)), choice($._rhs_expression, $.subscript_expression)),
+      seq(
+        optional(alias($._prefixUnaryOperator, $.operator)),
+        choice($._rhs_expression, $.subscript_expression, $._parenthesized_expression),
+      ),
 
     _ternary_condition: ($) =>
       prec(
@@ -294,6 +309,20 @@ const haxe_grammar = {
           repeat1(seq($.operator, $._chain_term)),
         ),
         seq($.subscript_expression, repeat1(seq($.operator, $._chain_term))),
+        // $._parenthesized_expression as a chain HEAD -- `(a + b) * c`,
+        // `(a + b) / 2`, etc. Same gap as $.subscript_expression above: a
+        // parenthesized sub-expression could only ever be an entire
+        // standalone `expression` (the top-level $._parenthesized_expression
+        // choice), never the first term of a longer chain. repeat1-gated so
+        // a solo `(a + b)` alone still goes through the plain
+        // $._parenthesized_expression choice, not this one.
+        seq($._parenthesized_expression, repeat1(seq($.operator, $._chain_term))),
+        // A postfix-unary term (`i--`, `i++`) as a chain HEAD -- `i-- > 0`,
+        // common in `while (i-- > 0)` loops. The leading-unary alternative
+        // above only covers a PREFIX unary head (`!x && y`); postfix was
+        // still only reachable as the entire standalone $._unaryExpression,
+        // never chained with a further operator. Same repeat1 gating and
+        // same rationale as the leading-unary alternative.
         seq(
           $._rhs_expression,
           alias($._postfixUnaryOperator, $.operator),
