@@ -1,0 +1,96 @@
+===================
+anonymous function literal as a callback argument
+===================
+
+class Foo {
+  function bar() {
+    doThing(function() {
+      trace("hi");
+    });
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (call_expression (identifier)
+            (function_expression
+              (block
+                (call_expression (identifier) (string))
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+anonymous function literal with a typed arg and return type, assigned to a var
+===================
+
+class Foo {
+  function bar() {
+    var f = function(x:Int):Int {
+      return x;
+    };
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (variable_declaration (identifier)
+            (operator)
+            (function_expression
+              (function_arg (identifier) (type (identifier)))
+              (type (identifier))
+              (block
+                (identifier)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+a named function statement is still a declaration, not an expression
+===================
+
+class Foo {
+  function bar() {
+    function inner() {
+      trace("hi");
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (function_declaration (identifier)
+            (block
+              (call_expression (identifier) (string))
+            )
+          )
+        )
+      )
+    )
+  )
+)
