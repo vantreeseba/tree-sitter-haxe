@@ -768,7 +768,7 @@ private extern typedef MyType = {}
 
 ---
 
-(module (typedef_declaration (identifier) (block)))
+(module (typedef_declaration (identifier) (structure_type)))
 
 
 ===================

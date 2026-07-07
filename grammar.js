@@ -6,9 +6,6 @@ const builtins = require('./grammar-builtins');
 
 const { commaSep, commaSep1 } = require('./utils');
 
-const preprocessor_statement_start_tokens = ['if', 'elseif'];
-const preprocessor_statement_end_tokens = ['else', 'end'];
-
 const haxe_grammar = {
   name: 'haxe',
   externals: ($) => [$._lookback_semicolon, $._closing_brace_marker, $._closing_brace_unmarker],
@@ -28,14 +25,20 @@ const haxe_grammar = {
     [$.type, $._function_type_args],
     [$.structure_type_pair, $._function_type_args],
     [$.function_declaration, $.variable_declaration],
+    [$.function_expression, $.function_declaration],
     [$._prefixUnaryOperator, $._arithmeticOperator],
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
+    [$.enum_abstract_declaration, $.enum_declaration],
+    [$.typedef_declaration, $.structure_type],
+    [$.member_expression, $._lhs_expression],
+    [$.preprocessor_statement],
     [$._rhs_expression, $._lhs_expression],
     [$._rhs_expression, $.subscript_expression],
     [$._lhs_expression, $.pair],
     [$._ternary_condition, $.pair],
     [$._unaryExpression, $._ternary_condition, $.pair],
     [$._chain_term, $._ternary_condition],
+    [$._rhs_expression, $.member_expression],
   ],
   rules: {
     module: ($) => seq(repeat($.statement)),
@@ -61,14 +64,37 @@ const haxe_grammar = {
         ),
       ),
 
+    // `#if`/`#elseif`/`#else`/`#end` previously matched as separate,
+    // unrelated $.statement siblings, with no structural link to the
+    // declarations/statements they're actually guarding -- `#if (sys ||
+    // nodejs)` and the `function benchmark() {...}` right after it came out
+    // as two disconnected nodes in a flat list, silently discarding the
+    // conditional-compilation relationship (no ERROR node; this is a
+    // "wrong tree, not a broken one" bug, github.com/vantreeseba/tree-sitter-haxe/issues/36).
+    // Extremely common in this depot: 534 files use `#if`/`#elseif`
+    // immediately guarding a declaration-shaped line (var/function/public/etc).
+    // Restructured to nest each branch's guarded statements as children of
+    // one preprocessor_statement node, the same "each branch owns its own
+    // condition and body" shape used for conditional_statement's
+    // (`if`/`else if`/`else`) fix earlier in this fork's history. This does
+    // NOT evaluate which branch is "active" -- all branches stay in the
+    // tree, since a single source file compiles to multiple targets
+    // (html5, flash, cpp, ...) and every variant needs to stay visible to
+    // tooling built on this grammar, not just whichever one a particular
+    // build's defines would keep.
     preprocessor_statement: ($) =>
       prec.right(
         seq(
           '#',
-          choice(
-            seq(token.immediate(choice(...preprocessor_statement_start_tokens)), $.expression),
-            token.immediate(choice(...preprocessor_statement_end_tokens)),
+          token.immediate('if'),
+          field('condition', $.expression),
+          repeat($.statement),
+          repeat(
+            seq('#', token.immediate('elseif'), field('condition', $.expression), repeat($.statement)),
           ),
+          optional(seq('#', token.immediate('else'), repeat($.statement))),
+          '#',
+          token.immediate('end'),
         ),
       ),
 
@@ -107,23 +133,15 @@ const haxe_grammar = {
 
     throw_statement: ($) => prec.right(seq('throw', $.expression, $._lookback_semicolon)),
 
+    // 'this' is added directly here (not just reachable via member_expression's
+    // object field) so bare `this` works as a standalone expression -- return
+    // value, assignment RHS, call argument, etc. -- not just as the head of a
+    // member-access chain (`this.foo`). Pre-existing gap, unrelated to the two
+    // fixes above; found by testing against real code in this depot, where
+    // bare `this` is common (589 files).
     _rhs_expression: ($) =>
-      prec(1, choice($._literal, $.identifier, $.member_expression, $.call_expression)),
+      prec(1, choice($._literal, $.identifier, 'this', $.member_expression, $.call_expression)),
 
-    // Restricted to the actual unary operator sets (_prefixUnaryOperator/
-    // _postfixUnaryOperator), not the fully generic $.operator (which also
-    // includes every binary operator). The generic version let e.g. `width <`
-    // match here treating '<' as a bogus "postfix unary" operator -- almost
-    // never an issue on its own since it's semantically nonsensical, but it
-    // created a second, equally error-free reading for comparison-conditioned
-    // ternaries inside parens (`(width < height ? width : height)`, matching
-    // real code in this depot): _unaryExpression could swallow "width <" as
-    // one expression, leaving a second, separate ternary_expression for just
-    // "height ? width : height" -- silently misparsing `a < b ? c : d` as
-    // `a < (b ? c : d)` with no ERROR node to catch it. This was a
-    // pre-existing latent bug, not introduced by the < vs. type_params fix
-    // above; it surfaced now because it happened to share a state with the
-    // newly-added ternary_expression.
     _unaryExpression: ($) =>
       prec.left(
         2,
@@ -168,6 +186,29 @@ const haxe_grammar = {
 
     type_trace_expression: ($) => seq('$type', '(', $._rhs_expression, ')'),
 
+    // Anonymous function literal used in expression position (callback
+    // arguments, variable-declaration RHS, etc.) -- `doThing(function(x) {
+    // ... })`. There was previously no way to write a function as an
+    // expression at all: $.function_declaration is a statement-level
+    // $.declaration that always ends in $._lookback_semicolon, which isn't
+    // present (and shouldn't be consumed) when a function literal is nested
+    // inside a call's argument list or ends right at ')'. Real-world code
+    // uses this constantly (373 files in this depot pass an anonymous
+    // function as a callback argument). Deliberately excludes
+    // $._modifier/type_params (not valid on an anonymous function) and the
+    // trailing semicolon (the function's block is the end of the
+    // expression, whatever follows -- ')', ',', ';' -- belongs to the
+    // enclosing construct, not this rule).
+    function_expression: ($) =>
+      seq(
+        repeat($.metadata),
+        'function',
+        optional(field('name', $._lhs_expression)),
+        $._function_arg_list,
+        optional(seq(':', field('return_type', $.type))),
+        field('body', $.block),
+      ),
+
     _parenthesized_expression: ($) => seq('(', repeat1(prec.left($.expression)), ')'),
 
     range_expression: ($) =>
@@ -176,31 +217,8 @@ const haxe_grammar = {
         seq($.identifier, 'in', choice(seq($.integer, $._rangeOperator, $.integer), $.identifier)),
       ),
 
-    // A chain term that may optionally carry a leading prefix-unary operator
-    // (`!y`, `-y`, etc.), used only in a chain's TAIL positions (never as a
-    // chain's head -- using this in head position reintroduces an extra
-    // reduce step that collides with the head's own shift/reduce decision
-    // and silently breaks even plain chains like `1 + 2`; confirmed by
-    // testing, not just theorized). Restricted to tail positions, it lets
-    // `a && !b`, `!a && !b`, etc. parse -- not just `!a && b`, which the
-    // leading-unary `expression` alternative below already covers.
     _chain_term: ($) => seq(optional(alias($._prefixUnaryOperator, $.operator)), $._rhs_expression),
 
-    // Deliberately excludes $.ternary_expression itself (and the statement-
-    // like forms below) so a bare, unparenthesized ternary can't be used as
-    // another ternary's condition -- `a ? b : c` must be wrapped in parens
-    // to serve as a condition. This keeps the grammar's only self-recursion
-    // on this rule in the `alternative` field, which is what gives
-    // `a ? b : c ? d : e` its right-associative ("else if" chain) reading
-    // instead of an ambiguous choice between two equally-valid nestings.
-    // prec(1, ...) on the whole choice, not just one branch: `pair`'s value
-    // slot is `$.expression`, which reaches every alternative below via
-    // ternary_expression's condition field, so any of them can be mid-parse
-    // when a '?' shows up. Higher precedence than `pair`'s default (0) means
-    // the parser shifts (keeps parsing toward the ternary) instead of
-    // reducing the pair immediately, so `x : y ? c : d` reads as
-    // `x : (y ? c : d)` rather than leaving `? c : d` dangling after a
-    // prematurely-closed pair.
     _ternary_condition: ($) =>
       prec(
         2,
@@ -236,65 +254,21 @@ const haxe_grammar = {
         $.range_expression,
         $._parenthesized_expression,
         $.switch_expression,
+        $.function_expression,
         $.ternary_expression,
         // simple expression, or chained.
         seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
-        // Same chain, but with a leading prefix-unary term (`!x && y`,
-        // `-x + y`, etc.) -- requires repeat1 (at least one more operator/
-        // term after the head) so this alternative is never reachable for a
-        // solo unary term like `!x` alone; that continues to go exclusively
-        // through $._unaryExpression above. Without that exclusivity this
-        // would create a second, ambiguous derivation for every solo unary
-        // expression. $._unaryExpression's prefix-only reach (never chained)
-        // meant `!x && y` and similar always failed outright, even though
-        // it's extremely common real-world code (818 files in this depot
-        // use this shape).
         seq(
           alias($._prefixUnaryOperator, $.operator),
           $._rhs_expression,
           repeat1(seq($.operator, $._chain_term)),
         ),
-        // $.subscript_expression as a chain HEAD -- `x[i] = y;`,
-        // `x[i] * y`, etc. $.subscript_expression was only ever a complete,
-        // standalone `expression` on its own (e.g. `x[i];` alone), never
-        // one term of a longer chain, so any assignment or arithmetic
-        // involving an array/map element on the left failed outright.
-        // Extremely common (e.g. `mPieces[idx] = null;`,
-        // `sPeerMap[arg] = sharedName;`, `kBonusWinCredits[i] * mult`).
-        // repeat1-gated for the same reason as the leading-unary
-        // alternative above: a solo `x[i]` alone must still go through
-        // the plain $.subscript_expression choice, not this one.
         seq($.subscript_expression, repeat1(seq($.operator, $._chain_term))),
-        // A postfix-unary term (`i--`, `i++`) as a chain HEAD -- `i-- > 0`,
-        // common in `while (i-- > 0)` loops. The leading-unary alternative
-        // above only covers a PREFIX unary head (`!x && y`); postfix was
-        // still only reachable as the entire standalone $._unaryExpression,
-        // never chained with a further operator. Same repeat1 gating and
-        // same rationale as the leading-unary alternative.
         seq(
           $._rhs_expression,
           alias($._postfixUnaryOperator, $.operator),
           repeat1(seq($.operator, $._chain_term)),
         ),
-        // `return`/`untyped` previously only took a single bare
-        // $._rhs_expression, not a chain -- so `return a == b;` or
-        // `return a = b;` (assign-and-return, common in this depot's
-        // property setters, e.g. `return mKenoCardModel = kenoCardModel;`)
-        // had no valid derivation covering the whole span, and would
-        // hard-error. This was actually a PRE-EXISTING gap masked by a
-        // separate bug: before the _unaryExpression operator-set fix
-        // elsewhere in this fork's history, `a ==`/`a =` could silently
-        // (and incorrectly) match as _unaryExpression's postfix form
-        // (generic $.operator misread as a bogus postfix unary op),
-        // giving `return` an _rhs_expression-shaped path to latch onto by
-        // accident. Fixing that bug correctly closed off the accidental
-        // path here too, surfacing this as a hard ERROR instead of a
-        // silent misparse -- found via a depot-wide sweep combining this
-        // fork's fixes, not caught by any single fix's own testing.
-        // Broadened to accept the same chain shapes -- plain and
-        // leading-unary -- that a bare (non-`return`) expression already
-        // supports, plus a bare subscript return value (`return arr[i];`,
-        // also common) which $._rhs_expression doesn't cover either.
         seq(
           'return',
           optional(
@@ -337,20 +311,22 @@ const haxe_grammar = {
         //           seq($._parenthesized_expression, '[', field('index', $.expression), ']'),
       ),
 
+    // Left-associative (issue #52: `a.b.c` parses as `(a.b).c`, not
+    // `a.(b.c)`) via recursion on the object side -- $.member_expression is
+    // itself a valid `object`, and `member` is a single non-recursive
+    // $.identifier. The '?.' tokenization stays atomic (one token, no
+    // space allowed) rather than '?' and '.' as two separate tokens: with
+    // them separate, `identifier '?'` is ambiguous between "start of
+    // safe-nav" and "start of a ternary_expression" -- resolving that
+    // needs to see whether '.' follows, i.e. 2 tokens of lookahead, more
+    // than LALR(1) has. Making '?.' atomic pushes that decision into the
+    // lexer instead of the parser -- needed for ternary support.
     member_expression: ($) =>
-      prec.right(
+      prec.left(1,
         seq(
-          choice(field('object', choice('this', $.identifier)), field('literal', $._literal)),
-          // '?.' must be one atomic token (no space allowed, matching real
-          // Haxe syntax) rather than '?' and '.' as separate tokens. With
-          // them separate, `identifier '?'` is ambiguous between "start of
-          // safe-nav" and "start of a ternary_expression" -- resolving that
-          // needs to see whether '.' follows, i.e. 2 tokens of lookahead,
-          // more than LALR(1) has. Making '?.' atomic pushes the decision
-          // into the lexer (does the next char after '?' happen to be '.'?)
-          // instead of the parser.
+          field('object', choice('this', $.identifier, $.member_expression, $._literal)),
           choice(token('.'), alias(token(seq('?', '.')), $.operator)),
-          repeat1(field('member', $._lhs_expression)),
+          field('member', $.identifier),
         ),
       ),
 
@@ -396,6 +372,16 @@ const haxe_grammar = {
     // arg list is () with any amount of expressions followed by commas
     _arg_list: ($) => seq('(', commaSep($.expression), ')'),
 
+    // 'else if' was previously a single literal token with no condition of
+    // its own -- `if (a) {} else if (c) {}` lost both `c` and the entire
+    // second block, since matching that literal token left nothing to
+    // consume `(c)` or the block after it, corrupting parse recovery for
+    // the rest of the statement. Extremely common real-world shape (1,352
+    // files in this depot use `else if`); pre-existing gap, unrelated to
+    // the fixes above. Now: 'else' 'if' as two separate tokens, each
+    // else-if branch gets its own condition/block via repeat(...), reusing
+    // the same 'arguments_list' field name across branches -- same
+    // convention as e.g. class_declaration's repeated 'implements' clauses.
     conditional_statement: ($) =>
       prec.right(
         1,
@@ -403,7 +389,15 @@ const haxe_grammar = {
           field('name', 'if'),
           field('arguments_list', $._arg_list),
           optional($.block),
-          optional(seq(choice('else', 'else if'), $.block)),
+          // $.block here must NOT be optional() (unlike the primary if's
+          // block above, matching the original design): with it optional,
+          // the parser could -- and silently did, with no ERROR node --
+          // end this repeat iteration early and let a real, present block
+          // become a separate top-level statement instead, splitting an
+          // `else if (c) {d();} else {e();}` tail into a bogus bare
+          // identifier "else" plus two unrelated floating blocks.
+          repeat(seq('else', 'if', field('arguments_list', $._arg_list), $.block)),
+          optional(seq('else', $.block)),
         ),
       ),
 
@@ -437,7 +431,7 @@ const haxe_grammar = {
 
     comment: ($) => token(choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
     // TODO: implement the structures that use these
-    keyword: ($) => choice('catch', 'do', 'enum', 'for', 'try', 'while'),
+    keyword: ($) => choice('catch', 'do', 'for', 'try', 'while'),
     // keywords reserved by the haxe compiler that are not currently used
     reserved_keyword: ($) => choice('operator'),
     identifier: ($) => /[a-zA-Z_]+[a-zA-Z0-9]*/,

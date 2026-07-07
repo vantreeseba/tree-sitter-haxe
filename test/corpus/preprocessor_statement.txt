@@ -1,0 +1,72 @@
+===================
+if guarding a declaration (github issue #36)
+===================
+
+class BenchmarkTests extends utest.Test {
+  #if (sys || nodejs)
+  function benchmark(module:IModule2D):Float {
+    return 1;
+  }
+  #end
+}
+
+---
+
+(module
+  (class_declaration (identifier) (package_name) (type_name)
+    (block
+      (preprocessor_statement
+        (identifier) (operator) (identifier)
+        (function_declaration
+          (identifier)
+          (function_arg (identifier) (type (identifier)))
+          (type (identifier))
+          (block (integer))
+        )
+      )
+    )
+  )
+)
+
+===================
+if-elseif guarding a var redeclaration per platform
+===================
+
+#if flash
+var maxNumArgs:Int = 1;
+#elseif cpp
+var maxNumArgs:Int = 2;
+#end
+
+---
+
+(module
+  (preprocessor_statement
+    (identifier)
+    (variable_declaration (identifier) (type (identifier)) (operator) (integer))
+    (identifier)
+    (variable_declaration (identifier) (type (identifier)) (operator) (integer))
+  )
+)
+
+===================
+nested preprocessor statements
+===================
+
+#if flash
+#if debug
+trace(1);
+#end
+#end
+
+---
+
+(module
+  (preprocessor_statement
+    (identifier)
+    (preprocessor_statement
+      (identifier)
+      (call_expression (identifier) (integer))
+    )
+  )
+)

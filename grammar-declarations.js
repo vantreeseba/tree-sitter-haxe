@@ -6,6 +6,8 @@ module.exports = {
     choice(
       $.interface_declaration,
       $.class_declaration,
+      $.enum_abstract_declaration,
+      $.enum_declaration,
       $.typedef_declaration,
       $.function_declaration,
       $.variable_declaration,
@@ -66,28 +68,71 @@ module.exports = {
       'typedef',
       field('name', $._lhs_expression),
       optional($.type_params),
-      seq('=', choice($.block, $._lhs_expression, $.type)),
+      seq('=', choice($.block, $.structure_type, $._lhs_expression, $.type)),
       $._lookback_semicolon,
     ),
 
-  function_declaration: ($) =>
+  // enum Foo { VAL1; VAL2; }
+  enum_declaration: ($) =>
     seq(
       repeat($.metadata),
       repeat($._modifier),
-      'function',
-      field('name', choice($._lhs_expression, 'new')),
+      'enum',
+      field('name', $._lhs_expression),
       optional($.type_params),
-      $._function_arg_list,
-      optional(seq(':', field('return_type', $.type))),
-      optional(field('body', $.block)),
-      $._lookback_semicolon,
+      field('body', $.block),
+    ),
+
+  // enum abstract Foo(Int) from String to Int { var VAL = 0; }
+  enum_abstract_declaration: ($) =>
+    seq(
+      repeat($.metadata),
+      repeat($._modifier),
+      'enum',
+      'abstract',
+      field('name', $._lhs_expression),
+      optional($.type_params),
+      '(',
+      field('underlying_type', $.type),
+      ')',
+      repeat(seq('from', field('from_type', $.type))),
+      repeat(seq('to', field('to_type', $.type))),
+      field('body', $.block),
+    ),
+
+  // prec(1, ...): a named function with a block, at statement position, is
+  // ambiguous between this rule and $.function_expression wrapped in an
+  // expression-statement (both are followed by the same
+  // $._lookback_semicolon there) -- but a bare named `function foo() {}`
+  // statement is always a declaration in Haxe, never a dangling expression
+  // statement, so this rule should win that tie outright.
+  function_declaration: ($) =>
+    prec(
+      1,
+      seq(
+        repeat($.metadata),
+        repeat($._modifier),
+        'function',
+        field('name', choice($._lhs_expression, 'new')),
+        optional($.type_params),
+        $._function_arg_list,
+        optional(seq(':', field('return_type', $.type))),
+        optional(field('body', $.block)),
+        $._lookback_semicolon,
+      ),
     ),
 
   _function_arg_list: ($) => prec(1, seq('(', commaSep($.function_arg), ')')),
+  // Haxe allows the nullable-parameter '?' marker either before the name
+  // (`?x:Int`, the classic/most common form) or after it (`x?:Int`) -- only
+  // the postfix form was supported here. Pre-existing gap, unrelated to the
+  // ternary/type_params fixes above; found by testing against real code in
+  // this depot, where the prefix form is common (176 files).
   function_arg: ($) =>
     prec(
       1,
       seq(
+        optional('?'),
         field('name', $._lhs_expression),
         optional('?'),
         optional(seq(':', alias(choice($._lhs_expression, $.type, $.structure_type), $.type))),
