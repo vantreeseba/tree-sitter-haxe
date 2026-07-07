@@ -177,8 +177,13 @@ const haxe_grammar = {
     case_statement: ($) =>
       prec.right(
         choice(
-          seq('case', choice($._rhs_expression, alias('_', $._rhs_expression)), ':', $.statement),
-          seq('default', ':', $.statement),
+          seq(
+            'case',
+            choice($._rhs_expression, alias('_', $._rhs_expression)),
+            ':',
+            repeat($.statement),
+          ),
+          seq('default', ':', repeat($.statement)),
         ),
       ),
 
