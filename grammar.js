@@ -30,6 +30,7 @@ const haxe_grammar = {
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
     [$.enum_abstract_declaration, $.enum_declaration],
     [$.typedef_declaration, $.structure_type],
+    [$.object, $.structure_type],
     [$.member_expression, $._lhs_expression],
     [$.preprocessor_statement],
     [$._rhs_expression, $._lhs_expression],
@@ -417,6 +418,28 @@ const haxe_grammar = {
 
     _function_type_args: ($) => commaSep1(seq(optional(seq($.identifier, ':')), $.type)),
 
+    // Known limitation: a $.structure_type-typed segment that isn't the
+    // LAST segment of a $.function_type chain fails to extend into a
+    // further right-nested function_type -- `String->{}->Void` used as a
+    // variable/field type (real example: `mCallback:{}->Void;` in
+    // haxe/src/com/masque/tools/webServices/WebServicesURLLoader.hx:27)
+    // reduces the struct segment straight up to a complete $.type and
+    // drops everything after its `->`, even though the exact same shape
+    // works fine as a $.function_arg's type annotation (`cb:String->{}->
+    // Void`, the real, now-fixed WebServices.hx case) and a plain
+    // identifier-typed chain of the same length/position
+    // (`String->Int->Void`) also extends correctly. Tried and had no
+    // effect: bumping $.function_type's own prec.right to an explicit
+    // numeric level, mirroring $.function_arg's alias(choice(...), $.type)
+    // pattern for the variable_declaration/function_declaration type
+    // slots instead of a bare $.type reference, prec.dynamic on
+    // $.structure_type alone. No conflict is even reported for this case
+    // (unlike the two conflicts resolved above), meaning table
+    // construction never considers the extending derivation at all --
+    // the same not-fixable-via-grammar.js-alone class as the documented
+    // block/object case, just a third instance of it. Not currently known
+    // to affect any other file in this depot's `haxe/src/` tree besides
+    // the one line above.
     function_type: ($) =>
       prec.right(
         choice(
@@ -426,6 +449,16 @@ const haxe_grammar = {
         ),
       ),
 
+    // $.structure_type is a bare choice here (not just added at individual
+    // call sites like $.function_arg's own hand-rolled
+    // `alias(choice(..., $.type, $.structure_type), $.type)` workaround)
+    // so every $.type slot -- including both sides of $.function_type's
+    // '->' chain -- gets anonymous-struct support for free. Without it,
+    // `cb:String->{}->Void` (real example: `dailyPuzzleSelector()` in
+    // haxe/src/com/masque/tools/webServices/WebServices.hx:74) hard-erred:
+    // $.function_type's two $.type slots had no way to become `{}` at
+    // all, so the parser fell back to matching it as a bare $.object
+    // literal wrapped in an ERROR node instead.
     type: ($) =>
       prec.right(
         choice(
@@ -437,6 +470,7 @@ const haxe_grammar = {
             optional($.type_params),
           ),
           $.function_type,
+          $.structure_type,
           seq('(', alias($.type, 'type'), ')'),
         ),
       ),
