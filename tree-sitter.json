@@ -10,7 +10,7 @@
         "hx"
       ],
       "highlights": "queries/highlights.scm",
-      "injection-regex": "^haxe$",
+      "injection-regex": "^(hx|haxe)$",
       "class-name": "TreeSitterHaxe"
     }
   ],

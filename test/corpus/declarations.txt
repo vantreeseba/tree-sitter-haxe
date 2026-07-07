@@ -837,7 +837,7 @@ var x:Array<Int>;
 )
 
 ===================
-var declaration array comprehension
+var declaration array comprehension (for)
 ===================
 
 var a = [for (i in 0...5) i];
@@ -857,6 +857,31 @@ var a = [for (i in 0...5) i];
     )
   )
 )
+
+===================
+var declaration array comprehension (while)
+===================
+
+var a = [while (i < 1) i];
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (array
+      (call_expression
+        (identifier)
+        (identifier)
+        (operator)
+        (integer)
+      )
+      (identifier)
+    )
+  )
+)
+
 
 ===================
 var declaration with function type with no inputs
