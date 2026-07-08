@@ -166,7 +166,7 @@ logical not unop as the head of a binary operator chain
 
 class main {
   function test() {
-    if (!x && y) {}
+    if (!x && y) { z(); }
   }
 }
 
@@ -178,7 +178,7 @@ class main {
         (block
           (conditional_statement
             (operator) (identifier) (operator) (identifier)
-            (block)
+            (block (call_expression (identifier)))
           )
         )
       )
@@ -192,7 +192,7 @@ logical not unop as the tail of a binary operator chain
 
 class main {
   function test() {
-    if (x && !y) {}
+    if (x && !y) { z(); }
   }
 }
 
@@ -204,7 +204,7 @@ class main {
         (block
           (conditional_statement
             (identifier) (operator) (operator) (identifier)
-            (block)
+            (block (call_expression (identifier)))
           )
         )
       )
@@ -218,7 +218,7 @@ logical not unop as both the head and the tail of a binary operator chain
 
 class main {
   function test() {
-    if (!x && !y) {}
+    if (!x && !y) { z(); }
   }
 }
 
@@ -230,7 +230,7 @@ class main {
         (block
           (conditional_statement
             (operator) (identifier) (operator) (operator) (identifier)
-            (block)
+            (block (call_expression (identifier)))
           )
         )
       )

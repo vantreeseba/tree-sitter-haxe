@@ -1,0 +1,200 @@
+===================
+try/catch with a typed catch clause
+===================
+
+class F {
+  function b() {
+    try {
+      a();
+    } catch (e:String) {
+      b();
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (try_statement
+            (block (call_expression (identifier)))
+            (catch_clause (identifier) (type (identifier)) (block (call_expression (identifier))))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+try with a wildcard catch clause (no type)
+===================
+
+class F {
+  function b() {
+    try {
+      a();
+    } catch (e) {
+      b();
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (try_statement
+            (block (call_expression (identifier)))
+            (catch_clause (identifier) (block (call_expression (identifier))))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+try with multiple catch clauses
+===================
+
+class F {
+  function b() {
+    try {
+      a();
+    } catch (e:String) {
+      b();
+    } catch (e:Int) {
+      c();
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (try_statement
+            (block (call_expression (identifier)))
+            (catch_clause (identifier) (type (identifier)) (block (call_expression (identifier))))
+            (catch_clause (identifier) (type (identifier)) (block (call_expression (identifier))))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+array comprehension over a for loop
+===================
+
+class F {
+  function b() {
+    var x = [for (i in 0...10) i * 2];
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (variable_declaration
+            (identifier) (operator)
+            (array
+              (comprehension_for
+                (identifier)
+                (integer) (operator) (integer)
+                (identifier) (operator) (integer)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+array comprehension over a while loop
+===================
+
+class F {
+  function b() {
+    var x = [while (i < 10) i++];
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (variable_declaration
+            (identifier) (operator)
+            (array
+              (comprehension_while
+                (identifier) (operator) (integer)
+                (identifier) (operator)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+array comprehension with a nested for and an if filter
+===================
+
+class F {
+  function b() {
+    var x = [for (a in 1...11) for (b in 2...4) if (a == b) a];
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (variable_declaration
+            (identifier) (operator)
+            (array
+              (comprehension_for
+                (identifier)
+                (integer) (operator) (integer)
+                (comprehension_for
+                  (identifier)
+                  (integer) (operator) (integer)
+                  (comprehension_if
+                    (identifier) (operator) (identifier)
+                    (identifier)
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

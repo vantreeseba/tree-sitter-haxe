@@ -1,0 +1,171 @@
+===================
+for over an array
+===================
+
+class F {
+  function b() {
+    for (v in list) {
+      trace(v);
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (for_statement
+            (identifier) (identifier)
+            (block (call_expression (identifier) (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+for over a range with a braceless body
+===================
+
+class F {
+  function b() {
+    for (i in 0...10) trace(i);
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (for_statement
+            (identifier)
+            (integer) (operator) (integer)
+            (call_expression (identifier) (identifier))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+for with a key => value binding over a map
+===================
+
+class F {
+  function b() {
+    for (k => v in map) {
+      trace(k, v);
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (for_statement
+            (pair (identifier) (identifier))
+            (identifier)
+            (block (call_expression (identifier) (identifier) (identifier)))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+while loop
+===================
+
+class F {
+  function b() {
+    while (f < 5) {
+      f = 1;
+    }
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (while_statement
+            (identifier) (operator) (integer)
+            (block (identifier) (operator) (integer))
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+while loop with a braceless body
+===================
+
+class F {
+  function b() {
+    while (f < 5) f = 1;
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (while_statement
+            (identifier) (operator) (integer)
+            (identifier) (operator) (integer)
+          )
+        )
+      )
+    )
+  )
+)
+
+===================
+do-while loop
+===================
+
+class F {
+  function b() {
+    do {
+      f = 1;
+    } while (f < 5);
+  }
+}
+
+---
+
+(module
+  (class_declaration (identifier)
+    (block
+      (function_declaration (identifier)
+        (block
+          (do_while_statement
+            (block (identifier) (operator) (integer))
+            (identifier) (operator) (integer)
+          )
+        )
+      )
+    )
+  )
+)

@@ -11,14 +11,15 @@ class F {
 ---
 
 (module
-  (class_declaration (identifier)
+  (class_declaration
+    (identifier)
     (block
-      (function_declaration (identifier)
-        (block (identifier) (operator) (identifier))
-      )
-    )
-  )
-)
+      (function_declaration
+        (identifier)
+        (block
+          (identifier)
+          (operator)
+          (identifier))))))
 
 ===================
 return with an assign-and-return chain
@@ -33,14 +34,15 @@ class F {
 ---
 
 (module
-  (class_declaration (identifier)
+  (class_declaration
+    (identifier)
     (block
-      (function_declaration (identifier)
-        (block (identifier) (operator) (identifier))
-      )
-    )
-  )
-)
+      (function_declaration
+        (identifier)
+        (block
+          (identifier)
+          (operator)
+          (identifier))))))
 
 ===================
 return with a bare subscript, no operator
@@ -55,14 +57,92 @@ class F {
 ---
 
 (module
-  (class_declaration (identifier)
+  (class_declaration
+    (identifier)
     (block
-      (function_declaration (identifier)
-        (block (subscript_expression (identifier) (identifier)))
-      )
-    )
-  )
-)
+      (function_declaration
+        (identifier)
+        (block
+          (subscript_expression
+            (identifier)
+            (identifier)))))))
+
+===================
+return with a bare ternary, no outer parens
+===================
+
+class F {
+  function b() {
+    return a ? b : c;
+  }
+}
+
+---
+
+(module
+  (class_declaration
+    name: (identifier)
+    body: (block
+      (function_declaration
+        name: (identifier)
+        body: (block
+          (ternary_expression
+            condition: (identifier)
+            consequence: (identifier)
+            alternative: (identifier)))))))
+
+===================
+return with a ternary wrapped in outer parens
+===================
+
+class F {
+  function b() {
+    return (ix != -1) ? heights[ix] : -1;
+  }
+}
+
+---
+
+(module
+  (class_declaration
+    name: (identifier)
+    body: (block
+      (function_declaration
+        name: (identifier)
+        body: (block
+          (ternary_expression
+            condition: (identifier)
+            condition: (operator)
+            condition: (operator)
+            condition: (integer)
+            consequence: (subscript_expression
+              (identifier)
+              index: (identifier))
+            alternative: (operator)
+            alternative: (integer)))))))
+
+===================
+return with a parenthesized non-ternary expression
+===================
+
+class F {
+  function b() {
+    return (a + b);
+  }
+}
+
+---
+
+(module
+  (class_declaration
+    (identifier)
+    (block
+      (function_declaration
+        (identifier)
+        (block
+          (identifier)
+          (operator)
+          (identifier))))))
 
 ===================
 subscript_expression as the head of an assignment chain
@@ -77,18 +157,17 @@ class F {
 ---
 
 (module
-  (class_declaration (identifier)
+  (class_declaration
+    (identifier)
     (block
-      (function_declaration (identifier)
+      (function_declaration
+        (identifier)
         (block
-          (subscript_expression (identifier) (identifier))
+          (subscript_expression
+            (identifier)
+            (identifier))
           (operator)
-          (identifier)
-        )
-      )
-    )
-  )
-)
+          (identifier))))))
 
 ===================
 postfix unary as the head of a comparison chain
@@ -103,11 +182,13 @@ class F {
 ---
 
 (module
-  (class_declaration (identifier)
+  (class_declaration
+    (identifier)
     (block
-      (function_declaration (identifier)
-        (block (identifier) (operator) (operator) (integer))
-      )
-    )
-  )
-)
+      (function_declaration
+        (identifier)
+        (block
+          (identifier)
+          (operator)
+          (operator)
+          (integer))))))

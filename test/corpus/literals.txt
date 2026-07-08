@@ -137,28 +137,6 @@ class main {
 
 
 ===================
-float literal with no trailing number.
-===================
-
-class main {
-  var x = 4.;
-}
-
----
-
-(module
-  (class_declaration (identifier)
-    (block
-      (variable_declaration
-        (identifier)
-        (operator)
-        (float)
-      )
-    )
-  )
-)
-
-===================
 float literal e notation.
 ===================
 

@@ -8,8 +8,23 @@ module.exports = {
 
   // Match any [42, 0xFF43]
   integer: ($) => choice(/[\d_]+/, /0x[a-fA-F\d_]+/),
-  // Match any [0.32, 3., 2.1e5]
-  float: ($) => choice(/[\d_]+[\.]+[\d_]*/, /[\d_]+[\.]+[\d_]*e[\d_]*/),
+  // Match any [0.32, 2.1e5]. Requires at least one digit after the '.'
+  // (`[\d_]+` not `[\d_]*`) -- deliberately drops support for a *trailing*-
+  // dot float with no digits after it (`3.`, which the original comment
+  // here listed as supported) to fix a much more damaging, silent bug:
+  // `0...10` (an integer immediately followed by the range operator -- the
+  // single most common shape for a `for` loop's iterable, e.g.
+  // `for (i in 0...10)`) was being lexed as ONE token, "0.", stopping right
+  // after the first '.' and silently swallowing the rest of the range
+  // operator with no ERROR node (a float is a perfectly valid, complete
+  // token on its own). Tree-sitter's regex engine has no lookahead, so
+  // there's no way to keep `3.` valid while still telling `0.` apart from
+  // `0...`; picked the fix that helps far more real code than it costs
+  // (the `for (i in 0...N)` shape is extremely common;
+  // occurrence of a genuinely bare trailing-dot float is comparatively
+  // rare and easy to write as `3.0` instead if it ever turns up
+  // broken).
+  float: ($) => choice(/[\d_]+\.[\d_]+/, /[\d_]+\.[\d_]+e[\d_]*/),
   // Match either [true, false]
   bool: ($) => choice('true', 'false'),
   // Match any ["XXX", 'XXX']
@@ -24,10 +39,16 @@ module.exports = {
   null: ($) => 'null',
 
   // https://haxe.org/manual/expression-array-declaration.html
+  // Array comprehension (https://haxe.org/manual/lf-array-comprehension.html,
+  // `[for (i in 0...10) i]` / `[while (...) ...]`) is its own alternative,
+  // not folded into the plain-elements one -- it starts with a literal
+  // 'for'/'while' token, so there's no overlap with a normal
+  // comma-separated array literal (including the single-element case,
+  // `[x]`) to disambiguate.
   array: ($) =>
     choice(
       seq('[', commaSep(prec.left($.expression)), ']'),
-      seq('[', $.expression, $.identifier, ']'), //array comprehension
+      seq('[', choice($.comprehension_for, $.comprehension_while), ']'),
     ),
 
   // https://haxe.org/manual/expression-map-declaration.html
@@ -36,7 +57,20 @@ module.exports = {
   // https://haxe.org/manual/expression-object-declaration.html
   object: ($) => prec(1, seq('{', commaSep($.pair), $._closing_brace)),
 
-  structure_type: ($) => prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), $._closing_brace)),
+  // prec.dynamic (not a bump to the static prec()) so this only tie-breaks
+  // a genuinely completed GLR ambiguity in favor of the structure reading
+  // -- e.g. `(name: {})`, ambiguous against a parenthesized bare-pair
+  // expression whose value is an empty $.object, now that $.structure_type
+  // is a bare $.type alternative (grammar.js). Bumping the static prec()
+  // instead (tried first) resolves that one case but changes the
+  // shift/reduce table globally, which broke an unrelated multi-arrow
+  // $.function_type chain (`String->{}->Void` reduced `{}` all the way up
+  // to a complete $.type immediately instead of shifting further to
+  // recurse into `{}->Void` as a nested function_type) -- prec.dynamic
+  // only applies at GLR completion time, not to that shift/reduce
+  // decision, so it fixes the ambiguity without the side effect.
+  structure_type: ($) =>
+    prec.dynamic(1, prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), $._closing_brace))),
   structure_type_pair: ($) => prec.left(seq(choice($.identifier), ':', $.type)),
 
   // Sub part of map and object literals.
