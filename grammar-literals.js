@@ -44,9 +44,7 @@ module.exports = {
   // not folded into the plain-elements one -- it starts with a literal
   // 'for'/'while' token, so there's no overlap with a normal
   // comma-separated array literal (including the single-element case,
-  // `[x]`) to disambiguate. The previous placeholder attempt here
-  // (`seq('[', $.expression, $.identifier, ']')`) didn't match real Haxe
-  // comprehension syntax at all.
+  // `[x]`) to disambiguate.
   array: ($) =>
     choice(
       seq('[', commaSep(prec.left($.expression)), ']'),

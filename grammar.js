@@ -225,28 +225,25 @@ const haxe_grammar = {
     // alternative in `expression` below (`_rhs_expression (operator
     // _chain_term)*`) already parses `0...10`, `arr.length - 1 ...
     // arr.length + 5`, etc. correctly on its own, with no ERROR and no
-    // separate rule needed -- confirmed empirically: a dedicated
-    // range_expression rule (built the same way, with a narrowed operand
-    // operator set to avoid it swallowing its own '...' separator) never
-    // once got chosen over the plain chain in testing, for either a bare
-    // `0...10` or a for-loop's iterable. Removed rather than left in as
-    // unreachable dead code.
+    // separate rule needed. A dedicated range_expression rule (narrowing
+    // the operand operator set to avoid swallowing its own '...'
+    // separator) is therefore unreachable dead code -- the plain chain
+    // alternative always wins over it -- so it's removed rather than kept
+    // around unused.
 
     // A chain term that may optionally carry a leading prefix-unary operator
     // (`!y`, `-y`, etc.), used only in a chain's TAIL positions (never as a
     // chain's head -- using this in head position reintroduces an extra
     // reduce step that collides with the head's own shift/reduce decision
-    // and silently breaks even plain chains like `1 + 2`; confirmed by
-    // testing, not just theorized). Restricted to tail positions, it lets
-    // `a && !b`, `!a && !b`, etc. parse -- not just `!a && b`, which the
-    // leading-unary `expression` alternative below already covers.
+    // and silently breaks even plain chains like `1 + 2`). Restricted to
+    // tail positions, it lets `a && !b`, `!a && !b`, etc. parse -- not just
+    // `!a && b`, which the leading-unary `expression` alternative below
+    // already covers.
     // $.subscript_expression is included alongside $._rhs_expression here
-    // so it can appear as a chain's TAIL term too (`null != m_cache[id]`) --
+    // so it can appear as a chain's TAIL term too (`null != arr[id]`) --
     // not just as a chain's HEAD, which the dedicated
     // `seq($.subscript_expression, repeat1(...))` alternative in
-    // `expression` below already covers. Found via a depot-wide sweep, not
-    // assumed: `while (null != m_timer[id]) { ... }` is real code in this
-    // depot.
+    // `expression` below already covers.
     _chain_term: ($) =>
       seq(optional(alias($._prefixUnaryOperator, $.operator)), choice($._rhs_expression, $.subscript_expression)),
 
@@ -391,22 +388,22 @@ const haxe_grammar = {
       ),
 
     // Known limitation: a genuinely EMPTY `{}` used as a control-flow body
-    // (`if (cond) {}`, `while (cond) {}`, etc. -- 42 files in this depot)
-    // resolves to an empty $.object (an object-literal expression
-    // statement), not $.block. $.block is not even reachable from
-    // $.expression's own choice list, so this is really "empty $.object
-    // (reached via $.statement's `seq($.expression, ';')` alternative) vs.
-    // $.block (a sibling alternative of that same $.statement choice) for
-    // identical input" -- and empirically, this resolves independent of
-    // every lever tried: declaring `[$.block, $.object]` in `conflicts`
-    // gets flagged as unnecessary (tree-sitter's own analysis says this
-    // isn't a real, GLR-forkable ambiguity), `prec`/`prec.dynamic` on
-    // either rule (even prec(1000)) has zero effect, an explicit
-    // `choice($.block, $.statement)` at the body field doesn't change it,
-    // and neither does reordering which rule is declared first in this
-    // file. This suggests tree-sitter's table construction is merging the
-    // two empty-content states before precedence would ever be consulted,
-    // which isn't fixable by anything expressible in grammar.js alone.
+    // (`if (cond) {}`, `while (cond) {}`, etc.) resolves to an empty
+    // $.object (an object-literal expression statement), not $.block.
+    // $.block is not even reachable from $.expression's own choice list,
+    // so this is really "empty $.object (reached via $.statement's
+    // `seq($.expression, ';')` alternative) vs. $.block (a sibling
+    // alternative of that same $.statement choice) for identical input" --
+    // and this isn't fixable via any of the usual levers: declaring
+    // `[$.block, $.object]` in `conflicts` gets flagged as unnecessary
+    // (tree-sitter's own analysis says this isn't a real, GLR-forkable
+    // ambiguity), `prec`/`prec.dynamic` on either rule (even prec(1000))
+    // has zero effect, an explicit `choice($.block, $.statement)` at the
+    // body field doesn't change it, and neither does reordering which rule
+    // is declared first in this file. This suggests tree-sitter's table
+    // construction is merging the two empty-content states before
+    // precedence would ever be consulted, which isn't fixable by anything
+    // expressible in grammar.js alone.
     // Non-empty bodies (`if (cond) { a(); }`) are entirely unaffected --
     // $.object's content is $.pair-shaped, which can never be confused
     // with $.block's $.statement-shaped content once there's real content
@@ -424,8 +421,8 @@ const haxe_grammar = {
     _arg_list: ($) => seq('(', commaSep($.expression), ')'),
 
     // Bodies are $.statement, not $.block -- Haxe's `if (cond) expr;` (no
-    // braces) is standard, idiomatic syntax (~660 files in this depot use
-    // it), and was completely broken here (forcing braces on every branch).
+    // braces) is standard, idiomatic syntax, and was completely broken
+    // here (forcing braces on every branch).
     // $.statement already covers both shapes (`{ ... }` via its own
     // $.block alternative, or a bare `expr;` via its
     // `seq($.expression, $._lookback_semicolon)` alternative), so reusing
