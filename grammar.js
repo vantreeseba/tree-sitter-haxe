@@ -231,38 +231,32 @@ const haxe_grammar = {
     // alternative in `expression` below (`_rhs_expression (operator
     // _chain_term)*`) already parses `0...10`, `arr.length - 1 ...
     // arr.length + 5`, etc. correctly on its own, with no ERROR and no
-    // separate rule needed -- confirmed empirically: a dedicated
-    // range_expression rule (built the same way, with a narrowed operand
-    // operator set to avoid it swallowing its own '...' separator) never
-    // once got chosen over the plain chain in testing, for either a bare
-    // `0...10` or a for-loop's iterable. Removed rather than left in as
-    // unreachable dead code.
+    // separate rule needed. A dedicated range_expression rule (narrowing
+    // the operand operator set to avoid swallowing its own '...'
+    // separator) is therefore unreachable dead code -- the plain chain
+    // alternative always wins over it -- so it's removed rather than kept
+    // around unused.
 
     // A chain term that may optionally carry a leading prefix-unary operator
     // (`!y`, `-y`, etc.), used only in a chain's TAIL positions (never as a
     // chain's head -- using this in head position reintroduces an extra
     // reduce step that collides with the head's own shift/reduce decision
-    // and silently breaks even plain chains like `1 + 2`; confirmed by
-    // testing, not just theorized). Restricted to tail positions, it lets
-    // `a && !b`, `!a && !b`, etc. parse -- not just `!a && b`, which the
-    // leading-unary `expression` alternative below already covers.
+    // and silently breaks even plain chains like `1 + 2`). Restricted to
+    // tail positions, it lets `a && !b`, `!a && !b`, etc. parse -- not just
+    // `!a && b`, which the leading-unary `expression` alternative below
+    // already covers.
     // $.subscript_expression is included alongside $._rhs_expression here
-    // so it can appear as a chain's TAIL term too (`null != m_cache[id]`) --
+    // so it can appear as a chain's TAIL term too (`null != arr[id]`) --
     // not just as a chain's HEAD, which the dedicated
     // `seq($.subscript_expression, repeat1(...))` alternative in
-    // `expression` below already covers. Found via a depot-wide sweep, not
-    // assumed: `while (null != m_timer[id]) { ... }` is real code in this
-    // depot.
+    // `expression` below already covers.
     //
     // $._parenthesized_expression is included for the same reason: a
     // parenthesized sub-expression could previously only appear as an
     // ENTIRE standalone expression (the top-level $._parenthesized_expression
     // choice in `expression` below), never as one term of a longer chain --
     // so `0...(10)`, `a + (b)`, `total = (a + b) / 2`, etc. all hard-errored.
-    // Found via a depot-wide Haxe parse-error sweep (0...(width*height) in
-    // haxe/src/com/masque/mah/common/ZMap.hx), then confirmed general rather
-    // than range-operator-specific by testing plain arithmetic. This fixes
-    // the TAIL position; see the dedicated
+    // This fixes the TAIL position; see the dedicated
     // `seq($._parenthesized_expression, repeat1(...))` alternative in
     // `expression` below for the analogous HEAD-position fix.
     _chain_term: ($) =>
@@ -283,9 +277,7 @@ const haxe_grammar = {
           // parenthesized tail term works here too -- `(x >= 0) && (x < 10)
           // ? a : b` previously hard-errored even though the unparenthesized
           // `x >= 0 && x < 10 ? a : b` worked fine, since $._rhs_expression
-          // still excludes $._parenthesized_expression. Found via the same
-          // depot-wide sweep as $._chain_term's own parenthesized-term fix
-          // above (haxe/src/com/masque/mah/common/ZMap.hx:210).
+          // still excludes $._parenthesized_expression.
           seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
           // A parenthesized HEAD term followed by more chain -- `(x >= 0) &&
           // y ? a : b`. Same head/tail split as $._parenthesized_expression's
@@ -421,25 +413,21 @@ const haxe_grammar = {
     // Known limitation: a $.structure_type-typed segment that isn't the
     // LAST segment of a $.function_type chain fails to extend into a
     // further right-nested function_type -- `String->{}->Void` used as a
-    // variable/field type (real example: `mCallback:{}->Void;` in
-    // haxe/src/com/masque/tools/webServices/WebServicesURLLoader.hx:27)
-    // reduces the struct segment straight up to a complete $.type and
-    // drops everything after its `->`, even though the exact same shape
-    // works fine as a $.function_arg's type annotation (`cb:String->{}->
-    // Void`, the real, now-fixed WebServices.hx case) and a plain
-    // identifier-typed chain of the same length/position
-    // (`String->Int->Void`) also extends correctly. Tried and had no
-    // effect: bumping $.function_type's own prec.right to an explicit
-    // numeric level, mirroring $.function_arg's alias(choice(...), $.type)
-    // pattern for the variable_declaration/function_declaration type
-    // slots instead of a bare $.type reference, prec.dynamic on
-    // $.structure_type alone. No conflict is even reported for this case
-    // (unlike the two conflicts resolved above), meaning table
-    // construction never considers the extending derivation at all --
-    // the same not-fixable-via-grammar.js-alone class as the documented
-    // block/object case, just a third instance of it. Not currently known
-    // to affect any other file in this depot's `haxe/src/` tree besides
-    // the one line above.
+    // variable/field type reduces the struct segment straight up to a
+    // complete $.type and drops everything after its `->`, even though the
+    // exact same shape works fine as a $.function_arg's type annotation
+    // (`cb:String->{}->Void`) and a plain identifier-typed chain of the
+    // same length/position (`String->Int->Void`) also extends correctly.
+    // Tried and had no effect: bumping $.function_type's own prec.right to
+    // an explicit numeric level, mirroring $.function_arg's
+    // alias(choice(...), $.type) pattern for the
+    // variable_declaration/function_declaration type slots instead of a
+    // bare $.type reference, prec.dynamic on $.structure_type alone. No
+    // conflict is even reported for this case (unlike the two conflicts
+    // resolved above), meaning table construction never considers the
+    // extending derivation at all -- the same not-fixable-via-grammar.js-
+    // alone class as the documented block/object case, just a third
+    // instance of it.
     function_type: ($) =>
       prec.right(
         choice(
@@ -454,11 +442,10 @@ const haxe_grammar = {
     // `alias(choice(..., $.type, $.structure_type), $.type)` workaround)
     // so every $.type slot -- including both sides of $.function_type's
     // '->' chain -- gets anonymous-struct support for free. Without it,
-    // `cb:String->{}->Void` (real example: `dailyPuzzleSelector()` in
-    // haxe/src/com/masque/tools/webServices/WebServices.hx:74) hard-erred:
-    // $.function_type's two $.type slots had no way to become `{}` at
-    // all, so the parser fell back to matching it as a bare $.object
-    // literal wrapped in an ERROR node instead.
+    // `cb:String->{}->Void` hard-errors: $.function_type's two $.type
+    // slots have no way to become `{}` at all, so the parser falls back to
+    // matching it as a bare $.object literal wrapped in an ERROR node
+    // instead.
     type: ($) =>
       prec.right(
         choice(
@@ -476,22 +463,22 @@ const haxe_grammar = {
       ),
 
     // Known limitation: a genuinely EMPTY `{}` used as a control-flow body
-    // (`if (cond) {}`, `while (cond) {}`, etc. -- 42 files in this depot)
-    // resolves to an empty $.object (an object-literal expression
-    // statement), not $.block. $.block is not even reachable from
-    // $.expression's own choice list, so this is really "empty $.object
-    // (reached via $.statement's `seq($.expression, ';')` alternative) vs.
-    // $.block (a sibling alternative of that same $.statement choice) for
-    // identical input" -- and empirically, this resolves independent of
-    // every lever tried: declaring `[$.block, $.object]` in `conflicts`
-    // gets flagged as unnecessary (tree-sitter's own analysis says this
-    // isn't a real, GLR-forkable ambiguity), `prec`/`prec.dynamic` on
-    // either rule (even prec(1000)) has zero effect, an explicit
-    // `choice($.block, $.statement)` at the body field doesn't change it,
-    // and neither does reordering which rule is declared first in this
-    // file. This suggests tree-sitter's table construction is merging the
-    // two empty-content states before precedence would ever be consulted,
-    // which isn't fixable by anything expressible in grammar.js alone.
+    // (`if (cond) {}`, `while (cond) {}`, etc.) resolves to an empty
+    // $.object (an object-literal expression statement), not $.block.
+    // $.block is not even reachable from $.expression's own choice list,
+    // so this is really "empty $.object (reached via $.statement's
+    // `seq($.expression, ';')` alternative) vs. $.block (a sibling
+    // alternative of that same $.statement choice) for identical input" --
+    // and this isn't fixable via any of the usual levers: declaring
+    // `[$.block, $.object]` in `conflicts` gets flagged as unnecessary
+    // (tree-sitter's own analysis says this isn't a real, GLR-forkable
+    // ambiguity), `prec`/`prec.dynamic` on either rule (even prec(1000))
+    // has zero effect, an explicit `choice($.block, $.statement)` at the
+    // body field doesn't change it, and neither does reordering which rule
+    // is declared first in this file. This suggests tree-sitter's table
+    // construction is merging the two empty-content states before
+    // precedence would ever be consulted, which isn't fixable by anything
+    // expressible in grammar.js alone.
     // Non-empty bodies (`if (cond) { a(); }`) are entirely unaffected --
     // $.object's content is $.pair-shaped, which can never be confused
     // with $.block's $.statement-shaped content once there's real content
@@ -509,8 +496,8 @@ const haxe_grammar = {
     _arg_list: ($) => seq('(', commaSep($.expression), ')'),
 
     // Bodies are $.statement, not $.block -- Haxe's `if (cond) expr;` (no
-    // braces) is standard, idiomatic syntax (~660 files in this depot use
-    // it), and was completely broken here (forcing braces on every branch).
+    // braces) is standard, idiomatic syntax, and was completely broken
+    // here (forcing braces on every branch).
     // $.statement already covers both shapes (`{ ... }` via its own
     // $.block alternative, or a bare `expr;` via its
     // `seq($.expression, $._lookback_semicolon)` alternative), so reusing

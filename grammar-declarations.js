@@ -66,9 +66,7 @@ module.exports = {
   // that can hold var/function member declarations, so this used to just
   // reuse $.block directly. That collided with $.structure_type's own
   // comma-separated-pairs syntax (`typedef X = { x:Int, y:Int }`) for a
-  // single-field, no-trailing-comma struct ('typedef X = { f:T }', real
-  // example: `private typedef JJSON = { settings:String }` in
-  // haxe/src/com/masque/tools/webServices/WebServices.hx:243): a bare
+  // single-field, no-trailing-comma struct (`typedef X = { f:T }`): a bare
   // 'identifier : expression' is ALSO a valid one-statement $.block (via
   // $.pair's low-precedence bare-literal alternative, see its comment in
   // grammar-literals.js), so $.block and $.structure_type both matched
@@ -77,14 +75,13 @@ module.exports = {
   // ambiguity above ($.block's own comment) -- tree-sitter's conflict
   // analysis calls [$.typedef_declaration, $.structure_type] an
   // "unnecessary conflict" (no static ambiguity to resolve) yet the
-  // single-item-no-comma case still hard-errored at runtime, and neither
+  // single-item-no-comma case still hard-errors at runtime, and neither
   // declaring the conflict explicitly, nor bumping either rule's static
-  // OR dynamic precedence, changed that -- confirming it's not a real tie
-  // to break, the same not-fixable-via-prec class as the earlier case.
-  // Two or more fields, or a trailing comma, happened to dodge it because
-  // a ',' forces an early commit into the comma-list production, ruling
-  // out the single-bare-statement reading before the ambiguous state is
-  // ever reached.
+  // OR dynamic precedence, changes that -- it is not a real tie to break,
+  // the same not-fixable-via-prec class as the earlier case. Two or more
+  // fields, or a trailing comma, dodge it because a ',' forces an early
+  // commit into the comma-list production, ruling out the single-bare-
+  // statement reading before the ambiguous state is ever reached.
   //
   // The actual fix: this body never legitimately needs $.block's full
   // generality (arbitrary statements) -- real Haxe only ever puts
