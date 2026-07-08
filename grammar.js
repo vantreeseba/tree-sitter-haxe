@@ -333,6 +333,13 @@ const haxe_grammar = {
           alias($._postfixUnaryOperator, $.operator),
           repeat1(seq($.operator, $._chain_term)),
         ),
+        // $.ternary_expression and $._parenthesized_expression are ALSO
+        // bare choices here for the same reason as $.subscript_expression:
+        // `return a ? b : c;`, `return (a ? b : c);`, and `return (a + b);`
+        // all hard-error, since neither is reachable via $._rhs_expression
+        // (which deliberately excludes both to avoid ternary-condition
+        // ambiguity elsewhere -- see $._ternary_condition's own comment) nor
+        // via the chain alternatives above.
         seq(
           'return',
           optional(
