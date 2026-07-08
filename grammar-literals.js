@@ -20,10 +20,10 @@ module.exports = {
   // token on its own). Tree-sitter's regex engine has no lookahead, so
   // there's no way to keep `3.` valid while still telling `0.` apart from
   // `0...`; picked the fix that helps far more real code than it costs
-  // (the `for (i in 0...N)` shape appears in ~2,000 files in this depot;
-  // a real, code -- not comment/string -- occurrence of a genuinely bare
-  // trailing-dot float is comparatively rare and easy to write as `3.0`
-  // instead if it ever turns up broken).
+  // (the `for (i in 0...N)` shape is extremely common;
+  // occurrence of a genuinely bare trailing-dot float is comparatively
+  // rare and easy to write as `3.0` instead if it ever turns up
+  // broken).
   float: ($) => choice(/[\d_]+\.[\d_]+/, /[\d_]+\.[\d_]+e[\d_]*/),
   // Match either [true, false]
   bool: ($) => choice('true', 'false'),
@@ -44,9 +44,7 @@ module.exports = {
   // not folded into the plain-elements one -- it starts with a literal
   // 'for'/'while' token, so there's no overlap with a normal
   // comma-separated array literal (including the single-element case,
-  // `[x]`) to disambiguate. The previous placeholder attempt here
-  // (`seq('[', $.expression, $.identifier, ']')`) didn't match real Haxe
-  // comprehension syntax at all.
+  // `[x]`) to disambiguate.
   array: ($) =>
     choice(
       seq('[', commaSep(prec.left($.expression)), ']'),
