@@ -871,13 +871,12 @@ var a = [while (i < 1) i];
     (identifier)
     (operator)
     (array
-      (call_expression
-        (identifier)
+      (comprehension_while
         (identifier)
         (operator)
         (integer)
+        (identifier)
       )
-      (identifier)
     )
   )
 )
