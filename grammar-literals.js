@@ -22,7 +22,8 @@ module.exports = {
   // `0...`; picked the fix that helps far more real code than it costs
   // (the `for (i in 0...N)` shape is extremely common;
   // occurrence of a genuinely bare trailing-dot float is comparatively
-  // rare and easy to write as `3.0` instead if it ever turns up broken).
+  // rare and easy to write as `3.0` instead if it ever turns up
+  // broken).
   float: ($) => choice(/[\d_]+\.[\d_]+/, /[\d_]+\.[\d_]+e[\d_]*/),
   // Match either [true, false]
   bool: ($) => choice('true', 'false'),
