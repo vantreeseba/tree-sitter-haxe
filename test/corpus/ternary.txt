@@ -126,3 +126,23 @@ foo(a ? b : c);
     )
   )
 )
+
+===================
+ternary condition is a chain of parenthesized terms
+===================
+
+var x = (a >= 0) && (a < 10) ? b : c;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (ternary_expression
+      (identifier) (operator) (integer) (operator) (identifier) (operator) (integer)
+      (identifier)
+      (identifier)
+    )
+  )
+)

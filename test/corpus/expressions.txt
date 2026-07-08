@@ -217,6 +217,42 @@ switch (x) {
 )
 
 ===================
+switch case with multiple statements and no block
+===================
+
+switch (x) {
+  case 4:
+    a();
+    b();
+  case 5:
+    c();
+  default:
+    d();
+    e();
+}
+
+---
+
+(module
+  (switch_expression (identifier)
+  (block
+    (case_statement
+      (integer)
+      (call_expression (identifier))
+      (call_expression (identifier))
+    )
+    (case_statement
+      (integer)
+      (call_expression (identifier))
+    )
+    (case_statement
+      (call_expression (identifier))
+      (call_expression (identifier))
+    )
+  ))
+)
+
+===================
 case expr statement in case.
 ===================
 

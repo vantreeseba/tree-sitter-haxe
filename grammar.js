@@ -30,6 +30,7 @@ const haxe_grammar = {
     [$._prefixUnaryOperator, $._postfixUnaryOperator],
     [$.enum_abstract_declaration, $.enum_declaration],
     [$.typedef_declaration, $.structure_type],
+    [$.object, $.structure_type],
     [$.member_expression, $._lhs_expression],
     [$.preprocessor_statement],
     [$._rhs_expression, $._lhs_expression],
@@ -86,17 +87,31 @@ const haxe_grammar = {
     // (html5, flash, cpp, ...) and every variant needs to stay visible to
     // tooling built on this grammar, not just whichever one a particular
     // build's defines would keep.
+    // Each branch's body may START with one $.dangling_else_statement --
+    // an else/else-if clause continuing an if-statement from BEFORE the
+    // #if (`if (cond) {...} #if X else {...} #end`); see that rule's own
+    // comment for why it must be scoped to exactly this first-element
+    // position rather than being a general statement alternative.
     preprocessor_statement: ($) =>
       prec.right(
         seq(
           '#',
           token.immediate('if'),
           field('condition', $.expression),
+          optional($.dangling_else_statement),
           repeat($.statement),
           repeat(
-            seq('#', token.immediate('elseif'), field('condition', $.expression), repeat($.statement)),
+            seq(
+              '#',
+              token.immediate('elseif'),
+              field('condition', $.expression),
+              optional($.dangling_else_statement),
+              repeat($.statement),
+            ),
           ),
-          optional(seq('#', token.immediate('else'), repeat($.statement))),
+          optional(
+            seq('#', token.immediate('else'), optional($.dangling_else_statement), repeat($.statement)),
+          ),
           '#',
           token.immediate('end'),
         ),
@@ -177,8 +192,13 @@ const haxe_grammar = {
     case_statement: ($) =>
       prec.right(
         choice(
-          seq('case', choice($._rhs_expression, alias('_', $._rhs_expression)), ':', $.statement),
-          seq('default', ':', $.statement),
+          seq(
+            'case',
+            choice($._rhs_expression, alias('_', $._rhs_expression)),
+            ':',
+            repeat($.statement),
+          ),
+          seq('default', ':', repeat($.statement)),
         ),
       ),
 
@@ -209,7 +229,7 @@ const haxe_grammar = {
         'function',
         optional(field('name', $._lhs_expression)),
         $._function_arg_list,
-        optional(seq(':', field('return_type', $.type))),
+        optional(seq(':', field('return_type', choice($.type, $._conditional_type)))),
         field('body', $.block),
       ),
 
@@ -244,8 +264,20 @@ const haxe_grammar = {
     // not just as a chain's HEAD, which the dedicated
     // `seq($.subscript_expression, repeat1(...))` alternative in
     // `expression` below already covers.
+    //
+    // $._parenthesized_expression is included for the same reason: a
+    // parenthesized sub-expression could previously only appear as an
+    // ENTIRE standalone expression (the top-level $._parenthesized_expression
+    // choice in `expression` below), never as one term of a longer chain --
+    // so `0...(10)`, `a + (b)`, `total = (a + b) / 2`, etc. all hard-errored.
+    // This fixes the TAIL position; see the dedicated
+    // `seq($._parenthesized_expression, repeat1(...))` alternative in
+    // `expression` below for the analogous HEAD-position fix.
     _chain_term: ($) =>
-      seq(optional(alias($._prefixUnaryOperator, $.operator)), choice($._rhs_expression, $.subscript_expression)),
+      seq(
+        optional(alias($._prefixUnaryOperator, $.operator)),
+        choice($._rhs_expression, $.subscript_expression, $._parenthesized_expression),
+      ),
 
     _ternary_condition: ($) =>
       prec(
@@ -255,7 +287,18 @@ const haxe_grammar = {
           $.subscript_expression,
           $.cast_expression,
           $._parenthesized_expression,
-          seq($._rhs_expression, repeat(seq($.operator, $._rhs_expression))),
+          // Tail terms use $._chain_term (not $._rhs_expression) so a
+          // parenthesized tail term works here too -- `(x >= 0) && (x < 10)
+          // ? a : b` previously hard-errored even though the unparenthesized
+          // `x >= 0 && x < 10 ? a : b` worked fine, since $._rhs_expression
+          // still excludes $._parenthesized_expression.
+          seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
+          // A parenthesized HEAD term followed by more chain -- `(x >= 0) &&
+          // y ? a : b`. Same head/tail split as $._parenthesized_expression's
+          // two fixes in $._chain_term / `expression` above; repeat1-gated so
+          // a solo `(x >= 0)` alone still resolves via the standalone
+          // $._parenthesized_expression choice above, not this one.
+          seq($._parenthesized_expression, repeat1(seq($.operator, $._chain_term))),
         ),
       ),
 
@@ -291,11 +334,32 @@ const haxe_grammar = {
           repeat1(seq($.operator, $._chain_term)),
         ),
         seq($.subscript_expression, repeat1(seq($.operator, $._chain_term))),
+        // $._parenthesized_expression as a chain HEAD -- `(a + b) * c`,
+        // `(a + b) / 2`, etc. Same gap as $.subscript_expression above: a
+        // parenthesized sub-expression could only ever be an entire
+        // standalone `expression` (the top-level $._parenthesized_expression
+        // choice), never the first term of a longer chain. repeat1-gated so
+        // a solo `(a + b)` alone still goes through the plain
+        // $._parenthesized_expression choice, not this one.
+        seq($._parenthesized_expression, repeat1(seq($.operator, $._chain_term))),
+        // A postfix-unary term (`i--`, `i++`) as a chain HEAD -- `i-- > 0`,
+        // common in `while (i-- > 0)` loops. The leading-unary alternative
+        // above only covers a PREFIX unary head (`!x && y`); postfix was
+        // still only reachable as the entire standalone $._unaryExpression,
+        // never chained with a further operator. Same repeat1 gating and
+        // same rationale as the leading-unary alternative.
         seq(
           $._rhs_expression,
           alias($._postfixUnaryOperator, $.operator),
           repeat1(seq($.operator, $._chain_term)),
         ),
+        // $.ternary_expression and $._parenthesized_expression are ALSO
+        // bare choices here for the same reason as $.subscript_expression:
+        // `return a ? b : c;`, `return (a ? b : c);`, and `return (a + b);`
+        // all hard-error, since neither is reachable via $._rhs_expression
+        // (which deliberately excludes both to avoid ternary-condition
+        // ambiguity elsewhere -- see $._ternary_condition's own comment) nor
+        // via the chain alternatives above.
         seq(
           'return',
           optional(
@@ -307,6 +371,8 @@ const haxe_grammar = {
                 repeat(seq($.operator, $._chain_term)),
               ),
               $.subscript_expression,
+              $.ternary_expression,
+              $._parenthesized_expression,
             ),
           ),
         ),
@@ -315,6 +381,8 @@ const haxe_grammar = {
           choice(
             seq($._rhs_expression, repeat(seq($.operator, $._chain_term))),
             $.subscript_expression,
+            $.ternary_expression,
+            $._parenthesized_expression,
             seq(
               alias($._prefixUnaryOperator, $.operator),
               $._rhs_expression,
@@ -363,6 +431,24 @@ const haxe_grammar = {
 
     _function_type_args: ($) => commaSep1(seq(optional(seq($.identifier, ':')), $.type)),
 
+    // Known limitation: a $.structure_type-typed segment that isn't the
+    // LAST segment of a $.function_type chain fails to extend into a
+    // further right-nested function_type -- `String->{}->Void` used as a
+    // variable/field type reduces the struct segment straight up to a
+    // complete $.type and drops everything after its `->`, even though the
+    // exact same shape works fine as a $.function_arg's type annotation
+    // (`cb:String->{}->Void`) and a plain identifier-typed chain of the
+    // same length/position (`String->Int->Void`) also extends correctly.
+    // Tried and had no effect: bumping $.function_type's own prec.right to
+    // an explicit numeric level, mirroring $.function_arg's
+    // alias(choice(...), $.type) pattern for the
+    // variable_declaration/function_declaration type slots instead of a
+    // bare $.type reference, prec.dynamic on $.structure_type alone. No
+    // conflict is even reported for this case (unlike the two conflicts
+    // resolved above), meaning table construction never considers the
+    // extending derivation at all -- the same not-fixable-via-grammar.js-
+    // alone class as the documented block/object case, just a third
+    // instance of it.
     function_type: ($) =>
       prec.right(
         choice(
@@ -372,6 +458,15 @@ const haxe_grammar = {
         ),
       ),
 
+    // $.structure_type is a bare choice here (not just added at individual
+    // call sites like $.function_arg's own hand-rolled
+    // `alias(choice(..., $.type, $.structure_type), $.type)` workaround)
+    // so every $.type slot -- including both sides of $.function_type's
+    // '->' chain -- gets anonymous-struct support for free. Without it,
+    // `cb:String->{}->Void` hard-errors: $.function_type's two $.type
+    // slots have no way to become `{}` at all, so the parser falls back to
+    // matching it as a bare $.object literal wrapped in an ERROR node
+    // instead.
     type: ($) =>
       prec.right(
         choice(
@@ -383,7 +478,59 @@ const haxe_grammar = {
             optional($.type_params),
           ),
           $.function_type,
+          $.structure_type,
           seq('(', alias($.type, 'type'), ')'),
+        ),
+      ),
+
+    // A #if/#else/#end-guarded type, for conditionally compiling a type
+    // annotation depending on target (`scaleU:#if flash Null<Float> #else
+    // Float #end = 1.0`). Not a bare $.type choice itself -- wired in
+    // individually at each of the 3 real call sites
+    // (variable_declaration's and function_arg's type field,
+    // function_declaration/function_expression's return_type field)
+    // rather than folded into $.type generally, since $.type is also used
+    // in positions (cast(), extends/implements, type_params, ...) with no
+    // legitimate use for a conditional there -- narrower surface, less
+    // GLR-conflict risk than a blanket injection.
+    //
+    // Each branch also accepts its own optional default/initializer value
+    // (`optional(seq($._assignmentOperator, $._literal))` per branch),
+    // covering the case where the default differs per branch instead of
+    // being shared after #end (`wantFlush:#if flash Null<Bool> = false
+    // #else Bool = true #end`), including the asymmetric case where only
+    // one branch has a default at all (`artSwf1:#if USESWFLOADER
+    // SwfLoader #else String = "JustWords.swf" #end`). The shared-after-
+    // #end shape (`#if flash Null<Float> #else Float #end = 1.0`) still
+    // works too: it's just this rule's per-branch default staying empty
+    // both times, with the real function_arg/variable_declaration call
+    // site's own separate, pre-existing trailing default consuming the
+    // `= 1.0` as before. Harmless no-op at the return_type call site,
+    // which has no default/initializer concept to begin with -- real
+    // Haxe code never puts `= value` after a return type, so the
+    // optional default there simply never matches.
+    //
+    // Still NOT handled, remaining a known limitation: a statement whose
+    // trailing ';' is duplicated inside each branch instead of following
+    // the whole conditional.
+    _conditional_type: ($) =>
+      prec.right(
+        seq(
+          '#',
+          token.immediate('if'),
+          field('condition', $.expression),
+          $.type,
+          optional(seq($._assignmentOperator, $._literal)),
+          optional(
+            seq(
+              '#',
+              token.immediate('else'),
+              $.type,
+              optional(seq($._assignmentOperator, $._literal)),
+            ),
+          ),
+          '#',
+          token.immediate('end'),
         ),
       ),
 
@@ -438,9 +585,45 @@ const haxe_grammar = {
           field('name', 'if'),
           field('arguments_list', $._arg_list),
           field('body', $.statement),
-          repeat(seq('else', 'if', field('arguments_list', $._arg_list), field('body', $.statement))),
-          optional(seq('else', field('body', $.statement))),
+          repeat(
+            prec.dynamic(
+              1,
+              seq('else', 'if', field('arguments_list', $._arg_list), field('body', $.statement)),
+            ),
+          ),
+          optional(prec.dynamic(1, seq('else', field('body', $.statement)))),
         ),
+      ),
+
+    // A dangling else-clause -- an `else` whose `if` is not syntactically
+    // adjacent because a `#if`/`#end` boundary separates them (`if (cond)
+    // {...} #if X else {...} #end`): whether the else exists at all, or
+    // is a plain `else` vs an `else if`, can differ per compile target.
+    // Only reachable as the optional FIRST element of a
+    // $.preprocessor_statement branch, never as a general statement.
+    // Structurally the clause's logical parent is the if-statement
+    // preceding the #if, not the #if it sits inside -- a "wrong tree,
+    // not a broken one" tradeoff (no ERROR nodes, every guarded
+    // statement stays visible to tooling).
+    //
+    // Three constraints here are load-bearing -- change with care:
+    // 1. Must stay scoped to this position: as a general $.statement
+    //    alternative, 'else' enters FOLLOW(conditional_statement) and
+    //    the table deterministically steals every normal if's else into
+    //    a sibling of this node; no prec/conflicts knob can flip a
+    //    decision that never forks.
+    // 2. Body must be $.block, and
+    // 3. the rule must end with $._lookback_semicolon: the external
+    //    scanner's brace-lookback termination handshake (scanner.c's
+    //    just_saw_brace) otherwise breaks the statement immediately
+    //    following the clause. The body's own '}' satisfies the
+    //    lookback; no literal ';' is required in the source.
+    dangling_else_statement: ($) =>
+      seq(
+        'else',
+        optional(seq('if', field('arguments_list', $._arg_list))),
+        field('body', $.block),
+        $._lookback_semicolon,
       ),
 
     // https://haxe.org/manual/expression-while.html

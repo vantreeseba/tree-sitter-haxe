@@ -57,7 +57,15 @@ module.exports = {
   // https://haxe.org/manual/expression-object-declaration.html
   object: ($) => prec(1, seq('{', commaSep($.pair), $._closing_brace)),
 
-  structure_type: ($) => prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), $._closing_brace)),
+  // prec.dynamic, NOT a bump to the static prec(): it must only tie-break
+  // a genuinely completed GLR ambiguity in favor of the structure reading
+  // -- e.g. `(name: {})`, ambiguous against a parenthesized bare-pair
+  // expression whose value is an empty $.object, since $.structure_type
+  // is a bare $.type alternative (grammar.js). A static bump changes the
+  // shift/reduce table globally and breaks multi-arrow $.function_type
+  // chains (`String->{}->Void` stops after the `{}` segment).
+  structure_type: ($) =>
+    prec.dynamic(1, prec(1, seq('{', commaSep(alias($.structure_type_pair, $.pair)), $._closing_brace))),
   structure_type_pair: ($) => prec.left(seq(choice($.identifier), ':', $.type)),
 
   // Sub part of map and object literals.

@@ -141,6 +141,45 @@ var x = a != b;
 )
 
 ===================
+parenthesized sub-expression as a chain tail term
+===================
+
+var x = a + (b);
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier)
+  )
+)
+
+===================
+parenthesized sub-expression as a chain head, with a following operator
+===================
+
+var x = (a + b) * c;
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (identifier) (operator) (identifier) (operator) (identifier)
+  )
+)
+
+===================
+range operator with a parenthesized operand
+===================
+
+var x = 0...(10);
+
+---
+(module
+  (variable_declaration (identifier) (operator)
+    (integer) (operator) (integer)
+  )
+)
+
+===================
 less-than comparison does not get mistaken for a generic call's type params
 ===================
 
