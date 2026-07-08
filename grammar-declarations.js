@@ -61,19 +61,36 @@ module.exports = {
       field('body', $.block),
     ),
 
-  // Body for Haxe's "class-like" anonymous structure syntax
-  // (`typedef Point = { var x:Int; function bar():Void; }`). Restricted
-  // to var/function member declarations rather than reusing the general
-  // $.block: a bare 'identifier : expression' is also a valid
-  // one-statement $.block (via $.pair's bare-literal alternative), so a
-  // $.block body made a single-field, no-trailing-comma struct
-  // (`typedef X = { f:T }`) unparseable -- $.block and $.structure_type
-  // both matched the same tokens, and the collision is not resolvable
-  // via prec/conflicts (same class as the block-vs-object empty-body
-  // case in grammar.js). Member declarations always start with a
-  // keyword ('var'/'final'/'function'/metadata '@'), never a bare
-  // identifier, so this shape can't overlap with $.structure_type.
-  // Aliased to $.block so existing consumers/tests see the same node.
+  // Haxe's "class-like" anonymous structure syntax
+  // (`typedef Point = { var x:Int; function bar():Void; }`) needs a body
+  // that can hold var/function member declarations, so this used to just
+  // reuse $.block directly. That collided with $.structure_type's own
+  // comma-separated-pairs syntax (`typedef X = { x:Int, y:Int }`) for a
+  // single-field, no-trailing-comma struct (`typedef X = { f:T }`): a bare
+  // 'identifier : expression' is ALSO a valid one-statement $.block (via
+  // $.pair's low-precedence bare-literal alternative, see its comment in
+  // grammar-literals.js), so $.block and $.structure_type both matched
+  // that exact token sequence. This is the same class of GLR table-
+  // construction merge as the documented block-vs-object empty-body
+  // ambiguity above ($.block's own comment) -- tree-sitter's conflict
+  // analysis calls [$.typedef_declaration, $.structure_type] an
+  // "unnecessary conflict" (no static ambiguity to resolve) yet the
+  // single-item-no-comma case still hard-errors at runtime, and neither
+  // declaring the conflict explicitly, nor bumping either rule's static
+  // OR dynamic precedence, changes that -- it is not a real tie to break,
+  // the same not-fixable-via-prec class as the earlier case. Two or more
+  // fields, or a trailing comma, dodge it because a ',' forces an early
+  // commit into the comma-list production, ruling out the single-bare-
+  // statement reading before the ambiguous state is ever reached.
+  //
+  // The actual fix: this body never legitimately needs $.block's full
+  // generality (arbitrary statements) -- real Haxe only ever puts
+  // var/function member declarations in it, both of which start with a
+  // keyword ('var'/'final'/'function', or metadata's '@'), never a bare
+  // identifier, so a dedicated body rule restricted to those two
+  // declaration kinds can never overlap with $.structure_type's bare
+  // 'identifier : type' shape in the first place. Aliased to $.block so
+  // existing consumers/tests see the same node type as before.
   _structure_class_body: ($) =>
     seq('{', repeat(choice($.variable_declaration, $.function_declaration)), $._closing_brace),
 
