@@ -1,11 +1,67 @@
 ##
 A tree sitter parser for haxe.
 
-I've only testing this using nvim-treesitter.
+I've only tested this using nvim-treesitter.
 
-If you are getting an error on loading parser after 0.11.x, check config below and ensure you are including "src/scanner.c" in file list for config.
+If you are getting an error on loading parser after 0.11.x, check the config below and ensure you are including `src/scanner.c` in the file list for the config (only relevant for the legacy `master`-branch setup — the newer `main` branch compiles every C source in `src/` automatically).
 
 ## Use
+
+nvim-treesitter was rewritten and the config differs quite a bit between the
+current (`main` branch) version and the legacy (`master` branch) version. Pick
+the section that matches the version you have installed.
+
+### Newest nvim-treesitter (`main` branch)
+
+The `main` rewrite dropped `ensure_installed`/`configs.setup` and instead:
+
+- registers custom parsers inside a `User TSUpdate` autocommand,
+- installs queries straight from the parser repo (no manual `cp` needed),
+- compiles every C source in `src/` automatically (so no `files` list, and the
+  0.11.x scanner load error doesn't apply here),
+- enables highlighting with the native `vim.treesitter.start()`.
+
+Add this to your `init.lua` (or anywhere loaded at startup):
+
+```lua
+-- Register the Haxe parser. The main branch reads this when it
+-- installs/updates parsers, so register it in a `TSUpdate` autocommand.
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TSUpdate",
+  callback = function()
+    require("nvim-treesitter.parsers").haxe = {
+      install_info = {
+        url = "https://github.com/vantreeseba/tree-sitter-haxe",
+        branch = "main",
+        -- pull the highlights/locals/injections/folds queries from the repo
+        queries = "queries",
+      },
+    }
+  end,
+})
+
+-- Associate *.hx files with the `haxe` filetype/language.
+vim.filetype.add({ extension = { hx = "haxe" } })
+
+-- Enable tree-sitter highlighting for Haxe buffers.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "haxe",
+  callback = function()
+    vim.treesitter.start()
+  end,
+})
+```
+
+Then install the parser with:
+
+```
+:TSInstall haxe
+```
+
+and update it later with `:TSUpdate haxe`. Because the `queries` field points at
+this repo's `queries/` folder, the highlight queries are installed for you.
+
+### Legacy nvim-treesitter (`master` branch)
 
 Install nvim-treesitter.  
 Clone this repo, and run tree-sitter generate (you may have to install globally).  
