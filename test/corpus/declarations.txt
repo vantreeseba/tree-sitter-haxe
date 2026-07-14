@@ -1200,3 +1200,146 @@ var x:T<S -> R>;
     )
   )
 )
+
+===================
+var declaration with a conditionally-compiled type
+===================
+
+var atlasXml:#if flash flash.xml.XML #else Xml #end = null;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (identifier)
+    (type
+      (member_expression
+        (member_expression
+          (identifier)
+          (identifier))
+        (identifier)))
+    (type
+      (identifier))
+    (operator)
+    (null)))
+
+===================
+function arg with a conditionally-compiled type
+===================
+
+function scaleUV(scaleU:#if flash Null<Float> #else Float #end = 1.0):Void {}
+
+---
+
+(module
+  (function_declaration
+    (identifier)
+    (function_arg
+      (identifier)
+      (type
+        (identifier)
+        (type
+          (identifier)
+          (type_params
+            (type
+              (identifier))))
+        (type
+          (identifier)))
+      (float))
+    (type
+      (identifier))
+    (block)))
+
+===================
+function declaration with a conditionally-compiled return type
+===================
+
+function get_width():#if (!flash) Float #else Void #end { return 1; }
+
+---
+
+(module
+  (function_declaration
+    (identifier)
+    (operator)
+    (identifier)
+    (type
+      (identifier))
+    (type
+      (identifier))
+    (block
+      (integer))))
+
+===================
+function expression with a conditionally-compiled return type
+===================
+
+var fn = function(x:Int):#if flash Null<Bool> #else Bool #end { return true; };
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (operator)
+    (function_expression
+      (function_arg
+        (identifier)
+        (type
+          (identifier)))
+      (identifier)
+      (type
+        (identifier)
+        (type_params
+          (type
+            (identifier))))
+      (type
+        (identifier))
+      (block
+        (bool)))))
+
+===================
+function arg with a conditionally-compiled type and a different default per branch
+===================
+
+function saveSettings(wantFlush:#if flash Null<Bool> = false #else Bool = true #end):Void;
+
+---
+
+(module
+  (function_declaration
+    (identifier)
+    (function_arg
+      (identifier)
+      (type
+        (identifier)
+        (type
+          (identifier)
+          (type_params
+            (type
+              (identifier))))
+        (bool)
+        (type
+          (identifier))
+        (bool)))
+    (type
+      (identifier))))
+
+===================
+var declaration with a conditionally-compiled type and a default in only one branch
+===================
+
+private var artSwf1:#if USESWFLOADER SwfLoader #else String = "JustWords.swf" #end;
+
+---
+
+(module
+  (variable_declaration
+    (identifier)
+    (identifier)
+    (type
+      (identifier))
+    (type
+      (identifier))
+    (string)))

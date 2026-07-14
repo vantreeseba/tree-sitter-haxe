@@ -215,7 +215,7 @@ const haxe_grammar = {
         'function',
         optional(field('name', $._lhs_expression)),
         $._function_arg_list,
-        optional(seq(':', field('return_type', $.type))),
+        optional(seq(':', field('return_type', choice($.type, $._conditional_type)))),
         field('body', $.block),
       ),
 
@@ -466,6 +466,57 @@ const haxe_grammar = {
           $.function_type,
           $.structure_type,
           seq('(', alias($.type, 'type'), ')'),
+        ),
+      ),
+
+    // A #if/#else/#end-guarded type, for conditionally compiling a type
+    // annotation depending on target (`scaleU:#if flash Null<Float> #else
+    // Float #end = 1.0`). Not a bare $.type choice itself -- wired in
+    // individually at each of the 3 real call sites
+    // (variable_declaration's and function_arg's type field,
+    // function_declaration/function_expression's return_type field)
+    // rather than folded into $.type generally, since $.type is also used
+    // in positions (cast(), extends/implements, type_params, ...) with no
+    // legitimate use for a conditional there -- narrower surface, less
+    // GLR-conflict risk than a blanket injection.
+    //
+    // Each branch also accepts its own optional default/initializer value
+    // (`optional(seq($._assignmentOperator, $._literal))` per branch),
+    // covering the case where the default differs per branch instead of
+    // being shared after #end (`wantFlush:#if flash Null<Bool> = false
+    // #else Bool = true #end`), including the asymmetric case where only
+    // one branch has a default at all (`artSwf1:#if USESWFLOADER
+    // SwfLoader #else String = "JustWords.swf" #end`). The shared-after-
+    // #end shape (`#if flash Null<Float> #else Float #end = 1.0`) still
+    // works too: it's just this rule's per-branch default staying empty
+    // both times, with the real function_arg/variable_declaration call
+    // site's own separate, pre-existing trailing default consuming the
+    // `= 1.0` as before. Harmless no-op at the return_type call site,
+    // which has no default/initializer concept to begin with -- real
+    // Haxe code never puts `= value` after a return type, so the
+    // optional default there simply never matches.
+    //
+    // Still NOT handled, remaining a known limitation: a statement whose
+    // trailing ';' is duplicated inside each branch instead of following
+    // the whole conditional.
+    _conditional_type: ($) =>
+      prec.right(
+        seq(
+          '#',
+          token.immediate('if'),
+          field('condition', $.expression),
+          $.type,
+          optional(seq($._assignmentOperator, $._literal)),
+          optional(
+            seq(
+              '#',
+              token.immediate('else'),
+              $.type,
+              optional(seq($._assignmentOperator, $._literal)),
+            ),
+          ),
+          '#',
+          token.immediate('end'),
         ),
       ),
 
