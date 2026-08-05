@@ -215,7 +215,7 @@ const haxe_grammar = {
         'function',
         optional(field('name', $._lhs_expression)),
         $._function_arg_list,
-        optional(seq(':', field('return_type', $.type))),
+        optional(seq(':', field('return_type', choice($.type, $._conditional_type)))),
         field('body', $.block),
       ),
 
@@ -466,6 +466,37 @@ const haxe_grammar = {
           $.function_type,
           $.structure_type,
           seq('(', alias($.type, 'type'), ')'),
+        ),
+      ),
+
+    // A #if/#else/#end-guarded type, for conditionally compiling a type
+    // annotation depending on target (`scaleU:#if flash Null<Float> #else
+    // Float #end = 1.0`). Not a bare $.type choice itself -- wired in
+    // individually at each of the 3 real call sites
+    // (variable_declaration's and function_arg's type field,
+    // function_declaration/function_expression's return_type field)
+    // rather than folded into $.type generally, since $.type is also used
+    // in positions (cast(), extends/implements, type_params, ...) with no
+    // legitimate use for a conditional there -- narrower surface, less
+    // GLR-conflict risk than a blanket injection.
+    //
+    // Scoped to just this: a default/initializer value, if present, is
+    // shared and sits AFTER the #end (`= 1.0` above). Two rarer variants
+    // are explicitly NOT handled here and remain a known limitation: a
+    // *different* default inside each branch (`wantFlush:#if flash
+    // Null<Bool> = false #else Bool = true #end`), and a statement whose
+    // trailing ';' is duplicated inside each branch instead of following
+    // the whole conditional.
+    _conditional_type: ($) =>
+      prec.right(
+        seq(
+          '#',
+          token.immediate('if'),
+          field('condition', $.expression),
+          $.type,
+          optional(seq('#', token.immediate('else'), $.type)),
+          '#',
+          token.immediate('end'),
         ),
       ),
 
