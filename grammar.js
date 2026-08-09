@@ -87,17 +87,31 @@ const haxe_grammar = {
     // (html5, flash, cpp, ...) and every variant needs to stay visible to
     // tooling built on this grammar, not just whichever one a particular
     // build's defines would keep.
+    // Each branch's body may START with one $.dangling_else_statement --
+    // an else/else-if clause continuing an if-statement from BEFORE the
+    // #if (`if (cond) {...} #if X else {...} #end`); see that rule's own
+    // comment for why it must be scoped to exactly this first-element
+    // position rather than being a general statement alternative.
     preprocessor_statement: ($) =>
       prec.right(
         seq(
           '#',
           token.immediate('if'),
           field('condition', $.expression),
+          optional($.dangling_else_statement),
           repeat($.statement),
           repeat(
-            seq('#', token.immediate('elseif'), field('condition', $.expression), repeat($.statement)),
+            seq(
+              '#',
+              token.immediate('elseif'),
+              field('condition', $.expression),
+              optional($.dangling_else_statement),
+              repeat($.statement),
+            ),
           ),
-          optional(seq('#', token.immediate('else'), repeat($.statement))),
+          optional(
+            seq('#', token.immediate('else'), optional($.dangling_else_statement), repeat($.statement)),
+          ),
           '#',
           token.immediate('end'),
         ),
@@ -215,7 +229,7 @@ const haxe_grammar = {
         'function',
         optional(field('name', $._lhs_expression)),
         $._function_arg_list,
-        optional(seq(':', field('return_type', $.type))),
+        optional(seq(':', field('return_type', choice($.type, $._conditional_type)))),
         field('body', $.block),
       ),
 
@@ -469,6 +483,57 @@ const haxe_grammar = {
         ),
       ),
 
+    // A #if/#else/#end-guarded type, for conditionally compiling a type
+    // annotation depending on target (`scaleU:#if flash Null<Float> #else
+    // Float #end = 1.0`). Not a bare $.type choice itself -- wired in
+    // individually at each of the 3 real call sites
+    // (variable_declaration's and function_arg's type field,
+    // function_declaration/function_expression's return_type field)
+    // rather than folded into $.type generally, since $.type is also used
+    // in positions (cast(), extends/implements, type_params, ...) with no
+    // legitimate use for a conditional there -- narrower surface, less
+    // GLR-conflict risk than a blanket injection.
+    //
+    // Each branch also accepts its own optional default/initializer value
+    // (`optional(seq($._assignmentOperator, $._literal))` per branch),
+    // covering the case where the default differs per branch instead of
+    // being shared after #end (`wantFlush:#if flash Null<Bool> = false
+    // #else Bool = true #end`), including the asymmetric case where only
+    // one branch has a default at all (`artSwf1:#if USESWFLOADER
+    // SwfLoader #else String = "JustWords.swf" #end`). The shared-after-
+    // #end shape (`#if flash Null<Float> #else Float #end = 1.0`) still
+    // works too: it's just this rule's per-branch default staying empty
+    // both times, with the real function_arg/variable_declaration call
+    // site's own separate, pre-existing trailing default consuming the
+    // `= 1.0` as before. Harmless no-op at the return_type call site,
+    // which has no default/initializer concept to begin with -- real
+    // Haxe code never puts `= value` after a return type, so the
+    // optional default there simply never matches.
+    //
+    // Still NOT handled, remaining a known limitation: a statement whose
+    // trailing ';' is duplicated inside each branch instead of following
+    // the whole conditional.
+    _conditional_type: ($) =>
+      prec.right(
+        seq(
+          '#',
+          token.immediate('if'),
+          field('condition', $.expression),
+          $.type,
+          optional(seq($._assignmentOperator, $._literal)),
+          optional(
+            seq(
+              '#',
+              token.immediate('else'),
+              $.type,
+              optional(seq($._assignmentOperator, $._literal)),
+            ),
+          ),
+          '#',
+          token.immediate('end'),
+        ),
+      ),
+
     // Known limitation: a genuinely EMPTY `{}` used as a control-flow body
     // (`if (cond) {}`, `while (cond) {}`, etc.) resolves to an empty
     // $.object (an object-literal expression statement), not $.block.
@@ -520,9 +585,45 @@ const haxe_grammar = {
           field('name', 'if'),
           field('arguments_list', $._arg_list),
           field('body', $.statement),
-          repeat(seq('else', 'if', field('arguments_list', $._arg_list), field('body', $.statement))),
-          optional(seq('else', field('body', $.statement))),
+          repeat(
+            prec.dynamic(
+              1,
+              seq('else', 'if', field('arguments_list', $._arg_list), field('body', $.statement)),
+            ),
+          ),
+          optional(prec.dynamic(1, seq('else', field('body', $.statement)))),
         ),
+      ),
+
+    // A dangling else-clause -- an `else` whose `if` is not syntactically
+    // adjacent because a `#if`/`#end` boundary separates them (`if (cond)
+    // {...} #if X else {...} #end`): whether the else exists at all, or
+    // is a plain `else` vs an `else if`, can differ per compile target.
+    // Only reachable as the optional FIRST element of a
+    // $.preprocessor_statement branch, never as a general statement.
+    // Structurally the clause's logical parent is the if-statement
+    // preceding the #if, not the #if it sits inside -- a "wrong tree,
+    // not a broken one" tradeoff (no ERROR nodes, every guarded
+    // statement stays visible to tooling).
+    //
+    // Three constraints here are load-bearing -- change with care:
+    // 1. Must stay scoped to this position: as a general $.statement
+    //    alternative, 'else' enters FOLLOW(conditional_statement) and
+    //    the table deterministically steals every normal if's else into
+    //    a sibling of this node; no prec/conflicts knob can flip a
+    //    decision that never forks.
+    // 2. Body must be $.block, and
+    // 3. the rule must end with $._lookback_semicolon: the external
+    //    scanner's brace-lookback termination handshake (scanner.c's
+    //    just_saw_brace) otherwise breaks the statement immediately
+    //    following the clause. The body's own '}' satisfies the
+    //    lookback; no literal ';' is required in the source.
+    dangling_else_statement: ($) =>
+      seq(
+        'else',
+        optional(seq('if', field('arguments_list', $._arg_list))),
+        field('body', $.block),
+        $._lookback_semicolon,
       ),
 
     // https://haxe.org/manual/expression-while.html

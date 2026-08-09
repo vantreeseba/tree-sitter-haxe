@@ -70,3 +70,87 @@ trace(1);
     )
   )
 )
+
+===================
+dangling else guarded by a preprocessor conditional
+===================
+
+if (cond) {
+    a();
+}
+#if !STANDALONE
+else {
+    b();
+}
+#end
+
+---
+
+(module
+  (conditional_statement
+    (identifier)
+    (block
+      (call_expression (identifier))))
+  (preprocessor_statement
+    (operator)
+    (identifier)
+    (dangling_else_statement
+      (block
+        (call_expression (identifier))))))
+
+===================
+dangling else-if inside a disabled preprocessor branch
+===================
+
+#if 0
+else if (cond)
+{
+    enqueue(rawAsset);
+}
+#end
+
+---
+
+(module
+  (preprocessor_statement
+    (integer)
+    (dangling_else_statement
+      (identifier)
+      (block
+        (call_expression (identifier) (identifier))))))
+
+===================
+dangling else with trailing statements in the same guarded branch
+===================
+
+if (c) {
+    a();
+}
+#if !STANDALONE
+else {
+    b();
+}
+d();
+#else
+else {
+    e();
+}
+#end
+
+---
+
+(module
+  (conditional_statement
+    (identifier)
+    (block
+      (call_expression (identifier))))
+  (preprocessor_statement
+    (operator)
+    (identifier)
+    (dangling_else_statement
+      (block
+        (call_expression (identifier))))
+    (call_expression (identifier))
+    (dangling_else_statement
+      (block
+        (call_expression (identifier))))))
